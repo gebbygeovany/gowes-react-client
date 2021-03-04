@@ -1,0 +1,9 @@
+.chat-item:hover {
+    background-color: '#F3F4F5';
+    padding: 8px;
+}
+.chat-item {
+    cursor: pointer;
+    background-color: '#FFFFFF';
+    padding: 8px;
+}
