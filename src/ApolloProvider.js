@@ -25,7 +25,7 @@ const authLink = setContext(() => {
 httpLink = authLink.concat(httpLink);
 
 const wsLink = new WebSocketLink({
-  uri: "ws://gowes-market-apollo-server.herokuapp.com/",
+  uri: "wss://gowes-market-apollo-server.herokuapp.com/",
   options: {
     reconnect: true,
     connectionParams: {
@@ -48,6 +48,7 @@ const splitLink = split(
 
 const client = new ApolloClient({
   link: splitLink,
+  uri: "https://gowes-market-apollo-server.herokuapp.com/",
   cache: new InMemoryCache(),
 });
 
