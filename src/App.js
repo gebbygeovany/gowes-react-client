@@ -23,6 +23,7 @@ import AddItem from "./pages/AddItem";
 import SellerProfile from "./pages/SellerProfile";
 import EditItem from "./pages/EditItem";
 import Checkout from "./pages/Checkout";
+import Search from "./pages/Search";
 
 import EditMyStoreDetailsCard from "./components/EditMyStoreDetailsCard";
 import EditProfileCard from "./components/EditProfileCard";
@@ -70,6 +71,7 @@ class App extends Component {
             <Route exact path="/event" component={Event} />
             <Route exact path="/wishList" component={Bookmark} />
             <Route exact path="/cart" component={Cart} />
+            <Route exact path="/search" component={Search} />
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/register" component={Register} />
             <Route exact path="/posts/:postId" component={SinglePost} />

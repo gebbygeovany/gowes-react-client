@@ -5,9 +5,10 @@ import gql from "graphql-tag";
 
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
+import FilterBarHome from "../components/FilterBarHome";
 import { FETCH_ITEMS_QUERY } from "../util/graphql";
 
-function Home() {
+function Search() {
   const { loading, data } = useQuery(FETCH_ITEMS_QUERY);
   const { getItems: items } = data ? data : [];
 
@@ -19,9 +20,12 @@ function Home() {
         <Grid.Column width={16}>
           <SearchBarHome ></SearchBarHome>
         </Grid.Column>
-        <Grid.Column width={16}>
+        <Grid.Column width={3}>
+          <FilterBarHome contextRef={contextRef}></FilterBarHome>
+        </Grid.Column>
+        <Grid.Column width={13}>
           <h4>Products</h4>
-          <Grid stackable columns={6}>
+          <Grid stackable columns={5}>
             {!loading ? (
               <>
                 <Transition.Group duration={1000}>
@@ -58,4 +62,4 @@ const FETCH_CITIES_QUERY = gql`
   }
 `;
 
-export default Home;
+export default Search;
