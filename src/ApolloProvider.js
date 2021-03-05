@@ -26,7 +26,7 @@ const authLink = setContext(() => {
 httpLink = authLink.concat(httpLink);
 
 const wsLink = new WebSocketLink({
-  uri: "ws://gowes-market-apollo-server.herokuapp.com/",
+  uri: "wss://gowes-market-apollo-server.herokuapp.com/",
   // uri: "ws://localhost:5000/graphql",
   options: {
     reconnect: true,
