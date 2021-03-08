@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Ref } from "semantic-ui-react";
+import { Grid, Transition } from "semantic-ui-react";
 import gql from "graphql-tag";
 
 import ShopCard from "../components/ShopCard";
@@ -12,14 +12,11 @@ function Home() {
   const { loading, data } = useQuery(FETCH_ITEMS_QUERY);
   const { getItems: items } = data ? data : [];
 
-  const contextRef = React.createRef();
 
   return (
-    <Ref innerRef={contextRef}>
+    <>
+      <HomeCarousel></HomeCarousel>
       <Grid stackable>
-        <Grid.Column width={16}>
-        <HomeCarousel></HomeCarousel>
-        </Grid.Column>
         <Grid.Column width={16}>
           <SearchBarHome ></SearchBarHome>
         </Grid.Column>
@@ -38,14 +35,14 @@ function Home() {
                 </Transition.Group>
               </>
             ) : (
-                <h1>Loading Products..</h1>
-              )}
+              <h1>Loading Products..</h1>
+            )}
 
           </Grid>
         </Grid.Column>
 
       </Grid>
-    </Ref>
+    </>
   );
 }
 

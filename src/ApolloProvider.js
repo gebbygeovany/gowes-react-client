@@ -10,8 +10,8 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
 let httpLink = createHttpLink({
-  uri: "https://gowes-market-apollo-server.herokuapp.com/",
-  // uri: "http://localhost:3000"
+  // uri: "https://gowes-market-apollo-server.herokuapp.com/",
+  uri: "http://localhost:3000"
 });
 
 const authLink = setContext(() => {
@@ -26,8 +26,8 @@ const authLink = setContext(() => {
 httpLink = authLink.concat(httpLink);
 
 const wsLink = new WebSocketLink({
-  uri: "wss://gowes-market-apollo-server.herokuapp.com/",
-  // uri: "ws://localhost:3000/graphql",
+  // uri: "wss://gowes-market-apollo-server.herokuapp.com/",
+  uri: "ws://localhost:3000/graphql",
   options: {
     reconnect: true,
     connectionParams: {
