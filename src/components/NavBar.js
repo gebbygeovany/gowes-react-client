@@ -104,9 +104,11 @@ function NavBar(props) {
                             as={Link}
                             to="/wishList"
                         >
-                            <Label color='red' floating>
-                                {sizeBookmark}
-                            </Label>
+                            {sizeBookmark > 0 ? (
+                                <Label color='red' floating>
+                                    {sizeBookmark}
+                                </Label>
+                            ) : (<></>)}
                             <MyPopup content="Wishlist">
                                 <Icon name="heart" centered="true"></Icon>
                             </MyPopup>
@@ -120,9 +122,11 @@ function NavBar(props) {
                             as={Link}
                             to="/cart"
                         >
-                            <Label color='blue' floating>
-                                {sizeCart}
-                            </Label>
+                            {sizeCart > 0 ? (
+                                <Label color='blue' floating>
+                                    {sizeCart}
+                                </Label>
+                            ) : (<></>)}
                             <MyPopup content="Cart">
                                 <Icon name="cart" centered="true"></Icon>
                             </MyPopup>
