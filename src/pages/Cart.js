@@ -13,7 +13,6 @@ function Cart() {
   const { loading, data, refetch } = useQuery(FETCH_USER_CART_QUERY)
   let { getUserCartItems: cartItems } = data ? data : []
 
-  console.log(cartItems)
 
   Object.size = function (obj) {
     var size = 0,
@@ -25,6 +24,9 @@ function Cart() {
   };
 
   var size = Object.size(cartItems)
+
+  console.log(size)
+
 
   let cartMarkup = (
     <>

@@ -1,11 +1,14 @@
 import React, { useContext, useState } from 'react'
-import { Menu, Dropdown, Button, Segment, Image, Icon, Input } from 'semantic-ui-react'
+import { Menu, Dropdown, Button, Segment, Image, Icon, Label } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { IoMdBicycle } from 'react-icons/io';
+import { useQuery } from '@apollo/react-hooks';
 
 
 import { AuthContext } from '../context/auth'
 import MyPopup from './MyPopup';
+import { FETCH_BOOKMARKS_QUERY } from '../util/graphql';
+import { FETCH_USER_CART_QUERY } from '../util/graphql';
 
 
 function NavBar(props) {
@@ -32,6 +35,25 @@ function NavBar(props) {
         // handleItemClick()
         props.onDimmed()
     }
+
+    const { loading: loadingBookmark, data: bookmarkData } = useQuery(FETCH_BOOKMARKS_QUERY)
+    const { getBookmarks: bookmarks } = bookmarkData ? bookmarkData : []
+
+    const { loading: loadingCart, data: cartData } = useQuery(FETCH_USER_CART_QUERY)
+    let { getUserCartItems: cartItems } = cartData ? cartData : []
+
+    Object.size = function (obj) {
+        var size = 0,
+            key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
+
+    var sizeBookmark = Object.size(bookmarks)
+    var sizeCart = Object.size(cartItems)
+
 
     const navBar = user ? (
 
@@ -82,9 +104,13 @@ function NavBar(props) {
                             as={Link}
                             to="/wishList"
                         >
+                            <Label color='red' floating>
+                                {sizeBookmark}
+                            </Label>
                             <MyPopup content="Wishlist">
                                 <Icon name="heart" centered="true"></Icon>
                             </MyPopup>
+
                         </Menu.Item>
 
                         <Menu.Item
@@ -94,6 +120,9 @@ function NavBar(props) {
                             as={Link}
                             to="/cart"
                         >
+                            <Label color='blue' floating>
+                                {sizeCart}
+                            </Label>
                             <MyPopup content="Cart">
                                 <Icon name="cart" centered="true"></Icon>
                             </MyPopup>
@@ -121,22 +150,22 @@ function NavBar(props) {
         </Segment>
 
     ) : (
-            // guest navbar
-            <Segment inverted>
-                <div className="ui huge top inverted fixed menu " style={{ height: 80, zIndex: 1100 }}>
-                    <Menu fluid inverted secondary size='large'>
-                        <Menu.Item></Menu.Item>
-                        <Menu.Item
-                            active={activeItem === ''}
-                            onClick={handleItemClick}
-                            as={Link}
-                            to="/"
-                        >
-                            <IoMdBicycle color='rgb(206, 206, 206)' style={{ fontSize: 28, marginRight: 5 }}></IoMdBicycle>
-                            <div className="logo">Gowes</div>
-                        </Menu.Item>
+        // guest navbar
+        <Segment inverted>
+            <div className="ui huge top inverted fixed menu " style={{ height: 80, zIndex: 1100 }}>
+                <Menu fluid inverted secondary size='large'>
+                    <Menu.Item></Menu.Item>
+                    <Menu.Item
+                        active={activeItem === ''}
+                        onClick={handleItemClick}
+                        as={Link}
+                        to="/"
+                    >
+                        <IoMdBicycle color='rgb(206, 206, 206)' style={{ fontSize: 28, marginRight: 5 }}></IoMdBicycle>
+                        <div className="logo">Gowes</div>
+                    </Menu.Item>
 
-                        {/* <Menu.Item
+                    {/* <Menu.Item
                             name='shop'
                             active={activeItem === 'shop'}
                             onClick={handleItemClick}
@@ -152,28 +181,28 @@ function NavBar(props) {
                         /> */}
 
 
-                        <Menu.Menu position='right'>
-                            <Menu.Item>
-                                <Button
-                                    color='teal'
-                                    inverted
-                                    name='login'
-                                    active={activeItem === 'login'}
-                                    onClick={handleItemClick}
-                                    as={Link}
-                                    to="/login"
-                                    style={{ marginRight: 10 }}
-                                >
-                                    Sign In
+                    <Menu.Menu position='right'>
+                        <Menu.Item>
+                            <Button
+                                color='teal'
+                                inverted
+                                name='login'
+                                active={activeItem === 'login'}
+                                onClick={handleItemClick}
+                                as={Link}
+                                to="/login"
+                                style={{ marginRight: 10 }}
+                            >
+                                Sign In
                             </Button>
-                            </Menu.Item>
-                            <Menu.Item></Menu.Item>
-                        </Menu.Menu>
-                    </Menu>
-                </div>
-            </Segment>
+                        </Menu.Item>
+                        <Menu.Item></Menu.Item>
+                    </Menu.Menu>
+                </Menu>
+            </div>
+        </Segment>
 
-        )
+    )
     return navBar
 }
 
