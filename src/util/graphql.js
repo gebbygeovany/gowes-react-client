@@ -148,6 +148,7 @@ export const FETCH_BOOKMARKS_QUERY = gql`
         createdAt
       }
       user {
+        id
         seller {
           username
         }

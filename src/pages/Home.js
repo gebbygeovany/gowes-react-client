@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
+import HomeCarousel from "../components/HomeCarousel";
 import { FETCH_ITEMS_QUERY } from "../util/graphql";
 
 function Home() {
@@ -16,6 +17,9 @@ function Home() {
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
+        <Grid.Column width={16}>
+        <HomeCarousel></HomeCarousel>
+        </Grid.Column>
         <Grid.Column width={16}>
           <SearchBarHome ></SearchBarHome>
         </Grid.Column>

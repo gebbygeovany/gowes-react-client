@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 
 import { FETCH_USER_CART_QUERY } from '../util/graphql';
+import DeleteFromCartButton from './DeleteFromCartButton';
 
 function ItemCartCard({ item }) {
 
@@ -74,7 +75,8 @@ function ItemCartCard({ item }) {
                                     </Form>
                                 </Grid.Column>
                                 <Grid.Column width={6}>
-                                    <Icon onClick={deleteItemCart} size="large" color="grey" name="trash" style={{ marginRight: 40 }}></Icon>
+                                    {/* <Icon onClick={deleteItemCart} size="large" color="grey" name="trash" style={{ marginRight: 40 }}></Icon> */}
+                                    <DeleteFromCartButton item={item}></DeleteFromCartButton>
                                     <List horizontal>
                                         <List.Item>
                                             <Button

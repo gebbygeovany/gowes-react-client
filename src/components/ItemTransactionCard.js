@@ -8,6 +8,7 @@ import {
   Header,
   Input,
   Message,
+  Confirm
 } from "semantic-ui-react";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
@@ -99,11 +100,19 @@ function ItemTransactionCard({
   }
 
   function addItemToCart() {
-    // refetch()
     addToCart();
-    setVisible(true);
+    setConfirmOpen(true)
     // window.location.href='/items'
-    window.location.reload(false);
+    // window.location.reload(false);
+  }
+
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
+  function redirectToCart() {
+    window.location.href = '/cart'
+  }
+  function refreshPage() {
+    window.location.reload(false)
   }
 
   let itemMarkup = <h1>loading...</h1>;
@@ -226,6 +235,14 @@ function ItemTransactionCard({
           ) : (
             <div></div>
           )}
+          <Confirm
+            open={confirmOpen}
+            content='Item added successfully!'
+            cancelButton='Stay in Page'
+            confirmButton="View Cart"
+            onCancel={refreshPage}
+            onConfirm={redirectToCart}
+          />
         </Sticky>
       </>
     );
