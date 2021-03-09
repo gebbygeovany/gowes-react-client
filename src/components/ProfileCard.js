@@ -24,6 +24,9 @@ function ProfileCard(props) {
   });
   const { getUser: currentUser } = data ? data : [];
 
+  console.log("user@profileCard: ", currentUser);
+
+
   const [avatar] = useState(
     "https://react.semantic-ui.com/images/avatar/large/molly.png"
   );
@@ -31,7 +34,7 @@ function ProfileCard(props) {
   return (
     <>
       {loading ? (
-        <h1>Loading posts..</h1>
+        <h1>Loading profile..</h1>
       ) : (
         <Card
           fluid
