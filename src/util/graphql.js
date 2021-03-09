@@ -49,8 +49,35 @@ export const FETCH_ITEMS_QUERY = gql`
   }
 `;
 
+export const SEARCH_ITEMS_QUERY = gql`
+  query($keyword: String!){
+    searchItems(keyword: $keyword) {
+      id
+      name
+      price
+      createdAt
+      description
+      images {
+        id
+        downloadUrl
+      }
+      bookmarkedBy {
+        id
+        userId
+        createdAt
+      }
+      user {
+        id
+        seller {
+          username
+        }
+      }
+    }
+  }
+`;
+
 export const FETCH_ITEM_QUERY = gql`
-  query($itemId: ID!, $itemUserId: ID!) {
+  query($itemId: ID!, $itemUserId: ID!, $currentUserId: ID!) {
     getItem(itemId: $itemId) {
       id
       name
@@ -105,7 +132,7 @@ export const FETCH_ITEM_QUERY = gql`
       createdAt
     }
 
-    isChatExists(itemUserId: $itemUserId) {
+    isChatExists(itemUserId: $itemUserId, currentUserId: $currentUserId) {
       _id
       lastText
     }

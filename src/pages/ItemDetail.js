@@ -26,6 +26,7 @@ function ItemDetail(props) {
     variables: {
       itemId: itemId,
       itemUserId: itemUserId,
+      currentUserId: context.user ? context.user.id: "000000000000000000000000"
     },
   });
   const { getItem: item } = itemData ? itemData : [];

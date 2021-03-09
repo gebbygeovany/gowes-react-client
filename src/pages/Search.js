@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Ref } from "semantic-ui-react";
 import gql from "graphql-tag";
@@ -6,19 +6,25 @@ import gql from "graphql-tag";
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
 import FilterBarHome from "../components/FilterBarHome";
-import { FETCH_ITEMS_QUERY } from "../util/graphql";
+import { SEARCH_ITEMS_QUERY } from "../util/graphql";
 
-function Search() {
-  const { loading, data } = useQuery(FETCH_ITEMS_QUERY);
-  const { getItems: items } = data ? data : [];
+function Search(props) {
+  const { loading, data } = useQuery(SEARCH_ITEMS_QUERY, {
+    variables: {
+      keyword: props.match.params.keyword.trim(),
+    },
+  });
 
+  const { searchItems: items } = data ? data : [];
+  
   const contextRef = React.createRef();
-
+  const [keyword, setKeyword] = useState(props.match.params.keyword.trim());
+ 
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
         <Grid.Column width={16}>
-          <SearchBarHome ></SearchBarHome>
+          <SearchBarHome  keyword={keyword} />
         </Grid.Column>
         <Grid.Column width={3}>
           <FilterBarHome contextRef={contextRef}></FilterBarHome>
@@ -38,12 +44,10 @@ function Search() {
                 </Transition.Group>
               </>
             ) : (
-                <h1>Loading Products..</h1>
-              )}
-
+              <h1>Loading Products..</h1>
+            )}
           </Grid>
         </Grid.Column>
-
       </Grid>
     </Ref>
   );

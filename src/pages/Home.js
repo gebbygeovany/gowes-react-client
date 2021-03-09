@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition } from "semantic-ui-react";
 import gql from "graphql-tag";
@@ -11,14 +11,14 @@ import { FETCH_ITEMS_QUERY } from "../util/graphql";
 function Home() {
   const { loading, data } = useQuery(FETCH_ITEMS_QUERY);
   const { getItems: items } = data ? data : [];
-
+  const [keyword, setKeyword] = useState("");
 
   return (
     <>
       <HomeCarousel></HomeCarousel>
       <Grid stackable>
         <Grid.Column width={16}>
-          <SearchBarHome ></SearchBarHome>
+          <SearchBarHome keyword={keyword} />
         </Grid.Column>
         <Grid.Column width={16}>
           <h4>Products</h4>
@@ -37,10 +37,8 @@ function Home() {
             ) : (
               <h1>Loading Products..</h1>
             )}
-
           </Grid>
         </Grid.Column>
-
       </Grid>
     </>
   );

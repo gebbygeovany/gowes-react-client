@@ -10,8 +10,8 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
 let httpLink = createHttpLink({
-  uri: "https://gowes-market-apollo-server.herokuapp.com/",
-  // uri: "http://localhost:3000"
+  // uri: "https://gowes-market-apollo-server.herokuapp.com/",
+  uri: "http://localhost:4000"
 });
 
 const authLink = setContext(() => {

@@ -71,7 +71,7 @@ class App extends Component {
             <Route exact path="/event" component={Event} />
             <Route exact path="/wishList" component={Bookmark} />
             <Route exact path="/cart" component={Cart} />
-            <Route exact path="/search" component={Search} />
+            <Route exact path="/search/:keyword" component={Search} />
             <AuthRoute exact path="/login" component={Login} />
             <AuthRoute exact path="/register" component={Register} />
             <Route exact path="/posts/:postId" component={SinglePost} />
