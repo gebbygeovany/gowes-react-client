@@ -41,6 +41,9 @@ export const FETCH_ITEMS_QUERY = gql`
       }
       user {
         id
+        address{
+          cityName
+        }
         seller {
           username
         }
@@ -68,6 +71,9 @@ export const SEARCH_ITEMS_QUERY = gql`
       }
       user {
         id
+        address{
+          cityName
+        }
         seller {
           username
         }
@@ -285,6 +291,18 @@ export const ADD_MESSAGE = gql`
         downloadUrl
       }
       sentAt
+    }
+  }
+`;
+export const FETCH_CITIES_QUERY = gql`
+  {
+    getCities {
+      city_id
+      province_id
+      province
+      type
+      city_name
+      postal_code
     }
   }
 `;

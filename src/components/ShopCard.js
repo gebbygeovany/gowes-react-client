@@ -24,7 +24,7 @@ function PostCard({ item: { id, name, price, user, bookmarkedBy, images } }) {
       <Card.Content extra>
         <Card.Header style={{ fontSize: 14 }}>{name}</Card.Header>
         <Card.Meta>
-          <span className="penjual">{user.seller.username}</span>
+          <span className="penjual">{user.address.cityName}</span>
         </Card.Meta>
         <Card.Meta style={{ marginTop: 5 }}>
           <Icon name="star" style={{ color: "gold" }}></Icon>
