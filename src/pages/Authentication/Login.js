@@ -20,7 +20,9 @@ function Login(props) {
         update(_, { data: { login: userData } }) {
             userData.name = userData.buyer.name;
             context.login(userData)
-            props.history.push('/')
+            // props.history.push('/')
+            window.location.href = '/'
+
         },
         onError(err) {
             setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -39,7 +41,7 @@ function Login(props) {
                     <span className="logoLogin">Login to your account</span>
                 </Header>
                 <Form size='large' onSubmit={onSubmit} noValidate className={loading ? "loading" : ""}>
-                    <Segment style={{boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)'}}>
+                    <Segment style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>
                         <Form.Input
                             fluid
                             icon='mail'
@@ -71,14 +73,14 @@ function Login(props) {
                     New to us? <a href='/register'>Sign Up</a>
                 </Message>
                 {Object.keys(errors).length > 0 && (
-                <div className='ui error message'>
-                    <ul className="list">
-                        {Object.values(errors).map(value => (
-                            <li key={value}>{value}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+                    <div className='ui error message'>
+                        <ul className="list">
+                            {Object.values(errors).map(value => (
+                                <li key={value}>{value}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </Grid.Column>
         </Grid>
     )

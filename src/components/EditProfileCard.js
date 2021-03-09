@@ -226,7 +226,6 @@ function EditProfileCard(props) {
                       value={values.name}
                       name="name"
                       onChange={onChange}
-                      error={errors.name ? true : false}
                     />
                     <Form.Input
                       fluid
@@ -296,11 +295,9 @@ function EditProfileCard(props) {
                     <Form.Input
                       fluid
                       placeholder="Districts"
-                      name="districts"
+                      name="district"
                       value={values.district}
                       onChange={onChange}
-                      search
-                      selection
                     />
                     <Form.Input
                       fluid
@@ -312,7 +309,7 @@ function EditProfileCard(props) {
                     <Form.Input
                       fluid
                       placeholder="Address Details"
-                      name="addressDetails"
+                      name="detail"
                       value={values.detail}
                       onChange={onChange}
                       control={TextArea}
@@ -320,8 +317,9 @@ function EditProfileCard(props) {
                     <Button color="teal" size="small" floated="right">
                       Save
                   </Button>
-                  </Form>
                   {showMessage()}
+
+                  </Form>
                 </Grid.Column>
               </Grid>
             </Card.Content>

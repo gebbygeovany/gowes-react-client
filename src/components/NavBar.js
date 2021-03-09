@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom'
 import { IoMdBicycle } from 'react-icons/io';
 import { useQuery } from '@apollo/react-hooks';
 
-
 import { AuthContext } from '../context/auth'
 import MyPopup from './MyPopup';
 import { FETCH_BOOKMARKS_QUERY } from '../util/graphql';
 import { FETCH_USER_CART_QUERY } from '../util/graphql';
-
 
 function NavBar(props) {
 
