@@ -26,12 +26,12 @@ function Search(props) {
         <Grid.Column width={16}>
           <SearchBarHome  keyword={keyword} />
         </Grid.Column>
-        <Grid.Column width={3}>
+        <Grid.Column width={4}>
           <FilterBarHome contextRef={contextRef}></FilterBarHome>
         </Grid.Column>
-        <Grid.Column width={13}>
+        <Grid.Column width={12}>
           <h4>Products</h4>
-          <Grid stackable columns={5}>
+          <Grid stackable columns={4}>
             {!loading ? (
               <>
                 <Transition.Group duration={1000}>
@@ -53,17 +53,6 @@ function Search(props) {
   );
 }
 
-const FETCH_CITIES_QUERY = gql`
-  {
-    getCities {
-      city_id
-      province_id
-      province
-      type
-      city_name
-      postal_code
-    }
-  }
-`;
+
 
 export default Search;

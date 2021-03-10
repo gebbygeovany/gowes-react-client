@@ -1,34 +1,69 @@
 import React, { useState } from 'react';
 import { Card, Sticky, Dropdown, Form, Radio } from 'semantic-ui-react';
+import { useQuery } from "@apollo/react-hooks";
+
+
+import { FETCH_CITIES_QUERY } from "../util/graphql";
+
 
 function FilterBarHome({ contextRef }) {
 
-    const  [checked, setChecked]  = useState("new")
+    const [checked, setChecked] = useState("new")
 
     const handleChange = (e, { value }) => {
         setChecked(value)
     }
 
-    console.log(checked)
 
-    const friendOptions = [
+    const { loading, data } = useQuery(FETCH_CITIES_QUERY);
+    const { getCities: cities } = data ? data : [];
+
+    console.log(cities)
+
+    const cityOptions = []
+
+    if (cities) {
+        cities.forEach(city => {
+            cityOptions.push({
+                key: city.city_id,
+                text: city.city_name + " " + city.type,
+                value: city.city_id
+            })
+        });
+    }
+
+    const categoryOptions = [
         {
-            key: 'Jenny Hess',
-            text: 'Jenny Hess',
-            value: 'Jenny Hess',
+            key: 'accessories',
+            text: 'Accessories',
+            value: 'accessories',
             // image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
         },
         {
-            key: 'Elliot Fu',
-            text: 'Elliot Fu',
-            value: 'Elliot Fu',
+            key: 'sparepart',
+            text: 'Sparepart',
+            value: 'sparepart',
             // image: { avatar: true, src: '/images/avatar/small/elliot.jpg' },
         },
         {
-            key: 'Stevie Feliciano',
-            text: 'Stevie Feliciano',
-            value: 'Stevie Feliciano',
+            key: 'apparel',
+            text: 'Apparel',
+            value: 'apparel',
             // image: { avatar: true, src: '/images/avatar/small/stevie.jpg' },
+        },
+    ]
+    const priceOptions = [
+        {
+            key: 0,
+            text: 'Min to Max',
+            value: 'ascending',
+            // image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
+        },
+        {
+            key: 1,
+            text: 'Max to Min',
+            value: 'descending',
+            // image: { avatar: true, src: '/images/avatar/small/elliot.jpg' },
         },
     ]
 
@@ -45,7 +80,7 @@ function FilterBarHome({ contextRef }) {
                             placeholder='Select Category'
                             fluid
                             selection
-                            options={friendOptions}
+                            options={categoryOptions}
                         />
                     </Card.Content>
                     <Card.Content>
@@ -54,7 +89,8 @@ function FilterBarHome({ contextRef }) {
                             placeholder='Select City'
                             fluid
                             selection
-                            options={friendOptions}
+                            options={cityOptions}
+                            search selection
                         />
                     </Card.Content>
                     <Card.Content>
@@ -86,7 +122,7 @@ function FilterBarHome({ contextRef }) {
                             placeholder='Sort Price'
                             fluid
                             selection
-                            options={friendOptions}
+                            options={priceOptions}
                         />
                     </Card.Content>
                 </Card>
