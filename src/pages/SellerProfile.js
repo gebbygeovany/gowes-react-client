@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Ref  } from 'semantic-ui-react';
+import { Grid, Ref } from 'semantic-ui-react';
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks';
 
@@ -44,7 +44,7 @@ function SellerProfile(props) {
                             {items &&
                                 items.map((item) => (
                                     <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
-                                        <ShopCard item={item}  />
+                                        <ShopCard item={item} />
                                     </Grid.Column>
                                 ))}
                         </Grid>
@@ -88,6 +88,9 @@ const FETCH_SELLER_PROFILE_QUERY = gql`
             }
             user{
                 id
+                address{
+                    cityName
+                }
                 seller{
                     username
                 }

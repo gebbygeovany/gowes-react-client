@@ -182,6 +182,9 @@ export const FETCH_BOOKMARKS_QUERY = gql`
       }
       user {
         id
+        address{
+          cityName
+        }
         seller {
           username
         }
