@@ -38,6 +38,7 @@ function PostCard({ item: { id, name, price, user, bookmarkedBy, images } }) {
       >
         <Image
           size="large"
+          style={{height:180}}
           src={
             images.length > 0
               ? images[0].downloadUrl
