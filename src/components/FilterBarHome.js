@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Sticky, Dropdown, Form, Radio } from "semantic-ui-react";
+import { Card, Sticky, Dropdown, Form, Radio, Input, Label } from "semantic-ui-react";
 import { useQuery } from "@apollo/react-hooks";
 
 import { FETCH_CITIES_QUERY } from "../util/graphql";
@@ -10,7 +10,7 @@ function FilterBarHome({
   onCityChange,
   onConditionChange,
 }) {
-  const [checked, setChecked] = useState("new");
+  const [checked, setChecked] = useState("all");
 
   const handleChange = (e, { value }) => {
     setChecked(value);
@@ -19,7 +19,14 @@ function FilterBarHome({
 
   const { loading, data } = useQuery(FETCH_CITIES_QUERY);
   const { getCities: cities } = data ? data : [];
-  const cityOptions = [];
+  const cityOptions = [
+    {
+      key: "all",
+      text: "Indonesia",
+      value: "all",
+      // image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
+    },
+  ];
 
   if (cities) {
     cities.forEach((city) => {
@@ -32,6 +39,12 @@ function FilterBarHome({
   }
 
   const categoryOptions = [
+    {
+      key: "all",
+      text: "All Categories",
+      value: "all",
+      // image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
+    },
     {
       key: "accessories",
       text: "Accessories",
@@ -89,6 +102,7 @@ function FilterBarHome({
               selection
               options={categoryOptions}
               onChange={categoryChange}
+              defaultValue={categoryOptions[0].value}
             />
           </Card.Content>
           <Card.Content>
@@ -101,11 +115,21 @@ function FilterBarHome({
               search
               selection
               onChange={cityChange}
+              defaultValue={cityOptions[0].value}
             />
           </Card.Content>
           <Card.Content>
             <h5>Condition</h5>
             <Form>
+              <Form.Field>
+                <Radio
+                  label="All"
+                  name="all"
+                  value="all"
+                  checked={checked === "all" ? true : false}
+                  onChange={handleChange}
+                />
+              </Form.Field>
               <Form.Field>
                 <Radio
                   label="New"
@@ -128,12 +152,16 @@ function FilterBarHome({
           </Card.Content>
           <Card.Content>
             <h5>Price</h5>
-            <Dropdown
-              placeholder="Sort Price"
-              fluid
-              selection
-              options={priceOptions}
-            />
+            <Input fluid labelPosition='right' type='text' placeholder='Min Price' style={{marginBottom: 10}}>
+              <Label basic>Rp</Label>
+              <input />
+              <Label>.00</Label>
+            </Input>
+            <Input fluid labelPosition='right' type='text' placeholder='Max Price'>
+              <Label basic>Rp</Label>
+              <input />
+              <Label>.00</Label>
+            </Input>
           </Card.Content>
         </Card>
       </Sticky>
