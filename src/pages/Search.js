@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Ref } from "semantic-ui-react";
-import gql from "graphql-tag";
 
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
@@ -9,25 +8,48 @@ import FilterBarHome from "../components/FilterBarHome";
 import { SEARCH_ITEMS_QUERY } from "../util/graphql";
 
 function Search(props) {
-  const { loading, data } = useQuery(SEARCH_ITEMS_QUERY, {
+  const contextRef = React.createRef();
+  const [category, setCategory] = useState("");
+  const [condition, setCondition] = useState("");
+  const [city, setCity] = useState("");
+  const [keyword, setKeyword] = useState(props.match.params.keyword.trim());
+
+  const { loading, data, refetch } = useQuery(SEARCH_ITEMS_QUERY, {
     variables: {
       keyword: props.match.params.keyword.trim(),
+      category: category,
+      condition: condition,
+      city: city,
     },
   });
-
   const { searchItems: items } = data ? data : [];
-  
-  const contextRef = React.createRef();
-  const [keyword, setKeyword] = useState(props.match.params.keyword.trim());
- 
+  const onCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    refetch();
+  };
+  const onCityChange = (newCity) => {
+    setCity(newCity);
+    refetch();
+  };
+  const onConditionChange = (newCondition) => {
+    setCondition(newCondition);
+    refetch();
+  };
+  console.log(`category: ${category}, city: ${city}, condition: ${condition}`)
+  console.log(`@search-items: ${items}`);
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
         <Grid.Column width={16}>
-          <SearchBarHome  keyword={keyword} />
+          <SearchBarHome keyword={keyword} />
         </Grid.Column>
         <Grid.Column width={4}>
-          <FilterBarHome contextRef={contextRef}></FilterBarHome>
+          <FilterBarHome
+            contextRef={contextRef}
+            onCategoryChange={onCategoryChange}
+            onCityChange={onCityChange}
+            onConditionChange={onConditionChange}
+          />
         </Grid.Column>
         <Grid.Column width={12}>
           <h4>Products</h4>
@@ -52,7 +74,5 @@ function Search(props) {
     </Ref>
   );
 }
-
-
 
 export default Search;
