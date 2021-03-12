@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Button, Grid } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom'
-import CardMyOrders from './CardMyOrders'
+import CardMySales from './CardMySales';
 
-function MyOrders(props) {
+function MySales(props) {
 
     const [activeItem, setActiveItem] = useState("all")
 
@@ -13,13 +13,13 @@ function MyOrders(props) {
 
     var contentToShow
 
-    contentToShow = <CardMyOrders filter={activeItem}></CardMyOrders>
+    contentToShow = <CardMySales filter={activeItem}></CardMySales>
 
     return (
         <>
             <Grid stackable>
                 <Grid.Row>
-                    <Grid columns={6} stackable centered>
+                    <Grid columns={5} stackable centered>
                         <Grid.Column>
                             <Button
                                 name='all'
@@ -34,38 +34,38 @@ function MyOrders(props) {
                         </Grid.Column>
                         <Grid.Column>
                             <Button
-                                name='Waiting for payment'
+                                name='New Orders'
                                 onClick={handleItemClick}
-                                color={activeItem === "Waiting for payment" ? "teal" : ""}
+                                color={activeItem === "New Orders" ? "teal" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                Waiting For Payment
+                                New Orders
                             </Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Button
-                                name='Waiting for confirmation'
+                                name='Ready to ship'
                                 onClick={handleItemClick}
-                                color={activeItem === "Waiting for confirmation" ? "teal" : ""}
+                                color={activeItem === "Ready to ship" ? "teal" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                Waiting For Confirmation
+                                Ready to ship
                             </Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Button
-                                name='Order processed'
+                                name='On delivery'
                                 onClick={handleItemClick}
-                                color={activeItem === "Order processed" ? "teal" : ""}
+                                color={activeItem === "On delivery" ? "teal" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                Order Processed
+                                On delivery
                             </Button>
                         </Grid.Column>
                         <Grid.Column>
@@ -77,10 +77,10 @@ function MyOrders(props) {
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                Order Shipped
+                                Order Arrived
                             </Button>
                         </Grid.Column>
-                        <Grid.Column>
+                        {/* <Grid.Column>
                             <Button
                                 name='Order arrived'
                                 onClick={handleItemClick}
@@ -90,7 +90,7 @@ function MyOrders(props) {
                             >
                                 Order Arrived
                             </Button>
-                        </Grid.Column>
+                        </Grid.Column> */}
                         {/* <Grid.Column>
                             <Button
                                 name='order completed'
@@ -115,4 +115,4 @@ function MyOrders(props) {
     )
 }
 
-export default MyOrders
+export default MySales

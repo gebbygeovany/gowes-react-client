@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Button, Card, Grid } from 'semantic-ui-react';
 
 import ItemMyOrders from './ItemMyOrders'
-import ModalMyOrders from './ModalMyOrders'
+import ModalMySales from './ModalMySales'
 
-function CardMyOrders({ filter }) {
+function CardMySales({ filter }) {
 
     return (
         <Card fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>
@@ -29,10 +29,10 @@ function CardMyOrders({ filter }) {
             <ItemMyOrders></ItemMyOrders>
             <Card.Content>
                 {/* <Button floated='right' size='small' color='teal'>See Details</Button> */}
-                <ModalMyOrders filter={filter}></ModalMyOrders>
+                <ModalMySales filter={filter}></ModalMySales>
             </Card.Content>
         </Card>
     )
 }
 
-export default CardMyOrders
+export default CardMySales

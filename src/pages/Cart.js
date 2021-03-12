@@ -25,7 +25,7 @@ function Cart() {
 
   var size = Object.size(cartItems)
 
-  console.log(size)
+  console.log(cartItems)
 
 
   let cartMarkup = (
