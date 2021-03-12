@@ -53,24 +53,21 @@ export const FETCH_ITEMS_QUERY = gql`
 `;
 
 export const SEARCH_ITEMS_QUERY = gql`
-  query($keyword: String!){
-    searchItems(keyword: $keyword) {
+  query($keyword: String!, $category: String!, $condition: String!, $city: String!){
+    searchItems(keyword: $keyword, category: $category, city: $city, condition: $condition) {
       id
       name
       price
       createdAt
       description
       images {
-        id
         downloadUrl
       }
       bookmarkedBy {
-        id
         userId
         createdAt
       }
       user {
-        id
         address{
           cityName
         }
