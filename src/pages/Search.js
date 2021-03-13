@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Ref } from "semantic-ui-react";
 
@@ -6,6 +6,8 @@ import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
 import FilterBarHome from "../components/FilterBarHome";
 import { SEARCH_ITEMS_QUERY } from "../util/graphql";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 function Search(props) {
   const contextRef = React.createRef();
@@ -17,25 +19,19 @@ function Search(props) {
   const { loading, data, refetch } = useQuery(SEARCH_ITEMS_QUERY, {
     variables: {
       keyword: props.match.params.keyword.trim(),
-      category: category,
-      condition: condition,
-      city: city,
+      category: props.newFilter.category,
+      condition: props.newFilter.condition,
+      city: props.newFilter.city,
     },
   });
   const { searchItems: items } = data ? data : [];
-  const onCategoryChange = (newCategory) => {
-    setCategory(newCategory);
-    refetch();
-  };
-  const onCityChange = (newCity) => {
-    setCity(newCity);
-    refetch();
-  };
-  const onConditionChange = (newCondition) => {
-    setCondition(newCondition);
-    refetch();
-  };
-  console.log(`category: ${category}, city: ${city}, condition: ${condition}`)
+  console.log(`props.newFilter: ${props.newFilter.category}`)
+  useEffect(() => {
+    if (props.newFilter) {
+      refetch();
+    }
+  }, [props.newFilter]);
+
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
@@ -45,9 +41,6 @@ function Search(props) {
         <Grid.Column width={4}>
           <FilterBarHome
             contextRef={contextRef}
-            onCategoryChange={onCategoryChange}
-            onCityChange={onCityChange}
-            onConditionChange={onConditionChange}
           />
         </Grid.Column>
         <Grid.Column width={12}>
@@ -74,4 +67,12 @@ function Search(props) {
   );
 }
 
-export default Search;
+Search.propTypes = {
+  newFilter: PropTypes.object,
+};
+
+const mapStateToProps = (state) => ({
+  newFilter: state.searchFilter.filter,
+});
+
+export default connect(mapStateToProps, {})(Search);
