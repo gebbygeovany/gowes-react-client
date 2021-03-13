@@ -306,3 +306,11 @@ export const FETCH_CITIES_QUERY = gql`
     }
   }
 `;
+export const CREATE_PAYMENT_QUERY = gql`
+  {
+  createPayment{
+    token
+    redirect_url
+  }
+}
+`;
