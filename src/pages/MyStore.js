@@ -4,6 +4,7 @@ import { Grid, Ref } from 'semantic-ui-react';
 import SidebarStore from '../components/SidebarStore'
 import MyStoreDetailsCard from '../components/MyStoreDetailsCard'
 import MyItemList from '../components/MyItemList'
+import MySales from '../components/MySales'
 
 
 
@@ -20,7 +21,7 @@ function MyStore(props) {
     } else if (sidebarPosition === 'myItemsList') {
         contentToShow = <MyItemList props={props}></MyItemList>
     } else if (sidebarPosition === 'salesList') {
-
+        contentToShow = <MySales props={props}></MySales>
     }
 
     return (

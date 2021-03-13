@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react'
-import { Button, Divider, Grid, Modal, List, Confirm, Form} from 'semantic-ui-react'
+import { Button, Divider, Grid, Modal, List, Confirm, Form } from 'semantic-ui-react'
 
 import ItemMyOrders from './ItemMyOrders'
 import { AuthContext } from '../context/auth';
 
 
 
-function ModalMyOrders({ filter }) {
+function ModalMySales({ filter }) {
     const context = useContext(AuthContext);
     console.log(context.user.id)
 
@@ -17,7 +17,7 @@ function ModalMyOrders({ filter }) {
     let store = "6016b07f469523044467af34"
 
     var AWBInput = (
-        <Form style={{padding: 30}}>
+        <Form style={{ padding: 30 }}>
             <Form.Field>
                 <label>AWB Number</label>
                 <input placeholder='AWB Number' />
@@ -27,14 +27,14 @@ function ModalMyOrders({ filter }) {
 
     var orderAction
 
-    if (filter === 'Order shipped') {
+    if (store === context.user.id && filter === 'New Orders') {
         orderAction = (
             <Modal.Actions>
                 <Button color="teal" animated onClick={() => setConfirmOpen(true)} style={{ width: 200 }}>
-                    <Button.Content visible>Order Arrived?</Button.Content>
+                    <Button.Content visible>Confirm Order?</Button.Content>
                     <Button.Content hidden >
-                        Arrival Confirmation
-                        </Button.Content>
+                        Confirm
+                    </Button.Content>
                 </Button>
                 <Confirm
                     open={confirmOpen}
@@ -45,6 +45,27 @@ function ModalMyOrders({ filter }) {
                 />
             </Modal.Actions>
         )
+
+    } else if (store === context.user.id && filter === 'Ready to ship') {
+        orderAction = (
+            <Modal.Actions>
+                <Button color="teal" animated onClick={() => setConfirmOpen(true)} style={{ width: 200 }}>
+                    <Button.Content visible>Send Item</Button.Content>
+                    <Button.Content hidden >
+                        Send item now !
+                    </Button.Content>
+                </Button>
+                <Confirm
+                    open={confirmOpen}
+                    onCancel={() => setConfirmOpen(false)}
+                    onConfirm={() => setOpen(false)}
+                    cancelButton='Cancel'
+                    confirmButton="Confirm"
+                    content={AWBInput}
+                />
+            </Modal.Actions>
+        )
+
     }
 
     return (
@@ -71,14 +92,6 @@ function ModalMyOrders({ filter }) {
                             <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>Jon's Store</h5>
                             <div>Order Date</div>
                             <h5 style={{ marginTop: 5, marginBottom: 10 }}>2 Mar 2021, 09:22 WIB</h5>
-                        </Grid.Column>
-                        <Grid.Column width={4} style={{ paddingTop: 10 }}>
-                            <Button.Group vertical floated="right" style={{ paddingRight: 10 }}>
-                                {filter === "Order arrived" ? (
-                                    <Button fluid color="purple" compact>Give Review</Button>
-                                ) : (<></>)}
-                                <Button fluid compact>Chat Seller</Button>
-                            </Button.Group>
                         </Grid.Column>
                     </Grid>
                 </Modal.Description>
@@ -114,9 +127,11 @@ function ModalMyOrders({ filter }) {
                         <Grid.Column width={6}>
                             <h5 width={8} style={{ paddingLeft: 10, marginBottom: 10 }}>Shipping Info</h5>
                             <h5 style={{ paddingLeft: 10, marginTop: 5, marginBottom: 3, color: "teal" }}>SiCepat - Regular Package</h5>
-                            {filter === "Order shipped" ? (
+                            {filter === "On delivery" ? (
                                 <div style={{ paddingLeft: 10, marginBottom: 10 }}>AWB num : 000444958166</div>
                             ) : (<></>)}
+                            <Button style={{ margin:10 }} compact color="purple">Chat Seller</Button>
+
                         </Grid.Column>
                     </Grid>
                 </Modal.Description>
@@ -147,4 +162,4 @@ function ModalMyOrders({ filter }) {
     )
 }
 
-export default ModalMyOrders
+export default ModalMySales
