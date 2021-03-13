@@ -14,7 +14,7 @@ function FilterBarHome({
 
   const handleChange = (e, { value }) => {
     setChecked(value);
-    onConditionChange(value);
+    onConditionChange(value == "all" ? "" : value);
   };
 
   const { loading, data } = useQuery(FETCH_CITIES_QUERY);

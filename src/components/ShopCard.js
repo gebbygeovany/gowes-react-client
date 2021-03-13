@@ -6,9 +6,14 @@ import "../App.css";
 import { AuthContext } from "../context/auth";
 import BookmarkButton from "./BookmarkButton";
 
-function PostCard({ item: { id, name, price, user, bookmarkedBy, images } }) {
+function PostCard({ item: { id, name, condition, price, user, bookmarkedBy, images } }) {
   const userCache = useContext(AuthContext);
-  const currencyIdrConverter = (price, decPlaces, thouSeparator, decSeparator) => {
+  const currencyIdrConverter = (
+    price,
+    decPlaces,
+    thouSeparator,
+    decSeparator
+  ) => {
     var n = price,
       decPlaces = isNaN((decPlaces = Math.abs(decPlaces))) ? 2 : decPlaces,
       decSeparator = decSeparator == undefined ? "." : decSeparator,
@@ -29,6 +34,20 @@ function PostCard({ item: { id, name, price, user, bookmarkedBy, images } }) {
     );
   };
 
+  let ribbon = {
+    color: "green",
+    content: "New",
+    ribbon: true,
+  };
+
+  if (condition == "used") {
+    ribbon = {
+      color: "grey",
+      content: "Used",
+      ribbon: true,
+    };
+  }
+
   return (
     <Card style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content
@@ -37,8 +56,9 @@ function PostCard({ item: { id, name, price, user, bookmarkedBy, images } }) {
         to={`/items/${id}/${user.id}`}
       >
         <Image
+          label={ribbon}
           size="large"
-          style={{height:180}}
+          style={{ height: 180 }}
           src={
             images.length > 0
               ? images[0].downloadUrl
@@ -56,7 +76,9 @@ function PostCard({ item: { id, name, price, user, bookmarkedBy, images } }) {
           <Icon name="star" style={{ color: "gold" }}></Icon>
           4/5
         </Card.Meta>
-        <Card.Description>Rp {currencyIdrConverter(price, 0, '.', ',')}</Card.Description>
+        <Card.Description>
+          Rp {currencyIdrConverter(price, 0, ".", ",")}
+        </Card.Description>
       </Card.Content>
 
       <Card.Content extra>

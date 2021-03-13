@@ -28,6 +28,7 @@ export const FETCH_ITEMS_QUERY = gql`
       id
       name
       price
+      condition
       createdAt
       description
       images {
@@ -60,6 +61,7 @@ export const SEARCH_ITEMS_QUERY = gql`
       price
       createdAt
       description
+      condition
       images {
         downloadUrl
       }
@@ -68,6 +70,7 @@ export const SEARCH_ITEMS_QUERY = gql`
         createdAt
       }
       user {
+        id
         address{
           cityName
         }

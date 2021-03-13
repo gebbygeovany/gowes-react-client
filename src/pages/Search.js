@@ -36,7 +36,6 @@ function Search(props) {
     refetch();
   };
   console.log(`category: ${category}, city: ${city}, condition: ${condition}`)
-  console.log(`@search-items: ${items}`);
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
