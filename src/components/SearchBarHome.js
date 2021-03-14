@@ -20,12 +20,13 @@ function SearchBarHome(props) {
   }, [values, isSubmit]);
 
   const onChange = (_, { value }) => {
-    setValues({ ...values, ["keyword"]: value == "" ? " " : value });
+    setValues({ ...values, ["keyword"]: value });
   };
 
   const onSubmit = () => setSubmit(true);
 
   const handleKeyDown = (e) => {
+    console.log(e.key)
     if (e.key === "Enter") {
       setSubmit(true);
     }
