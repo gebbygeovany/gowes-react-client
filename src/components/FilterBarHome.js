@@ -7,6 +7,7 @@ import {
   Radio,
   Input,
   Label,
+  Button
 } from "semantic-ui-react";
 import { useQuery } from "@apollo/react-hooks";
 
@@ -14,6 +15,8 @@ import { FETCH_CITIES_QUERY } from "../util/graphql";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setFilter } from "../actions/searchFilterAction";
+import { useForm } from '../util/hooksPrice'
+
 
 function FilterBarHome(props) {
   const [values, setValues] = useState(props.filter);
@@ -30,7 +33,7 @@ function FilterBarHome(props) {
     setValues({ ...values, ["category"]: value == "all" ? "" : value });
   };
 
-  const cityChange = (_, {  value }) => {
+  const cityChange = (_, { value }) => {
     setValues({ ...values, ["city"]: value == "all" ? "" : value });
   };
 
@@ -76,10 +79,20 @@ function FilterBarHome(props) {
       value: "apparel",
     },
   ];
-  
+
+  const { onChange, onSubmit, priceValues } = useForm(filterPrice, {
+    max: "",
+    min: ""
+  })
+  console.log(priceValues)
+
+  function filterPrice(){
+
+  }
+
   return (
     <>
-      <Sticky context={props.contextRef} offset={120}>
+      <Sticky context={props.contextRef} offset={100}>
         <h4>Filter</h4>
         <Card style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
           <Card.Content>
@@ -109,58 +122,75 @@ function FilterBarHome(props) {
           <Card.Content>
             <h5>Condition</h5>
             <Form>
-              <Form.Field>
-                <Radio
-                  label="All"
-                  name="condition"
-                  value="all"
-                  checked={values.condition === "" ? true : false}
-                  onChange={handleChange}
-                />
-              </Form.Field>
-              <Form.Field>
-                <Radio
-                  label="New"
-                  name="condition"
-                  value="new"
-                  checked={values.condition === "new" ? true : false}
-                  onChange={handleChange}
-                />
-              </Form.Field>
-              <Form.Field>
-                <Radio
-                  label="Used"
-                  name="condition"
-                  value="used"
-                  checked={values.condition === "used" ? true : false}
-                  onChange={handleChange}
-                />
-              </Form.Field>
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <Radio
+                    label="All"
+                    name="condition"
+                    value="all"
+                    checked={values.condition === "" ? true : false}
+                    onChange={handleChange}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Radio
+                    label="New"
+                    name="condition"
+                    value="new"
+                    checked={values.condition === "new" ? true : false}
+                    onChange={handleChange}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Radio
+                    label="Used"
+                    name="condition"
+                    value="used"
+                    checked={values.condition === "used" ? true : false}
+                    onChange={handleChange}
+                  />
+                </Form.Field>
+              </Form.Group>
+
             </Form>
           </Card.Content>
           <Card.Content>
             <h5>Price</h5>
-            <Input
-              fluid
-              labelPosition="right"
-              type="text"
-              placeholder="Min Price"
-              style={{ marginBottom: 10 }}
-            >
-              <Label basic>Rp</Label>
-              <input />
-              <Label>.00</Label>
-            </Input>
-            <Input
-              fluid
-              labelPosition="right"
-              type="text"
-              placeholder="Max Price"
-            >
-              <Label basic>Rp</Label>
-              <input />
-              <Label>.00</Label>
-            </Input>
+            <Form onSubmit={onSubmit}>
+              <Form.Input
+                fluid
+                labelPosition="right"
+                type="text"
+                placeholder="Min Price"
+                style={{ marginBottom: 10 }}
+                value={priceValues.min}
+                onChange={onChange}
+                name="min"
+                type="number"
+              >
+                <Label basic>Rp</Label>
+                <input />
+                <Label>.00</Label>
+              </Form.Input>
+              <Form.Input
+                fluid
+                labelPosition="right"
+                type="text"
+                placeholder="Max Price"
+                value={priceValues.max}
+                onChange={onChange}
+                name="max"
+                type="number"
+              >
+                <Label basic>Rp</Label>
+                <input />
+                <Label>.00</Label>
+              </Form.Input>
+              <Button color='secondary' fluid >
+                Submit
+              </Button>
+            </Form>
+
           </Card.Content>
         </Card>
       </Sticky>

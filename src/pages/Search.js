@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Transition, Ref } from "semantic-ui-react";
+import { Grid, Transition, Ref, Message } from "semantic-ui-react";
 
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
@@ -29,6 +29,21 @@ function Search(props) {
     }
   }, [props.newFilter]);
 
+  Object.size = function (obj) {
+    var size = 0,
+      key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  };
+
+  var size = Object.size(items)
+
+  console.log(size)
+
+
+
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
@@ -43,7 +58,7 @@ function Search(props) {
         <Grid.Column width={12}>
           <h4>Products</h4>
           <Grid stackable columns={4}>
-            {!loading ? (
+            {!loading && size > 0 ? (
               <>
                 <Transition.Group duration={1000}>
                   {items &&
@@ -54,8 +69,21 @@ function Search(props) {
                     ))}
                 </Transition.Group>
               </>
-            ) : (
+            ) : (loading ? (
               <h1>Loading Products..</h1>
+
+            ) : (
+              <Grid.Column width={16}>
+                <Message
+                  error
+                  icon='search'
+                  header='Item not found'
+                  content='Try with another keywords or filters'
+                  style={{ marginBottom: 109 }}
+                />
+              </Grid.Column>
+
+            )
             )}
           </Grid>
         </Grid.Column>
