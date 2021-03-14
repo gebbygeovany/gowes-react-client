@@ -16,24 +16,23 @@ import { connect } from "react-redux";
 import { setFilter } from "../actions/searchFilterAction";
 
 function FilterBarHome(props) {
-  const [values, setValues] = useState({
-    category: "",
-    condition: "",
-    city: "",
-  });
+  const [values, setValues] = useState(props.filter);
 
-  const handleChange = (e, { name, value }) => {
+  useEffect(() => {
+    props.setFilter(values);
+  }, [values]);
+
+  const handleChange = (_, { name, value }) => {
     setValues({ ...values, [name]: value == "all" ? "" : value });
   };
 
-  const handleDropdownChange = (e, { key, value }) => {
-    setValues({ ["category"]: value == "all" ? "" : value });
+  const categoryChange = (_, { value }) => {
+    setValues({ ...values, ["category"]: value == "all" ? "" : value });
   };
 
-  useEffect(() => {
-    console.log(`values.category: ${values.category}`);
-    props.setFilter(values);
-  }, [values]);
+  const cityChange = (_, {  value }) => {
+    setValues({ ...values, ["city"]: value == "all" ? "" : value });
+  };
 
   const { data } = useQuery(FETCH_CITIES_QUERY);
   const { getCities: cities } = data ? data : [];
@@ -77,29 +76,7 @@ function FilterBarHome(props) {
       value: "apparel",
     },
   ];
-  const priceOptions = [
-    {
-      key: 0,
-      text: "Min to Max",
-      value: "ascending",
-    },
-    {
-      key: 1,
-      text: "Max to Min",
-      value: "descending",
-    },
-  ];
-
-  const categoryChange = (e, { value }) => {
-    setValues({ ...values, ["category"]: value == "all" ? "" : value });
-  };
-  const cityChange = (e, {  value }) => {
-    setValues({ ...values, ["city"]: value == "all" ? "" : value });
-  };
-  const conditionChange = (e, { name, value }) => {
-    props.onConditionChange(value);
-  };
-
+  
   return (
     <>
       <Sticky context={props.contextRef} offset={120}>
@@ -193,6 +170,11 @@ function FilterBarHome(props) {
 
 FilterBarHome.propTypes = {
   setFilter: PropTypes.func.isRequired,
+  filter: PropTypes.object,
 };
 
-export default connect(null, { setFilter })(FilterBarHome);
+const mapStateToProps = (state) => ({
+  filter: state.searchFilter.filter,
+});
+
+export default connect(mapStateToProps, { setFilter })(FilterBarHome);

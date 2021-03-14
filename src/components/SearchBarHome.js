@@ -1,31 +1,62 @@
-import React, { useState } from "react";
-import { Input, Button, Icon } from "semantic-ui-react";
+import React, { useState, useEffect } from "react";
+import { Input, Button } from "semantic-ui-react";
 import _ from "lodash";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { setFilter } from "../actions/searchFilterAction";
 
 function SearchBarHome(props) {
-  function search() {
-    window.location.href = "/search";
-  }
-  const [keyword, setKeyword] = useState(props.keyword);
+  const history = useHistory();
+  const [values, setValues] = useState(props.filter);
+  const [isSubmit, setSubmit] = useState(false);
 
-  const onChange = (event) => {
-    setKeyword(event.target.value)
-  }
+  useEffect(() => {
+    if (isSubmit && values.keyword !== "") {
+      props.setFilter(values);
+      history.push(`/search/${values.keyword == "" ? " " : values.keyword}`);
+    }
+    setSubmit(false);
+  }, [values, isSubmit]);
+
+  const onChange = (_, { value }) => {
+    setValues({ ...values, ["keyword"]: value == "" ? " " : value });
+  };
+
+  const onSubmit = () => setSubmit(true);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setSubmit(true);
+    }
+  };
 
   return (
     <Input
       fluid
       onChange={onChange}
-    //   action={<Button type='submit' onClick={() => {setSearch(true)}}>Search</Button>}
-      action={<Button type='submit' as={Link} to={`/search/${keyword ? keyword : " "}`} >Search</Button>}
+      action={
+        <Button type="submit" onClick={onSubmit}>
+          Search
+        </Button>
+      }
       placeholder="Search..."
       style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
       size="big"
-      value={keyword}
+      value={values.keyword}
       type="text"
+      onKeyDown={handleKeyDown}
     />
   );
 }
 
-export default SearchBarHome;
+SearchBarHome.propTypes = {
+  setFilter: PropTypes.func.isRequired,
+  filter: PropTypes.object,
+};
+
+const mapStateToProps = (state) => ({
+  filter: state.searchFilter.filter,
+});
+
+export default connect(mapStateToProps, { setFilter })(SearchBarHome);

@@ -2,6 +2,7 @@ import { SEARCH_FILTER } from "../actions/types";
 
 const initialState = {
   filter: {
+    keyword: "",
     category: "",
     condition: "",
     city: "",

@@ -11,9 +11,6 @@ import { connect } from "react-redux";
 
 function Search(props) {
   const contextRef = React.createRef();
-  const [category, setCategory] = useState("");
-  const [condition, setCondition] = useState("");
-  const [city, setCity] = useState("");
   const [keyword, setKeyword] = useState(props.match.params.keyword.trim());
 
   const { loading, data, refetch } = useQuery(SEARCH_ITEMS_QUERY, {

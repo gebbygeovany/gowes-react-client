@@ -12,7 +12,6 @@ import { SEARCH_FILTER } from "./types";
 // };
 
 export const setFilter = (filter) => (dispatch) => {
-    console.log("action called-filter condition", filter.condition)
     dispatch({
         type: SEARCH_FILTER,
         payload: filter,
