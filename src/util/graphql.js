@@ -61,7 +61,7 @@ export const SEARCH_ITEMS_QUERY = gql`
     $city: String!
   ) {
     searchItems(
-      searhItemInput: {
+      searchItemInput: {
         keyword: $keyword
         category: $category
         city: $city
