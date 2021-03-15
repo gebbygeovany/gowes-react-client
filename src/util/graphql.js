@@ -42,7 +42,7 @@ export const FETCH_ITEMS_QUERY = gql`
       }
       user {
         id
-        address{
+        address {
           cityName
         }
         seller {
@@ -54,8 +54,20 @@ export const FETCH_ITEMS_QUERY = gql`
 `;
 
 export const SEARCH_ITEMS_QUERY = gql`
-  query($keyword: String!, $category: String!, $condition: String!, $city: String!){
-    searchItems(keyword: $keyword, category: $category, city: $city, condition: $condition) {
+  query(
+    $keyword: String!
+    $category: String!
+    $condition: String!
+    $city: String!
+  ) {
+    searchItems(
+      searhItemInput: {
+        keyword: $keyword
+        category: $category
+        city: $city
+        condition: $condition
+      }
+    ) {
       id
       name
       price
@@ -71,7 +83,7 @@ export const SEARCH_ITEMS_QUERY = gql`
       }
       user {
         id
-        address{
+        address {
           cityName
         }
         seller {
@@ -182,7 +194,7 @@ export const FETCH_BOOKMARKS_QUERY = gql`
       }
       user {
         id
-        address{
+        address {
           cityName
         }
         seller {
@@ -311,9 +323,9 @@ export const FETCH_CITIES_QUERY = gql`
 `;
 export const CREATE_PAYMENT_QUERY = gql`
   {
-  createPayment{
-    token
-    redirect_url
+    createPayment {
+      token
+      redirect_url
+    }
   }
-}
 `;
