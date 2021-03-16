@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Ref, Message } from "semantic-ui-react";
 
@@ -8,57 +8,78 @@ import FilterBarHome from "../components/FilterBarHome";
 import { SEARCH_ITEMS_QUERY } from "../util/graphql";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { setFilter } from "../actions/searchFilterAction";
 
 function Search(props) {
   const contextRef = React.createRef();
-  const [keyword, setKeyword] = useState(props.match.params.keyword.trim());
+  const params = props.match.params.keyword.trim().split("&");
 
-  const { loading, data, refetch } = useQuery(SEARCH_ITEMS_QUERY, {
+  const getQueryFieldValue = (fieldName) => {
+    let result = "";
+    params.map((param) => {
+      const pair = param.split("=");
+      if (pair[0] == fieldName) {
+        result = pair[1];
+        return;
+      }
+    });
+    return result;
+  };
+
+  const navsourceParam = getQueryFieldValue("navsource");
+  const keywordParam = getQueryFieldValue("q");
+  const categoryParam = getQueryFieldValue("cat");
+  const conditionParam = getQueryFieldValue("cond");
+  const cityParam = getQueryFieldValue("city");
+  const minPriceParam = getQueryFieldValue("min");
+  const maxPriceParam = getQueryFieldValue("max");
+  const navsource = navsourceParam != "" ? `navsource=${navsourceParam}` : "";
+  const keyword =
+    navsourceParam != "" ? `&q=${keywordParam}` : `q=${keywordParam}`;
+  
+  const { loading, data } = useQuery(SEARCH_ITEMS_QUERY, {
     variables: {
-      keyword: props.match.params.keyword.trim(),
-      category: props.newFilter.category,
-      condition: props.newFilter.condition,
-      city: props.newFilter.city,
+      keyword: keywordParam,
+      category: categoryParam,
+      condition: conditionParam,
+      city: cityParam,
+      minPrice: minPriceParam != "" ? parseInt(minPriceParam) : -1,
+      maxPrice: maxPriceParam != "" ? parseInt(maxPriceParam) : -1,
     },
   });
   const { searchItems: items } = data ? data : [];
-  console.log(`props.newFilter: ${props.newFilter.category}`)
-  useEffect(() => {
-    if (props.newFilter) {
-      refetch();
-    }
-  }, [props.newFilter]);
-
-  Object.size = function (obj) {
-    var size = 0,
-      key;
-    for (key in obj) {
-      if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-  };
-
-  var size = Object.size(items)
-
-  console.log(size)
-
-
 
   return (
     <Ref innerRef={contextRef}>
       <Grid stackable>
         <Grid.Column width={16}>
-          <SearchBarHome keyword={keyword} />
+          <SearchBarHome keyword={keywordParam} />
         </Grid.Column>
         <Grid.Column width={4}>
           <FilterBarHome
             contextRef={contextRef}
+            navsource={navsource}
+            keyword={keyword}
+            category={categoryParam}
+            condition={conditionParam}
+            city={cityParam}
+            minPrice={minPriceParam}
+            maxPrice={maxPriceParam}
           />
         </Grid.Column>
         <Grid.Column width={12}>
           <h4>Products</h4>
+          {props.newFilter.minPrice < 100 && props.newFilter.minPrice != -1 ? (
+            <Message
+              error
+              header="The price range is between 100 - 100,000,000."
+            />
+          ) : (
+            <></>
+          )}
+
           <Grid stackable columns={4}>
-            {!loading && size > 0 ? (
+            {!loading && items.length > 0 ? (
               <>
                 <Transition.Group duration={1000}>
                   {items &&
@@ -69,21 +90,18 @@ function Search(props) {
                     ))}
                 </Transition.Group>
               </>
-            ) : (loading ? (
+            ) : loading ? (
               <h1>Loading Products..</h1>
-
             ) : (
               <Grid.Column width={16}>
                 <Message
                   error
-                  icon='search'
-                  header='Item not found'
-                  content='Try with another keywords or filters'
+                  icon="search"
+                  header="Item not found"
+                  content="Try with another keywords or filters"
                   style={{ marginBottom: 109 }}
                 />
               </Grid.Column>
-
-            )
             )}
           </Grid>
         </Grid.Column>
@@ -94,10 +112,11 @@ function Search(props) {
 
 Search.propTypes = {
   newFilter: PropTypes.object,
+  setFilter: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   newFilter: state.searchFilter.filter,
 });
 
-export default connect(mapStateToProps, {})(Search);
+export default connect(mapStateToProps, { setFilter })(Search);

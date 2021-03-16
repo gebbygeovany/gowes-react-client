@@ -59,6 +59,8 @@ export const SEARCH_ITEMS_QUERY = gql`
     $category: String!
     $condition: String!
     $city: String!
+    $minPrice: Int!
+    $maxPrice: Int!
   ) {
     searchItems(
       searchItemInput: {
@@ -66,6 +68,8 @@ export const SEARCH_ITEMS_QUERY = gql`
         category: $category
         city: $city
         condition: $condition
+        minPrice: $minPrice
+        maxPrice: $maxPrice
       }
     ) {
       id

@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button } from "semantic-ui-react";
 import _ from "lodash";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { setFilter } from "../actions/searchFilterAction";
+import { initialFilter } from "../util/const";
 
 function SearchBarHome(props) {
   const history = useHistory();
-  const [values, setValues] = useState(props.filter);
+  const navSource = props.navSource ? `navsource=${props.navSource}&` : "";
+  const keywordProp = props.keyword;
+  const [keyword, setKeyword] = useState(keywordProp);
   const [isSubmit, setSubmit] = useState(false);
 
   useEffect(() => {
-    if (isSubmit && values.keyword !== "") {
-      props.setFilter(values);
-      history.push(`/search/${values.keyword == "" ? " " : values.keyword}`);
+    if (isSubmit && keyword !== "") {
+      props.setFilter(initialFilter.filter);
+      const param = `${navSource}q=${keyword}`;
+      history.push(`/search/${param}`);
     }
     setSubmit(false);
-  }, [values, isSubmit]);
+  }, [keyword, isSubmit]);
 
   const onChange = (_, { value }) => {
-    setValues({ ...values, ["keyword"]: value });
+    setKeyword(value);
   };
 
   const onSubmit = () => setSubmit(true);
 
   const handleKeyDown = (e) => {
-    console.log(e.key)
     if (e.key === "Enter") {
       setSubmit(true);
     }
@@ -44,7 +47,7 @@ function SearchBarHome(props) {
       placeholder="Search..."
       style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
       size="big"
-      value={values.keyword}
+      value={keyword}
       type="text"
       onKeyDown={handleKeyDown}
     />

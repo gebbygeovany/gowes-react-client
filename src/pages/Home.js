@@ -1,24 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition } from "semantic-ui-react";
-import gql from "graphql-tag";
 
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
 import HomeCarousel from "../components/HomeCarousel";
 import { FETCH_ITEMS_QUERY } from "../util/graphql";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { setFilter } from "../actions/searchFilterAction";
+import { initialFilter } from "../util/const";
 
-function Home() {
+function Home(props) {
   const { loading, data } = useQuery(FETCH_ITEMS_QUERY);
   const { getItems: items } = data ? data : [];
-  const [keyword, setKeyword] = useState("");
+  props.setFilter(initialFilter.filter);
 
   return (
     <>
       <HomeCarousel></HomeCarousel>
       <Grid stackable>
         <Grid.Column width={16}>
-          <SearchBarHome keyword={keyword} />
+          <SearchBarHome navSource={"home"}/>
         </Grid.Column>
         <Grid.Column width={16}>
           <h4>Products</h4>
@@ -44,17 +47,12 @@ function Home() {
   );
 }
 
-const FETCH_CITIES_QUERY = gql`
-  {
-    getCities {
-      city_id
-      province_id
-      province
-      type
-      city_name
-      postal_code
-    }
-  }
-`;
+Home.propTypes = {
+  newFilter: PropTypes.object,
+  setFilter: PropTypes.func.isRequired,
+};
 
-export default Home;
+const mapStateToProps = (state) => ({
+  newFilter: state.searchFilter.filter,
+});
+export default connect(mapStateToProps, { setFilter })(Home);
