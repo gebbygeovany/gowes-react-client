@@ -58,7 +58,7 @@ function PostCard({ item: { id, name, condition, price, user, bookmarkedBy, imag
         <Image
           label={ribbon}
           size="large"
-          style={{ height: 180 }}
+          // style={{ height: 180 }}
           src={
             images.length > 0
               ? images[0].downloadUrl

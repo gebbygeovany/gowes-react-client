@@ -1,3 +1,5 @@
 export const FETCH_POSTS = "FETCH_POSTS";
 export const NEW_POSTS = "NEW_POSTS";
 export const SEARCH_FILTER = "SEARCH_FILTER";
+export const CHECKOUT_ORDER = "CHECKOUT_ORDER";
+export const SET_SHIPPING_ORDER = "SET_SHIPPING_ORDER";

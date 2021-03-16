@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Grid, Form, Checkbox, Image, Button, Icon, List, Input } from 'semantic-ui-react';
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
@@ -7,15 +7,47 @@ import { Link } from 'react-router-dom';
 
 import { FETCH_USER_CART_QUERY } from '../util/graphql';
 import DeleteFromCartButton from './DeleteFromCartButton';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { checkoutItems } from "../actions/orderAction";
 
-function ItemCartCard({ item }) {
+function ItemCartCard(props) {
 
-    const [amountItem, setAmountItem] = useState(item.amountItem)
+    const [amountItem, setAmountItem] = useState(props.item.amountItem)
     const [errors, setErrors] = useState({})
 
-    console.log(item.item.stock)
+    useEffect(() => {
+        let carts = props.carts
+        let cartObj
+        let cartItemObj
+        let indexCartObj
+        let indexCartItemObj
+        carts.map((cart, indexCart) => {
+            console.log(cart.user.seller.username, props.item.item.user.seller.username)
+            if (cart.user.seller.username === props.item.item.user.seller.username) {
+                indexCartObj = indexCart
+                cart.cartItems.map((cartItem, indexCartItem) => {
+                    if (cartItem.item.id === props.item.item.id) {
+                        indexCartItemObj = indexCartItem
+                        cartItemObj = cartItem
+                        cartItemObj = { ...cartItemObj,'amountItem': parseInt(amountItem) }
+                        console.log(cartItemObj)
+                        return
+                    }
+                })
+                cartObj = cart
+                cartObj.cartItems[indexCartItemObj] = cartItemObj
+                return
+            }
+        })
+        carts[indexCartObj] = cartObj
+        // console.log(carts)
+        props.checkoutItems(carts)
+    }, [amountItem])
 
-    console.log(item.name)
+    // console.log(props.item.item.stock)
+
+    // console.log(props.item.name)
 
     const [deleteItemCart] = useMutation(DELETE_CART_ITEM_MUTATION, {
         update(proxy, result) {
@@ -26,11 +58,11 @@ function ItemCartCard({ item }) {
             proxy.writeQuery({
                 query: FETCH_USER_CART_QUERY,
                 data: {
-                    getUserCartItems: data.getUserCartItems.filter(cart => cart.id !== item.id)
+                    getUserCartItems: data.getUserCartItems.filter(cart => cart.id !== props.item.id)
                 }
             })
         },
-        variables: { cartId: item.id }
+        variables: { cartId: props.item.id }
     })
 
 
@@ -46,18 +78,18 @@ function ItemCartCard({ item }) {
                             centered
                             rounded
                             src={
-                                item.item.images.length > 0
-                                  ? item.item.images[0].downloadUrl
-                                  : "https://react.semantic-ui.com/images/avatar/large/molly.png"
-                              }
+                                props.item.item.images.length > 0
+                                    ? props.item.item.images[0].downloadUrl
+                                    : "https://react.semantic-ui.com/images/avatar/large/molly.png"
+                            }
                             size='small'
-                            as={Link} to={`/items/${item.item.id}`}
+                            as={Link} to={`/items/${props.item.item.id}`}
                         />
                     </Grid.Column>
                     <Grid.Column width={13} style={{ marginTop: 5 }}>
-                        <Grid.Row><h4 >{item.item.name}</h4></Grid.Row>
+                        <Grid.Row><h4 >{props.item.item.name}</h4></Grid.Row>
                         <Grid.Row style={{ marginTop: 5 }}>
-                            <h4 style={{ color: 'teal' }}>Rp{item.item.price}</h4>
+                            <h4 style={{ color: 'teal' }}>Rp{props.item.item.price}</h4>
                         </Grid.Row>
                         <Grid.Row style={{ marginTop: 5 }}>
                             <Grid>
@@ -76,7 +108,7 @@ function ItemCartCard({ item }) {
                                 </Grid.Column>
                                 <Grid.Column width={6}>
                                     {/* <Icon onClick={deleteItemCart} size="large" color="grey" name="trash" style={{ marginRight: 40 }}></Icon> */}
-                                    <DeleteFromCartButton item={item}></DeleteFromCartButton>
+                                    <DeleteFromCartButton item={props.item}></DeleteFromCartButton>
                                     <List horizontal>
                                         <List.Item>
                                             <Button
@@ -99,7 +131,7 @@ function ItemCartCard({ item }) {
                                                 onClick={() => { setAmountItem(amountItem + 1) }}
                                                 size="mini"
                                                 secondary icon="plus"
-                                                disabled={amountItem >= item.item.stock}
+                                                disabled={amountItem >= props.item.item.stock}
                                             />
                                         </List.Item>
                                         {/* <List.Item>{`Stok  ${item.stock}`}</List.Item> */}
@@ -118,4 +150,15 @@ const DELETE_CART_ITEM_MUTATION = gql`
         deleteCartItem(cartId: $cartId)
     }
 `
-export default ItemCartCard;
+
+ItemCartCard.propTypes = {
+    checkoutItems: PropTypes.func.isRequired,
+    carts: PropTypes.array,
+};
+
+
+const mapStateToProps = (state) => ({
+    carts: state.orders.checkoutOrders,
+});
+
+export default connect(mapStateToProps, { checkoutItems })(ItemCartCard);
