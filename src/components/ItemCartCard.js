@@ -30,7 +30,7 @@ function ItemCartCard(props) {
                     if (cartItem.item.id === props.item.item.id) {
                         indexCartItemObj = indexCartItem
                         cartItemObj = cartItem
-                        cartItemObj = { ...cartItemObj,'amountItem': parseInt(amountItem) }
+                        cartItemObj = { ...cartItemObj, 'amountItem': parseInt(amountItem) }
                         console.log(cartItemObj)
                         return
                     }
@@ -42,7 +42,7 @@ function ItemCartCard(props) {
         })
         carts[indexCartObj] = cartObj
         // console.log(carts)
-        props.checkoutItems(carts)
+        props.checkoutItems(carts, !props.isChange)
     }, [amountItem])
 
     // console.log(props.item.item.stock)
@@ -99,7 +99,7 @@ function ItemCartCard(props) {
                                             <Form.Input
                                                 placeholder='Add Notes'
                                                 name='notes'
-                                            // value={notes}
+                                                value={props.item.note}
                                             // onChange={this.handleChange}
                                             />
                                             {/* <Form.Button size="mini" content='Submit' /> */}
@@ -113,8 +113,7 @@ function ItemCartCard(props) {
                                         <List.Item>
                                             <Button
                                                 onClick={() => { setAmountItem(amountItem - 1) }}
-                                                disabled={amountItem === 1}
-                                                disabled={amountItem <= 1}
+                                                disabled={amountItem <= 1 || !props.checked}
                                                 size="mini"
                                                 secondary icon="minus"
                                             />
@@ -131,7 +130,7 @@ function ItemCartCard(props) {
                                                 onClick={() => { setAmountItem(amountItem + 1) }}
                                                 size="mini"
                                                 secondary icon="plus"
-                                                disabled={amountItem >= props.item.item.stock}
+                                                disabled={amountItem >= props.item.item.stock || !props.checked}
                                             />
                                         </List.Item>
                                         {/* <List.Item>{`Stok  ${item.stock}`}</List.Item> */}
@@ -159,6 +158,7 @@ ItemCartCard.propTypes = {
 
 const mapStateToProps = (state) => ({
     carts: state.orders.checkoutOrders,
+    isChange: state.orders.isChange,
 });
 
 export default connect(mapStateToProps, { checkoutItems })(ItemCartCard);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Card, Checkbox } from 'semantic-ui-react';
 import gql from 'graphql-tag'
 import ItemCartCard from '../components/ItemCartCard';
@@ -10,6 +10,8 @@ import { checkoutItems } from "../actions/orderAction";
 function CartCard(props) {
 
     console.log(props.cartItem)
+
+    const [checked, setChecked] = useState(false)
 
     const onChecked = (event, data) => {
         console.log("event", event)
@@ -34,6 +36,7 @@ function CartCard(props) {
         }
         props.checkoutItems(carts)
         console.log(props.carts)
+        setChecked(checked? false : true)
 
 
     }
@@ -54,7 +57,7 @@ function CartCard(props) {
             </Card.Content>
             {props.cartItem &&
                 props.cartItem.map((item) => (
-                    <ItemCartCard item={item}></ItemCartCard>
+                    <ItemCartCard item={item} checked={checked}></ItemCartCard>
                 ))}
         </Card>
     );

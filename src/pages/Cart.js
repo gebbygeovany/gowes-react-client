@@ -44,7 +44,7 @@ function Cart() {
     </>
   )
   if (!loading) {
-    if (size >0) {
+    if (size > 0) {
       let group = cartItems.reduce((r, a) => {
         r[a.item.user.id] = [...r[a.item.user.id] || [], a];
         return r;
@@ -57,7 +57,7 @@ function Cart() {
       cartMarkup = (
         <Ref innerRef={contextRef}>
           <Grid stackable>
-            <Grid.Column width={16}></Grid.Column>
+            <Grid.Column width={16}><h1>Cart</h1></Grid.Column>
             <Grid.Column width={12} >
               {group &&
                 Object.keys(group).map((key, index) =>

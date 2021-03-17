@@ -8,13 +8,16 @@ import {
   Header,
   Input,
   Message,
-  Confirm
+  Confirm, Form
 } from "semantic-ui-react";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { FETCH_CART_QUERY } from "../util/graphql";
 import { AuthContext } from "../context/auth";
 import { FETCH_USER_CART_QUERY } from "../util/graphql";
+
+import { useForm } from '../util/hooks'
+
 
 function ItemTransactionCard({
   contextRef,
@@ -24,6 +27,7 @@ function ItemTransactionCard({
 }) {
   const context = useContext(AuthContext);
   const [amountItem, setAmountItem] = useState(1);
+  const [note, setNote] = useState("");
   const [visible, setVisible] = useState(false);
   const [errors, setErrors] = useState({});
   const chat = {
@@ -58,8 +62,12 @@ function ItemTransactionCard({
     setVisible(false);
   };
 
+  const { onChange, onSubmit, values } = useForm(addNotes, {
+    note: '',
+  })
+
   const [addToCart] = useMutation(ADD_TO_CART_MUTATION, {
-    variables: { itemId: item.id, amountItem: amountItem },
+    variables: { itemId: item.id, amountItem: amountItem, note: values.note },
     update(proxy, result) {
       const data = proxy.readQuery({
         query: FETCH_USER_CART_QUERY,
@@ -105,6 +113,11 @@ function ItemTransactionCard({
     // window.location.href='/items'
     // window.location.reload(false);
   }
+  function addNotes() {
+    setNote(values.note)
+  }
+  console.log("note",note)
+
 
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -166,6 +179,16 @@ function ItemTransactionCard({
                     <List.Item>{`Stok  ${item.stock}`}</List.Item>
                   </List>
                 </List.Item>
+                <Form onSubmit={onSubmit} style={{ marginTop: 10,  marginBottom: 10 }}>
+                    <Form.Input
+                      placeholder='add notes for seller'
+                      name='note'
+                      // style={{ width: 170 }}
+                      value={values.note}
+                      onChange={onChange}
+                      label='Note'
+                    />
+                </Form>
                 <List.Item>
                   <List.Content floated="left" verticalAlign="middle">
                     <Header as="h5">Sub Total</Header>
@@ -176,6 +199,7 @@ function ItemTransactionCard({
                 </List.Item>
                 <List.Item></List.Item>
               </List>
+
             </Card.Content>
             <Card.Content extra>
               <div className="ui two buttons">
@@ -251,8 +275,8 @@ function ItemTransactionCard({
 }
 
 const ADD_TO_CART_MUTATION = gql`
-  mutation addCartItem($itemId: ID!, $amountItem: Int!) {
-    addCartItem(itemId: $itemId, note: "", amountItem: $amountItem) {
+  mutation addCartItem($itemId: ID!, $amountItem: Int! , $note: String!) {
+    addCartItem(itemId: $itemId, note: $note, amountItem: $amountItem) {
       note
       amountItem
       createdAt

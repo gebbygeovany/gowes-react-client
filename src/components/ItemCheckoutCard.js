@@ -5,32 +5,8 @@ import { useMutation } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom';
 
 
-import { FETCH_USER_CART_QUERY } from '../util/graphql';
 
 function ItemCheckoutCard({ item }) {
-
-    const [amountItem, setAmountItem] = useState(item.amountItem)
-    const [errors, setErrors] = useState({})
-
-    console.log(item.item.stock)
-
-    console.log(item.name)
-
-    const [deleteItemCart] = useMutation(DELETE_CART_ITEM_MUTATION, {
-        update(proxy, result) {
-            // TODO: remove post cache
-            const data = proxy.readQuery({
-                query: FETCH_USER_CART_QUERY
-            })
-            proxy.writeQuery({
-                query: FETCH_USER_CART_QUERY,
-                data: {
-                    getUserCartItems: data.getUserCartItems.filter(cart => cart.id !== item.id)
-                }
-            })
-        },
-        variables: { cartId: item.id }
-    })
 
 
     return (
@@ -61,9 +37,4 @@ function ItemCheckoutCard({ item }) {
         </>
     );
 }
-const DELETE_CART_ITEM_MUTATION = gql`
-    mutation deleteCartItem($cartId:ID!){
-        deleteCartItem(cartId: $cartId)
-    }
-`
 export default ItemCheckoutCard;

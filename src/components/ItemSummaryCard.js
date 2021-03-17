@@ -9,23 +9,27 @@ import { checkoutItems } from "../actions/orderAction";
 function ItemSummaryCard(props) {
 
     const [subTotal, setSubTotal] = useState(0)
+    const [amount, setAmount] = useState(0)
+
 
     let total = 0
+    let amountCounter = 0
 
     useEffect(() => {
         props.carts.map((cart) => {
             cart.cartItems.map((cartItem) => {
+                amountCounter += cartItem.amountItem
                 const price = parseInt(cartItem.item.price)
                 total += price * cartItem.amountItem
                 // const amount = item
-                console.log(cartItem.amountItem)
-
+                console.log("amount",cartItem.amountItem)
             })
         })
+        setAmount(amountCounter)
         setSubTotal(total)
         console.log(typeof (subTotal))
         console.log(total)
-    }, [props.carts])
+    }, [props.carts, props.isChange])
 
 
     return (
@@ -45,7 +49,7 @@ function ItemSummaryCard(props) {
                     <List divided verticalAlign='middle'>
                         <List.Item>
                             <List.Content floated='right'>Rp {subTotal}</List.Content>
-                            <List.Content style={{ marginBottom: 5 }}><h4>Sub Total</h4></List.Content>
+                            <List.Content style={{ marginBottom: 5 }}><h4>Sub Total ({amount} items)</h4></List.Content>
                         </List.Item>
                     </List>
                 </Card.Content>
@@ -63,6 +67,7 @@ ItemSummaryCard.propTypes = {
 };
 const mapStateToProps = (state) => ({
     carts: state.orders.checkoutOrders,
+    isChange: state.orders.isChange,
 });
 
 export default connect(mapStateToProps, { checkoutItems })(ItemSummaryCard);

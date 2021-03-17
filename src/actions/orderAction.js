@@ -1,10 +1,13 @@
 import { CHECKOUT_ORDER } from "./types";
 import { SET_SHIPPING_ORDER } from "./types";
 
-export const checkoutItems = (carts) => (dispatch) => {
+export const checkoutItems = (carts, isChange) => (dispatch) => {
     dispatch({
         type: CHECKOUT_ORDER,
-        payload: carts,
+        payload: {
+            carts: carts, 
+            isChange: isChange
+        } 
     })
 };
 
