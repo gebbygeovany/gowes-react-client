@@ -1,19 +1,28 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Card, Checkbox } from 'semantic-ui-react';
 import gql from 'graphql-tag'
 import ItemCartCard from '../components/ItemCartCard';
+import { useMutation } from '@apollo/react-hooks'
+
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems } from "../actions/orderAction";
-import { ADD_TO_CART_MUTATION } from '../util/graphql';
+import { EDIT_CHECKED_MUTATION, FETCH_USER_CART_QUERY } from '../util/graphql';
 
 
 function CartCard(props) {
 
     console.log(props.cartItem)
 
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(props.cartItem[0].isChecked)
+    const [errors, setErrors] = useState({});
+
+    let itemIds = []
+    props.cartItem.map((cartItem) => {
+        itemIds = [...itemIds, cartItem.item.id]
+    })
+
 
     const onChecked = (event, data) => {
         console.log("event", event)
@@ -36,42 +45,35 @@ function CartCard(props) {
             }
             carts = [cart, ...carts]
         }
-        props.checkoutItems(carts)
+        props.checkoutItems(carts, checked)
         console.log(props.carts)
-        setChecked(checked? false : true)
-        // addToCart()
+        setChecked(checked ? false : true)
+        editCartItem()
 
 
     }
 
-    // const [addToCart] = useMutation(ADD_TO_CART_MUTATION, {
-    //     variables: { itemId: item.id, amountItem: amountItem, note: values.note, isChecked: checked? false : true },
-    //     update(proxy, result) {
-    //       const data = proxy.readQuery({
-    //         query: FETCH_USER_CART_QUERY,
-    //       });
-    
-    //       proxy.writeQuery({
-    //         query: FETCH_USER_CART_QUERY,
-    //         data: {
-    //           getUserCartItems: [result.data.addCartItem, ...data.getUserCartItems],
-    //         },
-    //       });
-    
-    //       const cartItem = proxy.readQuery({
-    //         query: FETCH_CART_QUERY,
-    //       });
-    //       proxy.writeQuery({
-    //         query: FETCH_CART_QUERY,
-    //         data: {
-    //           getUserCartItem: cartItem.getUserCartItem,
-    //         },
-    //       });
-    //     },
-    //     onError(err) {
-    //       setErrors(err.graphQLErrors[0].extensions.exception.errors);
-    //     },
-    //   });
+
+    const [editCartItem] = useMutation(EDIT_CHECKED_MUTATION, {
+        variables: { itemIds: itemIds, isChecked: checked ? false : true },
+        update(proxy, result) {
+            const data = proxy.readQuery({
+                query: FETCH_USER_CART_QUERY,
+            });
+
+            proxy.writeQuery({
+                query: FETCH_USER_CART_QUERY,
+                data: {
+                    getUserCartItems: [result.data.addCartItem, ...data.getUserCartItems],
+                },
+            });
+
+        },
+        onError(err) {
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+            // console.log(err.graphQLErrors)
+        },
+    });
 
     console.log(props.carts)
 
@@ -85,6 +87,7 @@ function CartCard(props) {
                     label={props.cartItem[0].item.user.seller.username}
                     style={{ fontWeight: 1000 }}
                     onChange={onChecked}
+                checked = {checked}
                 />
             </Card.Content>
             {props.cartItem &&

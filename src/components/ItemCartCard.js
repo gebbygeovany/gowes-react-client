@@ -47,6 +47,7 @@ function ItemCartCard(props) {
         carts[indexCartObj] = cartObj
         // console.log(carts)
         props.checkoutItems(carts, !props.isChange)
+        // addToCart()
     }, [amountItem])
 
     // console.log(props.item.item.stock)
@@ -70,7 +71,7 @@ function ItemCartCard(props) {
     })
 
     const [addToCart] = useMutation(EDIT_CART_MUTATION, {
-        variables: { itemId: props.item.item.id, amountItem: props.item.amountItem, note: note, isChecked: props.item.isChecked },
+        variables: { itemId: props.item.item.id, amountItem: amountItem, note: note, isChecked: props.item.isChecked },
         update(proxy, result) {
             const data = proxy.readQuery({
                 query: FETCH_USER_CART_QUERY,

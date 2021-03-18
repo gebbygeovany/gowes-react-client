@@ -252,6 +252,7 @@ export const ADD_TO_CART_MUTATION = gql`
       note
       amountItem
       createdAt
+      isChecked
     }
   }
 `;
@@ -261,7 +262,13 @@ export const EDIT_CART_MUTATION = gql`
       note
       amountItem
       createdAt
+      isChecked
     }
+  }
+`;
+export const EDIT_CHECKED_MUTATION = gql`
+  mutation updateCheckCart($itemIds:[ID]!, $isChecked: Boolean!){
+  updateCheckCart(checkedCart:{itemIds:$itemIds, isChecked: $isChecked})
   }
 `;
 
