@@ -9,9 +9,9 @@ import { checkoutItems } from "../actions/orderAction";
 import { EDIT_CHECKED_MUTATION, FETCH_USER_CART_QUERY } from "../util/graphql";
 
 function CartCard(props) {
-  console.log(
-    `username seller: ${props.cartItem[0].item.user.seller.username}, isChecked: ${props.cartItem[0].isChecked}`
-  );
+  // console.log(
+  //   `username seller: ${props.cartItem[0].item.user.seller.username}, isChecked: ${props.cartItem[0].isChecked}`
+  // );
   const [checked, setChecked] = useState(props.cartItem[0].isChecked);
   const [_, setErrors] = useState({});
 
@@ -41,20 +41,12 @@ function CartCard(props) {
 
   const onChecked = (_, data) => {
     console.log("onChecked called");
-    setChecked(checked ? false : true);
-    setCartsRedux();
-    editCartItem();
-  };
-
-  const setCartsRedux = () => {
-    console.log("set cart redux called");
     let carts = props.carts;
     if (carts.length > 0) {
-      if (checked) {
+      console.log(carts[0].cartItem);
+      if (carts.find((cart) => cart.cartItems[0].item.user.seller.username === data.label)) {
         carts = carts.filter(
-          (cart) =>
-            cart.user.seller.username !==
-            props.cartItem[0].item.user.seller.username
+          (cart) => cart.user.seller.username !== data.label
         );
       } else {
         const cart = {
@@ -64,21 +56,16 @@ function CartCard(props) {
         carts = [cart, ...carts];
       }
     } else {
-      if (checked) {
-        const cart = {
-          user: props.cartItem[0].item.user, // data yang dibutuhkan : username, cityId
-          cartItems: props.cartItem,
-        };
-        carts = [cart, ...carts];
-      }
+      const cart = {
+        user: props.cartItem[0].item.user, // data yang dibutuhkan : username, cityId
+        cartItems: props.cartItem,
+      };
+      carts = [cart, ...carts];
     }
     props.checkoutItems(carts, checked);
+    setChecked(checked ? false : true);
+    editCartItem();
   };
-
-  useEffect(() => {
-    setCartsRedux();
-    // do stuff here...
-  }, []); // <-- empty dependency array
 
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
