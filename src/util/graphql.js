@@ -174,6 +174,7 @@ export const FETCH_CART_QUERY = gql`
           }
         }
       }
+      isChecked
     }
   }
 `;
@@ -237,6 +238,26 @@ export const FETCH_USER_CART_QUERY = gql`
           username
         }
       }
+      note
+      isChecked
+      amountItem
+      createdAt
+    }
+  }
+`;
+
+export const ADD_TO_CART_MUTATION = gql`
+  mutation addCartItem($itemId: ID!, $amountItem: Int! , $isChecked: Boolean!, $note: String!) {
+    addCartItem(itemId: $itemId, note: $note, amountItem: $amountItem, isChecked: $isChecked) {
+      note
+      amountItem
+      createdAt
+    }
+  }
+`;
+export const EDIT_CART_MUTATION = gql`
+  mutation editCartItem($itemId: ID!, $amountItem: Int! , $isChecked: Boolean!, $note: String!) {
+    editCartItem(itemId: $itemId, note: $note, amountItem: $amountItem, isChecked: $isChecked) {
       note
       amountItem
       createdAt

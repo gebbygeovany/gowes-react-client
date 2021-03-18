@@ -14,7 +14,7 @@ import { useMutation, useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { FETCH_CART_QUERY } from "../util/graphql";
 import { AuthContext } from "../context/auth";
-import { FETCH_USER_CART_QUERY } from "../util/graphql";
+import { ADD_TO_CART_MUTATION, FETCH_USER_CART_QUERY } from "../util/graphql";
 
 import { useForm } from '../util/hooks'
 
@@ -67,7 +67,7 @@ function ItemTransactionCard({
   })
 
   const [addToCart] = useMutation(ADD_TO_CART_MUTATION, {
-    variables: { itemId: item.id, amountItem: amountItem, note: values.note },
+    variables: { itemId: item.id, amountItem: amountItem, note: values.note, isChecked: false },
     update(proxy, result) {
       const data = proxy.readQuery({
         query: FETCH_USER_CART_QUERY,
@@ -116,7 +116,7 @@ function ItemTransactionCard({
   function addNotes() {
     setNote(values.note)
   }
-  console.log("note",note)
+  console.log("note", note)
 
 
   const [confirmOpen, setConfirmOpen] = useState(false)
@@ -179,15 +179,15 @@ function ItemTransactionCard({
                     <List.Item>{`Stok  ${item.stock}`}</List.Item>
                   </List>
                 </List.Item>
-                <Form onSubmit={onSubmit} style={{ marginTop: 10,  marginBottom: 10 }}>
-                    <Form.Input
-                      placeholder='add notes for seller'
-                      name='note'
-                      // style={{ width: 170 }}
-                      value={values.note}
-                      onChange={onChange}
-                      label='Note'
-                    />
+                <Form onSubmit={onSubmit} style={{ marginTop: 10, marginBottom: 10 }}>
+                  <Form.Input
+                    placeholder='add notes for seller'
+                    name='note'
+                    // style={{ width: 170 }}
+                    value={values.note}
+                    onChange={onChange}
+                    label='Note'
+                  />
                 </Form>
                 <List.Item>
                   <List.Content floated="left" verticalAlign="middle">
@@ -274,14 +274,6 @@ function ItemTransactionCard({
   return itemMarkup;
 }
 
-const ADD_TO_CART_MUTATION = gql`
-  mutation addCartItem($itemId: ID!, $amountItem: Int! , $note: String!) {
-    addCartItem(itemId: $itemId, note: $note, amountItem: $amountItem) {
-      note
-      amountItem
-      createdAt
-    }
-  }
-`;
+
 
 export default ItemTransactionCard;

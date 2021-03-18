@@ -9,42 +9,6 @@ function ItemSummaryCheckout({ contextRef }) {
     const { loading, data } = useQuery(CREATE_PAYMENT_QUERY);
     const { createPayment: payment } = data ? data : [];
     console.log(payment)
-    const options = [
-        {
-            key: 1,
-            text: 'J&t REG',
-            value: 1,
-            content: (
-                <>
-                    <Header as='h4'>J&t REG</Header>
-                    <span>Rp10.000</span>
-                </>
-            ),
-        },
-        {
-            key: 2,
-            text: 'Si Cepat Halu',
-            value: 2,
-            content: (
-                <>
-                    <Header as='h4'>Si Cepat Halu</Header>
-                    <span>$10.99</span>
-                </>
-            ),
-        },
-        {
-            key: 3,
-            text: 'Anter Aja',
-            value: 3,
-            content: (
-                <>
-                    <Header as='h4'>Anter Aja</Header>
-                    <span>$10.99</span>
-                </>
-            ),
-        },
-    ]
-
 
     return (
         <>
@@ -52,12 +16,6 @@ function ItemSummaryCheckout({ contextRef }) {
                 <h1>Loading checkout..</h1>
             ) : (
                 <Sticky context={contextRef} offset={130}>
-                    <Card fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>
-                        <Card.Content header="Shipping" />
-                        <Card.Content>
-                            <Dropdown selection fluid options={options} placeholder='Shipment' />
-                        </Card.Content>
-                    </Card>
                     <Card fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>
                         <Card.Content header="Shopping Summary" />
                         <Card.Content>

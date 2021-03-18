@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Grid, Form, Checkbox, Image, Button, Icon, List, Input } from 'semantic-ui-react';
+import { Card, Grid, Form, Checkbox, Image, Button, Label, List, Input, Icon } from 'semantic-ui-react';
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { Link } from 'react-router-dom';
 
 
-import { FETCH_USER_CART_QUERY } from '../util/graphql';
+import { EDIT_CART_MUTATION, FETCH_USER_CART_QUERY } from '../util/graphql';
 import DeleteFromCartButton from './DeleteFromCartButton';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems } from "../actions/orderAction";
+import MyPopup from './MyPopup';
+
 
 function ItemCartCard(props) {
 
     const [amountItem, setAmountItem] = useState(props.item.amountItem)
     const [errors, setErrors] = useState({})
+    const [note, setNote] = useState(props.item.note)
+    const [isOpen, setOpen] = useState(false)
 
     useEffect(() => {
         let carts = props.carts
@@ -65,6 +69,30 @@ function ItemCartCard(props) {
         variables: { cartId: props.item.id }
     })
 
+    const [addToCart] = useMutation(EDIT_CART_MUTATION, {
+        variables: { itemId: props.item.item.id, amountItem: props.item.amountItem, note: note, isChecked: props.item.isChecked },
+        update(proxy, result) {
+            const data = proxy.readQuery({
+                query: FETCH_USER_CART_QUERY,
+            });
+
+            proxy.writeQuery({
+                query: FETCH_USER_CART_QUERY,
+                data: {
+                    getUserCartItems: [result.data.addCartItem, ...data.getUserCartItems],
+                },
+            });
+        },
+        onError(err) {
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+        },
+    });
+
+    function editCart() {
+        addToCart()
+        setOpen(false)
+    }
+
 
     return (
         <>
@@ -94,17 +122,43 @@ function ItemCartCard(props) {
                         <Grid.Row style={{ marginTop: 5 }}>
                             <Grid>
                                 <Grid.Column width={10}>
-                                    <Form size="small">
-                                        <Form.Group>
-                                            <Form.Input
-                                                placeholder='Add Notes'
-                                                name='notes'
-                                                value={props.item.note}
-                                            // onChange={this.handleChange}
-                                            />
-                                            {/* <Form.Button size="mini" content='Submit' /> */}
-                                        </Form.Group>
-                                    </Form>
+                                    {isOpen ? (
+                                        <Form size="small" onSubmit={editCart}>
+                                            <Form.Group>
+                                                <Form.Input
+                                                    placeholder='Add Notes'
+                                                    name='notes'
+                                                    value={note}
+                                                    onChange={
+                                                        (event) => { setNote(event.target.value) }
+                                                    }
+                                                />
+                                                <Form.Button color="teal" size="small" content="Save" />
+                                            </Form.Group>
+                                        </Form>
+                                    ) : (note !== "" ? (
+                                        <>
+                                            <Label color='blue' horizontal>
+                                                note
+                                            </Label>
+                                            {note}
+                                            <MyPopup content="Edit Note">
+                                                <Icon name="pencil" color="grey" onClick={() => setOpen(true)} style={{ marginLeft: 5 }}></Icon>
+                                            </MyPopup>
+
+                                        </>
+                                    ) : (
+                                        <Button
+                                            compact
+                                            color="transparent"
+                                            style={{ paddingTop: 7, paddingBottom: 7 }}
+                                            onClick={() => setOpen(true)}>
+                                                add notes
+                                        </Button>
+                                    )
+                                    )
+                                    }
+
                                 </Grid.Column>
                                 <Grid.Column width={6}>
                                     {/* <Icon onClick={deleteItemCart} size="large" color="grey" name="trash" style={{ marginRight: 40 }}></Icon> */}

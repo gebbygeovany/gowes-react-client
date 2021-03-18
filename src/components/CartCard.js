@@ -6,6 +6,8 @@ import ItemCartCard from '../components/ItemCartCard';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems } from "../actions/orderAction";
+import { ADD_TO_CART_MUTATION } from '../util/graphql';
+
 
 function CartCard(props) {
 
@@ -37,9 +39,39 @@ function CartCard(props) {
         props.checkoutItems(carts)
         console.log(props.carts)
         setChecked(checked? false : true)
+        // addToCart()
 
 
     }
+
+    // const [addToCart] = useMutation(ADD_TO_CART_MUTATION, {
+    //     variables: { itemId: item.id, amountItem: amountItem, note: values.note, isChecked: checked? false : true },
+    //     update(proxy, result) {
+    //       const data = proxy.readQuery({
+    //         query: FETCH_USER_CART_QUERY,
+    //       });
+    
+    //       proxy.writeQuery({
+    //         query: FETCH_USER_CART_QUERY,
+    //         data: {
+    //           getUserCartItems: [result.data.addCartItem, ...data.getUserCartItems],
+    //         },
+    //       });
+    
+    //       const cartItem = proxy.readQuery({
+    //         query: FETCH_CART_QUERY,
+    //       });
+    //       proxy.writeQuery({
+    //         query: FETCH_CART_QUERY,
+    //         data: {
+    //           getUserCartItem: cartItem.getUserCartItem,
+    //         },
+    //       });
+    //     },
+    //     onError(err) {
+    //       setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    //     },
+    //   });
 
     console.log(props.carts)
 
