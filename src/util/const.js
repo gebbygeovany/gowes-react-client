@@ -34,5 +34,6 @@ export const initialFilter = {
 
 export const initialOrderList = {
   checkoutOrders: [],
-  isChange: false
+  isChange: false,
+  isChecked: false,
 }

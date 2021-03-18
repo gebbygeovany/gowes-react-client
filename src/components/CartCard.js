@@ -23,7 +23,6 @@ function CartCard(props) {
         itemIds = [...itemIds, cartItem.item.id]
     })
 
-
     const onChecked = (event, data) => {
         console.log("event", event)
         console.log("data", data)
@@ -49,8 +48,6 @@ function CartCard(props) {
         console.log(props.carts)
         setChecked(checked ? false : true)
         editCartItem()
-
-
     }
 
 
@@ -71,14 +68,8 @@ function CartCard(props) {
         },
         onError(err) {
             setErrors(err.graphQLErrors[0].extensions.exception.errors);
-            // console.log(err.graphQLErrors)
         },
     });
-
-    console.log(props.carts)
-
-
-    // console.log(id)
 
     return (
         <Card fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>
@@ -87,7 +78,7 @@ function CartCard(props) {
                     label={props.cartItem[0].item.user.seller.username}
                     style={{ fontWeight: 1000 }}
                     onChange={onChecked}
-                checked = {checked}
+                // checked = {checked}
                 />
             </Card.Content>
             {props.cartItem &&
@@ -98,11 +89,6 @@ function CartCard(props) {
     );
 }
 
-const DELETE_CART_ITEM_MUTATION = gql`
-    mutation deleteCartItem($cartId:ID!){
-        deleteCartItem(cartId: $cartId)
-    }
-`
 
 CartCard.propTypes = {
     checkoutItems: PropTypes.func.isRequired,

@@ -9,7 +9,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         checkoutOrders: action.payload.carts,
-        isChange: action.payload.isChange
+        isChange: action.payload.isChange,
+        isChecked: action.payload.isChecked
       };
     case SET_SHIPPING_ORDER:
       return {

@@ -168,7 +168,7 @@ function ItemCartCard(props) {
                                         <List.Item>
                                             <Button
                                                 onClick={() => { setAmountItem(amountItem - 1) }}
-                                                disabled={amountItem <= 1 || !props.checked}
+                                                disabled={amountItem <= 1 || props.checked === false}
                                                 size="mini"
                                                 secondary icon="minus"
                                             />
@@ -185,7 +185,7 @@ function ItemCartCard(props) {
                                                 onClick={() => { setAmountItem(amountItem + 1) }}
                                                 size="mini"
                                                 secondary icon="plus"
-                                                disabled={amountItem >= props.item.item.stock || !props.checked}
+                                                disabled={amountItem >= props.item.item.stock || props.checked === false}
                                             />
                                         </List.Item>
                                         {/* <List.Item>{`Stok  ${item.stock}`}</List.Item> */}
