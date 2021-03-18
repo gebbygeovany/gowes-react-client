@@ -27,8 +27,6 @@ function ItemSummaryCard(props) {
         })
         setAmount(amountCounter)
         setSubTotal(total)
-        console.log(typeof (subTotal))
-        console.log(total)
     }, [props.carts, props.isChange])
 
 
