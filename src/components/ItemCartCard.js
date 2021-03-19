@@ -155,7 +155,7 @@ function ItemCartCard(props) {
                     </Form>
                   ) : note !== "" ? (
                     <>
-                      <Label color="blue" horizontal>
+                      <Label color="teal" horizontal>
                         note
                       </Label>
                       {note}
@@ -171,16 +171,16 @@ function ItemCartCard(props) {
                   ) : (
                     <Button
                       compact
-                      color="transparent"
-                      style={{ paddingTop: 7, paddingBottom: 7 }}
+                      color="blue"
+                      style={{ paddingTop: 7, paddingBottom: 7, marginTop: 3 }}
                       onClick={() => setOpen(true)}
+                      icon="plus"
+                      content="add notes"
                     >
-                      add notes
                     </Button>
                   )}
                 </Grid.Column>
                 <Grid.Column width={6}>
-                  {/* <Icon onClick={deleteItemCart} size="large" color="grey" name="trash" style={{ marginRight: 40 }}></Icon> */}
                   <DeleteFromCartButton
                     item={props.item}
                   ></DeleteFromCartButton>
@@ -218,7 +218,6 @@ function ItemCartCard(props) {
                         }
                       />
                     </List.Item>
-                    {/* <List.Item>{`Stok  ${item.stock}`}</List.Item> */}
                   </List>
                 </Grid.Column>
               </Grid>
