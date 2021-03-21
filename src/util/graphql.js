@@ -245,10 +245,79 @@ export const FETCH_USER_CART_QUERY = gql`
     }
   }
 `;
+export const FETCH_USER_CART_CHECKOUT_QUERY = gql`
+  query($userId: ID!) {
+    getUserCartItemsCheckout {
+      id
+      item {
+        id
+        weight
+        name
+        price
+        stock
+        images {
+          downloadUrl
+        }
+        user {
+          id
+          seller {
+            username
+          }
+          address {
+            cityName
+            cityId
+            district
+            postalCode
+            detail
+          }
+        }
+      }
+      user {
+        id
+        buyer {
+          name
+        }
+        seller {
+          username
+        }
+      }
+      note
+      isChecked
+      amountItem
+      createdAt
+    }
+    getUser(userId: $userId) {
+      id
+      email
+      phone
+      address {
+        cityName
+        cityId
+        district
+        postalCode
+        detail
+      }
+      balance
+      buyer {
+        name
+      }
+    }
+  }
+`;
 
 export const ADD_TO_CART_MUTATION = gql`
-  mutation addCartItem($itemId: ID!, $amountItem: Int! , $isChecked: Boolean!, $note: String!) {
-    addCartItem(itemId: $itemId, note: $note, amountItem: $amountItem, isChecked: $isChecked) {
+  mutation addCartItem(
+    $itemId: ID!
+    $amountItem: Int!
+    $isChecked: Boolean!
+    $note: String!
+  ) {
+    addCartItem(
+      itemId: $itemId
+      note: $note
+      amountItem: $amountItem
+      isChecked: $isChecked
+    ) {
       note
       amountItem
       createdAt
@@ -257,8 +326,18 @@ export const ADD_TO_CART_MUTATION = gql`
   }
 `;
 export const EDIT_CART_MUTATION = gql`
-  mutation editCartItem($itemId: ID!, $amountItem: Int! , $isChecked: Boolean!, $note: String!) {
-    editCartItem(itemId: $itemId, note: $note, amountItem: $amountItem, isChecked: $isChecked) {
+  mutation editCartItem(
+    $itemId: ID!
+    $amountItem: Int!
+    $isChecked: Boolean!
+    $note: String!
+  ) {
+    editCartItem(
+      itemId: $itemId
+      note: $note
+      amountItem: $amountItem
+      isChecked: $isChecked
+    ) {
       note
       amountItem
       createdAt
@@ -267,8 +346,8 @@ export const EDIT_CART_MUTATION = gql`
   }
 `;
 export const EDIT_CHECKED_MUTATION = gql`
-  mutation updateCheckCart($itemIds:[ID]!, $isChecked: Boolean!){
-  updateCheckCart(checkedCart:{itemIds:$itemIds, isChecked: $isChecked})
+  mutation updateCheckCart($itemIds: [ID]!, $isChecked: Boolean!) {
+    updateCheckCart(checkedCart: { itemIds: $itemIds, isChecked: $isChecked })
   }
 `;
 
@@ -358,6 +437,35 @@ export const CREATE_PAYMENT_QUERY = gql`
     createPayment {
       token
       redirect_url
+    }
+  }
+`;
+export const FETCH_COST_COURIER_QUERY = gql`
+  query(
+    $origin: String!
+    $destination: String!
+    $weight: Int!
+    $courier: String!
+  ) {
+    getCosts(
+      costInput: {
+        origin: $origin
+        destination: $destination
+        weight: $weight
+        courier: $courier
+      }
+    ) {
+      code
+      name
+      costs {
+        service
+        description
+        cost {
+          value
+          etd
+          note
+        }
+      }
     }
   }
 `;
