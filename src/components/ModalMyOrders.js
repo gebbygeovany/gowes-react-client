@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Button, Divider, Grid, Modal, List, Confirm, Form} from 'semantic-ui-react'
+import { Button, Divider, Grid, Modal, List, Confirm, Form } from 'semantic-ui-react'
 
 import ItemMyOrders from './ItemMyOrders'
 import { AuthContext } from '../context/auth';
@@ -17,7 +17,7 @@ function ModalMyOrders({ filter }) {
     let store = "6016b07f469523044467af34"
 
     var AWBInput = (
-        <Form style={{padding: 30}}>
+        <Form style={{ padding: 30 }}>
             <Form.Field>
                 <label>AWB Number</label>
                 <input placeholder='AWB Number' />
@@ -27,6 +27,8 @@ function ModalMyOrders({ filter }) {
 
     var orderAction
 
+    console.log(filter)
+
     if (filter === 'Order shipped') {
         orderAction = (
             <Modal.Actions>
@@ -34,6 +36,24 @@ function ModalMyOrders({ filter }) {
                     <Button.Content visible>Order Arrived?</Button.Content>
                     <Button.Content hidden >
                         Arrival Confirmation
+                        </Button.Content>
+                </Button>
+                <Confirm
+                    open={confirmOpen}
+                    onCancel={() => setConfirmOpen(false)}
+                    onConfirm={() => setOpen(false)}
+                    cancelButton='Cancel'
+                    confirmButton="Confirm"
+                />
+            </Modal.Actions>
+        )
+    } else if (filter === 'Waiting for payment') {
+        orderAction = (
+            <Modal.Actions>
+                <Button color="teal" animated onClick={() => setConfirmOpen(true)} style={{ width: 200 }}>
+                    <Button.Content visible>Cancel Order?</Button.Content>
+                    <Button.Content hidden >
+                        Cancel Order
                         </Button.Content>
                 </Button>
                 <Confirm

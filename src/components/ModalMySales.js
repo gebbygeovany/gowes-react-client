@@ -30,6 +30,19 @@ function ModalMySales({ filter }) {
     if (store === context.user.id && filter === 'New Orders') {
         orderAction = (
             <Modal.Actions>
+                <Button style={{padding: 5}} color="red" animated onClick={() => setConfirmOpen(true)} style={{ width: 200 }}>
+                    <Button.Content visible> Cancel Order?</Button.Content>
+                    <Button.Content hidden >
+                        Cancel
+                    </Button.Content>
+                </Button>
+                <Confirm
+                    open={confirmOpen}
+                    onCancel={() => setConfirmOpen(false)}
+                    onConfirm={() => setOpen(false)}
+                    cancelButton='Cancel'
+                    confirmButton="Confirm"
+                />
                 <Button color="teal" animated onClick={() => setConfirmOpen(true)} style={{ width: 200 }}>
                     <Button.Content visible>Confirm Order?</Button.Content>
                     <Button.Content hidden >
