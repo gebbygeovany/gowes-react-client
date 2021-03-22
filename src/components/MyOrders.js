@@ -41,7 +41,7 @@ function MyOrders(props) {
                             <Button
                                 name='completed'
                                 onClick={handleStatusChange}
-                                color={status === "completed" ? "teal" : ""}
+                                color={status === "completed" ? "black" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
@@ -70,7 +70,7 @@ function MyOrders(props) {
                                 <Button
                                     name='Waiting for payment'
                                     onClick={handleItemClick}
-                                    color={activeItem === "Waiting for payment" ? "orange" : ""}
+                                    color={activeItem === "Waiting for payment" ? "teal" : ""}
                                     size="tiny"
                                     fluid
                                     style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
@@ -82,7 +82,7 @@ function MyOrders(props) {
                                 <Button
                                     name='Waiting for confirmation'
                                     onClick={handleItemClick}
-                                    color={activeItem === "Waiting for confirmation" ? "orange" : ""}
+                                    color={activeItem === "Waiting for confirmation" ? "teal" : ""}
                                     size="tiny"
                                     fluid
                                     style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
@@ -94,7 +94,7 @@ function MyOrders(props) {
                                 <Button
                                     name='Order processed'
                                     onClick={handleItemClick}
-                                    color={activeItem === "Order processed" ? "orange" : ""}
+                                    color={activeItem === "Order processed" ? "teal" : ""}
                                     size="tiny"
                                     fluid
                                     style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
@@ -106,7 +106,7 @@ function MyOrders(props) {
                                 <Button
                                     name='Order shipped'
                                     onClick={handleItemClick}
-                                    color={activeItem === "Order shipped" ? "orange" : ""}
+                                    color={activeItem === "Order shipped" ? "teal" : ""}
                                     size="tiny"
                                     fluid
                                     style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
@@ -118,7 +118,7 @@ function MyOrders(props) {
                                 <Button
                                     name='Order arrived'
                                     onClick={handleItemClick}
-                                    color={activeItem === "Order arrived" ? "orange" : ""}
+                                    color={activeItem === "Order arrived" ? "teal" : ""}
                                     size="tiny"
                                     fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                                 >
