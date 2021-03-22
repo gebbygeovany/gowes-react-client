@@ -19,12 +19,12 @@ function MySales(props) {
         <>
             <Grid stackable>
                 <Grid.Row>
-                    <Grid columns={5} stackable centered>
+                    <Grid columns={6} stackable centered>
                         <Grid.Column>
                             <Button
                                 name='all'
                                 onClick={handleItemClick}
-                                color={activeItem === "all" ? "teal" : ""}
+                                color={activeItem === "all" ? "black" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
@@ -70,14 +70,26 @@ function MySales(props) {
                         </Grid.Column>
                         <Grid.Column>
                             <Button
-                                name='Order shipped'
+                                name='Order Arrived'
                                 onClick={handleItemClick}
-                                color={activeItem === "Order shipped" ? "teal" : ""}
+                                color={activeItem === "Order Arrived" ? "teal" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
                                 Order Arrived
+                            </Button>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Button
+                                name='Canceled'
+                                onClick={handleItemClick}
+                                color={activeItem === "Canceled" ? "red" : ""}
+                                size="tiny"
+                                fluid
+                                style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
+                            >
+                                Canceled
                             </Button>
                         </Grid.Column>
                         {/* <Grid.Column>

@@ -5,10 +5,15 @@ import CardMyOrders from './CardMyOrders'
 
 function MyOrders(props) {
 
-    const [activeItem, setActiveItem] = useState("all")
+    const [activeItem, setActiveItem] = useState("Waiting for payment")
+
+    const [status, setStatus] = useState("onGoing")
 
     const handleItemClick = (e, { name }) => {
         setActiveItem(name)
+    }
+    const handleStatusChange = (e, { name }) => {
+        setStatus(name)
     }
 
     var contentToShow
@@ -18,92 +23,112 @@ function MyOrders(props) {
     return (
         <>
             <Grid stackable>
-                <Grid.Row>
-                    <Grid columns={6} stackable centered>
+                <Grid.Row style={{ paddingBottom: 0 }}>
+                    <Grid columns={3} stackable centered>
                         <Grid.Column>
                             <Button
-                                name='all'
-                                onClick={handleItemClick}
-                                color={activeItem === "all" ? "teal" : ""}
+                                name='onGoing'
+                                onClick={handleStatusChange}
+                                color={status === "onGoing" ? "black" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                All
+                                On Going
                             </Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Button
-                                name='Waiting for payment'
-                                onClick={handleItemClick}
-                                color={activeItem === "Waiting for payment" ? "teal" : ""}
+                                name='completed'
+                                onClick={handleStatusChange}
+                                color={status === "completed" ? "teal" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                Waiting For Payment
+                                Completed
                             </Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Button
-                                name='Waiting for confirmation'
-                                onClick={handleItemClick}
-                                color={activeItem === "Waiting for confirmation" ? "teal" : ""}
+                                name='failed'
+                                onClick={handleStatusChange}
+                                color={status === "failed" ? "red" : ""}
                                 size="tiny"
                                 fluid
                                 style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
                             >
-                                Waiting For Confirmation
+                                Failed
                             </Button>
                         </Grid.Column>
-                        <Grid.Column>
-                            <Button
-                                name='Order processed'
-                                onClick={handleItemClick}
-                                color={activeItem === "Order processed" ? "teal" : ""}
-                                size="tiny"
-                                fluid
-                                style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
-                            >
-                                Order Processed
-                            </Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Button
-                                name='Order shipped'
-                                onClick={handleItemClick}
-                                color={activeItem === "Order shipped" ? "teal" : ""}
-                                size="tiny"
-                                fluid
-                                style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
-                            >
-                                Order Shipped
-                            </Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Button
-                                name='Order arrived'
-                                onClick={handleItemClick}
-                                color={activeItem === "Order arrived" ? "teal" : ""}
-                                size="tiny"
-                                fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
-                            >
-                                Order Arrived
-                            </Button>
-                        </Grid.Column>
-                        {/* <Grid.Column>
-                            <Button
-                                name='order completed'
-                                onClick={handleItemClick}
-                                color={activeItem === "Order completed" ? "teal" : ""}
-                                size="tiny"
-                                fluid
-                                style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
-                            >Order Completed
-                            </Button>
-                        </Grid.Column> */}
                     </Grid>
-                </Grid.Row>
+                </Grid.Row >
+                {status === "onGoing" ? (
+                    <Grid.Row style={{ paddingTop: 0 }}>
+                        <Grid columns={5} stackable centered>
+                            <Grid.Column>
+                                <Button
+                                    name='Waiting for payment'
+                                    onClick={handleItemClick}
+                                    color={activeItem === "Waiting for payment" ? "orange" : ""}
+                                    size="tiny"
+                                    fluid
+                                    style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
+                                >
+                                    Waiting For Payment
+                            </Button>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button
+                                    name='Waiting for confirmation'
+                                    onClick={handleItemClick}
+                                    color={activeItem === "Waiting for confirmation" ? "orange" : ""}
+                                    size="tiny"
+                                    fluid
+                                    style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
+                                >
+                                    Waiting For Confirmation
+                            </Button>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button
+                                    name='Order processed'
+                                    onClick={handleItemClick}
+                                    color={activeItem === "Order processed" ? "orange" : ""}
+                                    size="tiny"
+                                    fluid
+                                    style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
+                                >
+                                    Order Processed
+                            </Button>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button
+                                    name='Order shipped'
+                                    onClick={handleItemClick}
+                                    color={activeItem === "Order shipped" ? "orange" : ""}
+                                    size="tiny"
+                                    fluid
+                                    style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
+                                >
+                                    Order Shipped
+                            </Button>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button
+                                    name='Order arrived'
+                                    onClick={handleItemClick}
+                                    color={activeItem === "Order arrived" ? "orange" : ""}
+                                    size="tiny"
+                                    fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}
+                                >
+                                    Order Arrived
+                            </Button>
+                            </Grid.Column>
+                        </Grid>
+                    </Grid.Row>
+                ) : (<></>)}
+
                 <Grid.Row>
                     <Grid.Column size={16}>
                         {contentToShow}

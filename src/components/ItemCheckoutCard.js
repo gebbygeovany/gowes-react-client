@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom';
 function ItemCheckoutCard({ item }) {
 
 
+    console.log(item.item.images[0].downloadUrl)
+
+
     return (
         <>
             <Card.Content>
@@ -18,7 +21,7 @@ function ItemCheckoutCard({ item }) {
                             fluid
                             centered
                             rounded
-                            src='https://react.semantic-ui.com/images/avatar/large/molly.png'
+                            src={item.item.images[0].downloadUrl}
                             size='small'
                             as={Link} to={`/items/${item.item.id}`}
                         />
