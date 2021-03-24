@@ -469,3 +469,26 @@ export const FETCH_COST_COURIER_QUERY = gql`
     }
   }
 `;
+
+export const ADD_ORDER = gql`
+  mutation addOrder($itemIds: [ID]!, $state: String!, $shipping: String!) {
+    addOrder(
+      addOrderInput: {
+        itemIds: $itemIds
+        state: { stateType: $state }
+        shipping: { courierName: $shipping }
+      }
+    ) {
+      id
+      state {
+        stateType
+        createdAt
+        deadline
+      }
+      shipping {
+        awbNumber
+        courierName
+      }
+    }
+  }
+`;

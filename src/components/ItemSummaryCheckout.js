@@ -2,13 +2,38 @@ import React, { useState } from 'react';
 import { Card, Sticky, Dropdown, Divider, Button, List, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PaymentButton from "../components/PaymentButton";
-import { useQuery } from "@apollo/react-hooks";
-import { CREATE_PAYMENT_QUERY } from "../util/graphql";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { CREATE_PAYMENT_QUERY, ADD_ORDER } from "../util/graphql";
 
-function ItemSummaryCheckout({ contextRef }) {
+function ItemSummaryCheckout({ contextRef, items }) {
+    const [errors, setErrors] = useState({})
+
     const { loading, data } = useQuery(CREATE_PAYMENT_QUERY);
     const { createPayment: payment } = data ? data : [];
-    console.log(payment)
+
+    let itemIds = [];
+    items.map((item) => {
+        itemIds = [...itemIds, item.item.id];
+    });
+
+    const [addOrder] = useMutation(ADD_ORDER, {
+        update(_, { data: { addOrder: orderData } }) {
+            // userData.name = userData.buyer.name;
+            // context.login(userData)
+            // // props.history.push('/')
+            // window.location.href = '/'
+
+        },
+        onError(err) {
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
+        },
+        variables: { itemIds: itemIds, state: "CONFIRMATION", shipping: "tiki" }
+    })
+
+
+
+
+
 
     return (
         <>
@@ -36,7 +61,10 @@ function ItemSummaryCheckout({ contextRef }) {
                             </List>
                         </Card.Content>
                         <Card.Content extra>
-                            <PaymentButton />
+                            {/* <PaymentButton /> */}
+                            <Button fluid color="teal" onClick={addOrder}>
+                                Pay
+                            </Button>
                         </Card.Content>
                     </Card>
                 </Sticky>

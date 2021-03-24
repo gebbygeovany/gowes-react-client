@@ -34,6 +34,7 @@ function Checkout() {
 
   var size = Object.size(cartItemsCheckout);
 
+  
   let cartMarkup = (
     <>
       <br></br>
@@ -88,6 +89,7 @@ function Checkout() {
             <Grid.Column width={4}>
               <ItemSummaryCheckout
                 contextRef={contextRef}
+                items={cartItemsCheckout}
               ></ItemSummaryCheckout>
             </Grid.Column>
           </Grid>
