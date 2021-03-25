@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Sticky, Divider, Button, List } from "semantic-ui-react";
+import { Card, Sticky, Divider, Button, List, Message } from "semantic-ui-react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { CREATE_PAYMENT_QUERY, ADD_ORDER } from "../util/graphql";
 import PropTypes from "prop-types";
@@ -12,6 +12,7 @@ function ItemSummaryCheckout(props) {
   const [subTotal, setSubTotal] = useState(0);
   const [amount, setAmount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
+  const [messageVisibility, setMessageVisibility] = useState(false);
 
   const { loading, data } = useQuery(CREATE_PAYMENT_QUERY);
   const { createPayment: payment } = data ? data : [];
@@ -30,6 +31,14 @@ function ItemSummaryCheckout(props) {
     },
     variables: { itemIds: itemIds, state: "CONFIRMATION", shipping: "tiki" },
   });
+
+  function actionAddOrder() {
+    if (shippingCost > 0) {
+      addOrder()
+    } else {
+      setMessageVisibility(true)
+    }
+  }
 
   useEffect(() => {
     props.carts.map((cart) => {
@@ -86,11 +95,18 @@ function ItemSummaryCheckout(props) {
             </Card.Content>
             <Card.Content extra>
               {/* <PaymentButton /> */}
-              <Button fluid color="teal" onClick={addOrder}>
+              <Button fluid color="teal" onClick={actionAddOrder}>
                 Pay
               </Button>
             </Card.Content>
           </Card>
+          {messageVisibility ? (
+            <Message negative onDismiss={()=>setMessageVisibility(false)}>
+              <Message.Header>Shipment service not chosen</Message.Header>
+              <p>Select shipment service to complete your order</p>
+            </Message>
+          ) : (<></>)}
+
         </Sticky>
       )}
     </>
