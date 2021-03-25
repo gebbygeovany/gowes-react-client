@@ -1,17 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Header, Dropdown, Label, List } from "semantic-ui-react";
 import ItemCheckoutCard from "./ItemCheckoutCard";
 import { FETCH_COST_COURIER_QUERY } from "../util/graphql";
 import { useQuery } from "@apollo/react-hooks";
 import { objectSize } from "../util/extensions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { checkoutItems } from "../actions/orderAction";
 
 function CheckoutCard(props) {
+  const [courier, setCourier] = useState({
+    code: "",
+    service: "",
+    amount: 0,
+  });
+  let weightTotal = 0;
+  props.cartItem.map((item) => {
+    weightTotal += item.item.weight * item.amountItem;
+  });
+  console.log(weightTotal);
+
   let costVariables = {
     origin: props.cartItem[0].item.user.address.cityId,
     destination: props.user.address.cityId,
-    weight: props.cartItem[0].item.weight,
+    weight: weightTotal,
     courier: "tiki",
   };
+
+  const courierChange = (_, { value }) => {
+    const courierSplit = value.split(" ");
+    setCourier({
+      code: courierSplit[0],
+      service: courierSplit[1],
+      amount: parseInt(courierSplit[2]),
+    });
+  };
+
+  useEffect(() => {
+    let carts = props.carts;
+    let cartObj;
+    let cartItemObj;
+    let indexCartObj;
+    let indexCartItemObj;
+    carts.map((cart, indexCart) => {
+      if (
+        cart.user.seller.username ===
+        props.cartItem[0].item.user.seller.username
+      ) {
+        indexCartObj = indexCart;
+        cartObj = cart;
+        cart.cartItems.map((cartItem, indexCartItem) => {
+          indexCartItemObj = indexCartItem;
+          cartItemObj = cartItem;
+          cartItemObj = { ...cartItemObj, courier: courier };
+          cartObj.cartItems[indexCartItemObj] = cartItemObj;
+        });
+        return;
+      }
+    });
+    carts[indexCartObj] = cartObj;
+    // console.log(carts)
+    props.checkoutItems(carts, !props.isChange);
+    // addToCart()
+  }, [courier]);
+
   const { loading, data } = useQuery(FETCH_COST_COURIER_QUERY, {
     variables: costVariables,
   });
@@ -40,9 +92,6 @@ function CheckoutCard(props) {
     const tikiSize = objectSize(tikiCosts);
     const jneSize = objectSize(jneCosts);
     const posSize = objectSize(posCosts);
-    console.log("tikiCosts: ", tikiCosts);
-    console.log("jneCosts: ", jneCosts);
-    console.log("posCosts: ", posCosts);
     let options = [];
     if (tikiSize > 0 && tikiCosts[0].costs) {
       tikiCosts[0].costs.map((cost) => {
@@ -50,8 +99,8 @@ function CheckoutCard(props) {
           ...options,
           {
             key: cost.cost[0].etd,
-            text: tikiCosts[0].code,
-            value: cost.cost[0].etd,
+            text: `${tikiCosts[0].code} (${cost.service}) Rp${cost.cost[0].value}`,
+            value: `${tikiCosts[0].code} ${cost.service} ${cost.cost[0].value}`,
             content: (
               <>
                 <List>
@@ -78,8 +127,8 @@ function CheckoutCard(props) {
           ...options,
           {
             key: cost.cost[0].etd,
-            text: jneCosts[0].code,
-            value: cost.cost[0].etd,
+            text: `${jneCosts[0].code} (${cost.service}) Rp${cost.cost[0].value}`,
+            value: `${jneCosts[0].code} ${cost.service} ${cost.cost[0].value}`,
             content: (
               <>
                 <List>
@@ -106,8 +155,8 @@ function CheckoutCard(props) {
           ...options,
           {
             key: cost.cost[0].etd,
-            text: posCosts[0].code,
-            value: cost.cost[0].etd,
+            text: `${posCosts[0].code} (${cost.service}) Rp${cost.cost[0].value}`,
+            value: `${posCosts[0].code} ${cost.service} ${cost.cost[0].value}`,
             content: (
               <>
                 <List>
@@ -146,7 +195,13 @@ function CheckoutCard(props) {
           >
             Shipping
           </Label>
-          <Dropdown selection fluid options={options} placeholder="Shipment" />
+          <Dropdown
+            onChange={courierChange}
+            selection
+            fluid
+            options={options}
+            placeholder="Shipment"
+          />
         </Card.Content>
       </Card>
     );
@@ -154,5 +209,13 @@ function CheckoutCard(props) {
 
   return checkoutCartMarkup;
 }
+CheckoutCard.propTypes = {
+  checkoutItems: PropTypes.func.isRequired,
+  carts: PropTypes.array,
+};
+const mapStateToProps = (state) => ({
+  carts: state.orders.checkoutOrders,
+  isChange: state.orders.isChange,
+});
 
-export default CheckoutCard;
+export default connect(mapStateToProps, { checkoutItems })(CheckoutCard);

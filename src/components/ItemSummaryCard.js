@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, Sticky, Button, List } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems } from "../actions/orderAction";
+import { currencyIdrConverter } from "../util/extensions";
 
 function ItemSummaryCard(props) {
   const [subTotal, setSubTotal] = useState(0);
@@ -27,27 +27,14 @@ function ItemSummaryCard(props) {
     setSubTotal(total);
   }, [props.carts, props.isChange]);
 
-  function checkout() {
-    window.location.href = "/checkout";
-  }
-
   return (
     <Sticky context={props.contextRef} offset={130}>
       <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
         <Card.Content header="Shopping Summary" />
         <Card.Content>
-          {/* <List divided verticalAlign='middle'>
-                        <List.Item>
-                            
-                            <List.Content floated='right'>Rp100.000</List.Content>
-                            <List.Content style={{ marginBottom: 5 }}>Item (x2)</List.Content>
-                            
-                        </List.Item>
-                    </List>
-                    <Divider /> */}
           <List divided verticalAlign="middle">
             <List.Item>
-              <List.Content floated="right">Rp {subTotal}</List.Content>
+              <List.Content floated="right">Rp {currencyIdrConverter(subTotal, 0, ".", ",")}</List.Content>
               <List.Content style={{ marginBottom: 5 }}>
                 <h4>Sub Total ({amount} items)</h4>
               </List.Content>

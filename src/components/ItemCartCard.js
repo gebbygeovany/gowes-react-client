@@ -42,6 +42,7 @@ function ItemCartCard(props) {
             indexCartItemObj = indexCartItem;
             cartItemObj = cartItem;
             cartItemObj = { ...cartItemObj, amountItem: parseInt(amountItem) };
+            cartItemObj = { ...cartItemObj, note: note };
             console.log(cartItemObj);
             return;
           }
