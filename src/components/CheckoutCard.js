@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, Header, Dropdown, Label, List } from "semantic-ui-react";
 import ItemCheckoutCard from "./ItemCheckoutCard";
 import { FETCH_COST_COURIER_QUERY } from "../util/graphql";
 import { useQuery } from "@apollo/react-hooks";
+import { objectSize } from "../util/extensions";
 
 function CheckoutCard(props) {
   let costVariables = {
     origin: props.cartItem[0].item.user.address.cityId,
     destination: props.user.address.cityId,
-    weight: props.cartItem[0].item.weight * 1000,
+    weight: props.cartItem[0].item.weight,
     courier: "tiki",
   };
   const { loading, data } = useQuery(FETCH_COST_COURIER_QUERY, {
@@ -35,28 +36,15 @@ function CheckoutCard(props) {
   let { getCosts: posCosts } = posData ? posData : [];
 
   let checkoutCartMarkup = <></>;
-  if (!loading && !jneLoading & !posLoading) {
-    // {
-    //   key: 1,
-    //   text: "J&t REG",
-    //   value: 1,
-    //   content: (
-    //     <>
-    //       {/* <Header as='h4'>J&t REG</Header>
-    //                       <span>Rp10.000</span> */}
-    //       <List>
-    //         <List.Item>
-    //           <List.Content floated="right">Rp10.000</List.Content>
-    //           <List.Content style={{ marginBottom: 5 }}>
-    //             <Header as="h5">J&t REG</Header>
-    //           </List.Content>
-    //         </List.Item>
-    //       </List>
-    //     </>
-    //   ),
-    // },
+  if (!loading && !jneLoading && !posLoading) {
+    const tikiSize = objectSize(tikiCosts);
+    const jneSize = objectSize(jneCosts);
+    const posSize = objectSize(posCosts);
+    console.log("tikiCosts: ", tikiCosts);
+    console.log("jneCosts: ", jneCosts);
+    console.log("posCosts: ", posCosts);
     let options = [];
-    if (tikiCosts[0].costs) {
+    if (tikiSize > 0 && tikiCosts[0].costs) {
       tikiCosts[0].costs.map((cost) => {
         options = [
           ...options,
@@ -84,7 +72,7 @@ function CheckoutCard(props) {
         ];
       });
     }
-    if (jneCosts[0].costs) {
+    if (jneSize > 0 && jneCosts[0].costs) {
       jneCosts[0].costs.map((cost) => {
         options = [
           ...options,
@@ -112,7 +100,7 @@ function CheckoutCard(props) {
         ];
       });
     }
-    if (posCosts[0].costs) {
+    if (posSize > 0 && posCosts[0].costs) {
       posCosts[0].costs.map((cost) => {
         options = [
           ...options,
