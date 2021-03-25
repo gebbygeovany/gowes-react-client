@@ -28,7 +28,7 @@ function ItemSummaryCard(props) {
   }, [props.carts, props.isChange]);
 
   function checkout() {
-    window.location.href = '/checkout'
+    window.location.href = "/checkout";
   }
 
   return (
@@ -59,7 +59,9 @@ function ItemSummaryCard(props) {
             disabled={amount == 0}
             fluid
             color="teal"
-            onClick={checkout}
+            as={Link}
+            to="/checkout"
+            // onClick={checkout}
           >
             Checkout
           </Button>
