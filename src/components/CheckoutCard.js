@@ -18,7 +18,6 @@ function CheckoutCard(props) {
   props.cartItem.forEach((item) => {
     weightTotal += item.item.weight * item.amountItem;
   });
-  console.log(weightTotal);
 
   let costVariables = {
     origin: props.cartItem[0].item.user.address.cityId,

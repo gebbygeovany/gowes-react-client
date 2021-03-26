@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Card, Sticky, Divider, Button, List, Message } from "semantic-ui-react";
+import {
+  Card,
+  Sticky,
+  Divider,
+  Button,
+  List,
+  Message,
+} from "semantic-ui-react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { CREATE_PAYMENT_QUERY, ADD_ORDER } from "../util/graphql";
 import PropTypes from "prop-types";
@@ -19,6 +26,7 @@ function ItemSummaryCheckout(props) {
 
   let total = 0;
   let amountCounter = 0;
+  let shippingCostCounter = 0;
   let itemIds = [];
 
   props.items.forEach((item) => {
@@ -28,30 +36,31 @@ function ItemSummaryCheckout(props) {
   const [addOrder] = useMutation(ADD_ORDER, {
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
-      console.log(errors)
+      console.log(errors);
     },
     variables: { itemIds: itemIds, state: "CONFIRMATION", shipping: "tiki" },
   });
 
   function actionAddOrder() {
     if (shippingCost > 0) {
-      addOrder()
+      addOrder();
     } else {
-      setMessageVisibility(true)
+      setMessageVisibility(true);
     }
   }
 
   useEffect(() => {
     props.carts.forEach((cart) => {
-      setShippingCost(cart.cartItems[0].courier.amount);
+      if (cart.cartItems[0].courier) {
+        shippingCostCounter += cart.cartItems[0].courier.amount;
+      }
       cart.cartItems.forEach((cartItem) => {
         amountCounter += cartItem.amountItem;
         const price = parseInt(cartItem.item.price);
         total += price * cartItem.amountItem;
-        // const amount = item
-        console.log("amount", cartItem.amountItem);
       });
     });
+    setShippingCost(shippingCostCounter);
     setAmount(amountCounter);
     setSubTotal(total);
   }, [props.carts, props.isChange]);
@@ -102,12 +111,13 @@ function ItemSummaryCheckout(props) {
             </Card.Content>
           </Card>
           {messageVisibility ? (
-            <Message negative onDismiss={()=>setMessageVisibility(false)}>
+            <Message negative onDismiss={() => setMessageVisibility(false)}>
               <Message.Header>Shipment service not chosen</Message.Header>
               <p>Select shipment service to complete your order</p>
             </Message>
-          ) : (<></>)}
-
+          ) : (
+            <></>
+          )}
         </Sticky>
       )}
     </>

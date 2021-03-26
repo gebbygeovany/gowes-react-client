@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Grid, Ref, Message, Card } from "semantic-ui-react";
 import { useQuery } from "@apollo/react-hooks";
 import { AuthContext } from "../context/auth";
@@ -6,8 +6,11 @@ import CheckoutCard from "../components/CheckoutCard";
 import ItemSummaryCheckout from "../components/ItemSummaryCheckout";
 import { FETCH_USER_CART_CHECKOUT_QUERY } from "../util/graphql";
 import { objectSize } from "../util/extensions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { checkoutItems } from "../actions/orderAction";
 
-function Checkout() {
+function Checkout(props) {
   const contextRef = React.createRef();
   const context = useContext(AuthContext);
 
@@ -25,6 +28,25 @@ function Checkout() {
   let { getUser: user } = userData ? userData : [];
 
   var size = objectSize(cartItemsCheckout);
+  useEffect(() => {
+    if (size > 0) {
+      let group = cartItemsCheckout.reduce((r, a) => {
+        r[a.item.user.id] = [...(r[a.item.user.id] || []), a];
+        return r;
+      }, {});
+      let carts = props.carts;
+      Object.keys(group).forEach(function (key) {
+        if (group[key][0].isChecked && objectSize(carts) <= 1) {
+          const cart = {
+            user: group[key][0].item.user, // data yang dibutuhkan : username, cityId
+            cartItems: group[key],
+          };
+          carts = [cart, ...carts];
+        }
+      });
+      props.checkoutItems(carts, !props.isChange);
+    }
+  }, [size]); // <-- empty dependency array
 
   let cartMarkup = (
     <>
@@ -86,4 +108,13 @@ function Checkout() {
   return cartMarkup;
 }
 
-export default Checkout;
+Checkout.propTypes = {
+  checkoutItems: PropTypes.func.isRequired,
+  carts: PropTypes.array,
+};
+const mapStateToProps = (state) => ({
+  carts: state.orders.checkoutOrders,
+  isChange: state.orders.isChange,
+});
+
+export default connect(mapStateToProps, { checkoutItems })(Checkout);
