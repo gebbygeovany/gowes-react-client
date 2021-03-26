@@ -3,6 +3,8 @@ import { Card, Grid, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 function ItemCheckoutCard({ item }) {
+
+  console.log(typeof(item.note))
   return (
     <>
       <Card.Content>
@@ -22,7 +24,7 @@ function ItemCheckoutCard({ item }) {
               to={`/items/${item.item.id}`}
             />
           </Grid.Column>
-          <Grid.Column width={13} style={{ marginTop: 5 }}>
+          <Grid.Column width={10} style={{ marginTop: 5 }}>
             <Grid.Row>
               <h4>{item.item.name}</h4>
             </Grid.Row>
@@ -32,7 +34,16 @@ function ItemCheckoutCard({ item }) {
             <Grid.Row style={{ marginTop: 5 }}>
               <div>
                 {item.amountItem} item ({item.item.weight * item.amountItem}gr){" "}
+                {item.note}
               </div>
+            </Grid.Row>
+          </Grid.Column>
+          <Grid.Column width={3} style={{ marginTop: 5 }}>
+            <Grid.Row>
+              <h5 style={{ color: "teal" }}>Notes:</h5>
+            </Grid.Row>
+            <Grid.Row style={{ marginTop: 0 }}>
+              {item.note === "" ? "-" : item.note}
             </Grid.Row>
           </Grid.Column>
         </Grid>
