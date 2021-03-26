@@ -1,7 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Grid, Transition, Ref, Message } from "semantic-ui-react";
-
 import ShopCard from "../components/ShopCard";
 import SearchBarHome from "../components/SearchBarHome";
 import FilterBarHome from "../components/FilterBarHome";
@@ -13,12 +12,11 @@ import { setFilter } from "../actions/searchFilterAction";
 function Search(props) {
   const contextRef = React.createRef();
   const params = props.match.params.keyword.trim().split("&");
-
   const getQueryFieldValue = (fieldName) => {
     let result = "";
-    params.map((param) => {
+    params.forEach((param) => {
       const pair = param.split("=");
-      if (pair[0] == fieldName) {
+      if (pair[0] === fieldName) {
         result = pair[1];
         return;
       }
@@ -33,18 +31,18 @@ function Search(props) {
   const cityParam = getQueryFieldValue("city");
   const minPriceParam = getQueryFieldValue("min");
   const maxPriceParam = getQueryFieldValue("max");
-  const navsource = navsourceParam != "" ? `navsource=${navsourceParam}` : "";
+  const navsource = navsourceParam !== "" ? `navsource=${navsourceParam}` : "";
   const keyword =
-    navsourceParam != "" ? `&q=${keywordParam}` : `q=${keywordParam}`;
-  
+    navsourceParam !== "" ? `&q=${keywordParam}` : `q=${keywordParam}`;
+
   const { loading, data } = useQuery(SEARCH_ITEMS_QUERY, {
     variables: {
       keyword: keywordParam,
       category: categoryParam,
       condition: conditionParam,
       city: cityParam,
-      minPrice: minPriceParam != "" ? parseInt(minPriceParam) : -1,
-      maxPrice: maxPriceParam != "" ? parseInt(maxPriceParam) : -1,
+      minPrice: minPriceParam !== "" ? parseInt(minPriceParam) : -1,
+      maxPrice: maxPriceParam !== "" ? parseInt(maxPriceParam) : -1,
     },
   });
   const { searchItems: items } = data ? data : [];
@@ -69,7 +67,7 @@ function Search(props) {
         </Grid.Column>
         <Grid.Column width={12}>
           <h4>Products</h4>
-          {props.newFilter.minPrice < 100 && props.newFilter.minPrice != -1 ? (
+          {props.newFilter.minPrice < 100 && props.newFilter.minPrice !== -1 ? (
             <Message
               error
               header="The price range is between 100 - 100,000,000."
@@ -83,11 +81,13 @@ function Search(props) {
               <>
                 <Transition.Group duration={1000}>
                   {items &&
-                    items.map((item) => (
-                      <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
-                        <ShopCard item={item} />
-                      </Grid.Column>
-                    ))}
+                    items.map((item) => {
+                      return (
+                        <Grid.Column key={item.id} style={{ marginBottom: 20 }}>
+                          <ShopCard item={item} />
+                        </Grid.Column>
+                      );
+                    })}
                 </Transition.Group>
               </>
             ) : loading ? (

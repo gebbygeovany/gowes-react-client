@@ -3,7 +3,6 @@ import {
   Card,
   Grid,
   Form,
-  Checkbox,
   Image,
   Button,
   Label,
@@ -11,11 +10,13 @@ import {
   Input,
   Icon,
 } from "semantic-ui-react";
-import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
-
-import { EDIT_CART_MUTATION, FETCH_USER_CART_QUERY } from "../util/graphql";
+import {
+  EDIT_CART_MUTATION,
+  FETCH_USER_CART_QUERY,
+  DELETE_CART_ITEM_MUTATION,
+} from "../util/graphql";
 import DeleteFromCartButton from "./DeleteFromCartButton";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -34,10 +35,10 @@ function ItemCartCard(props) {
     let cartItemObj;
     let indexCartObj;
     let indexCartItemObj;
-    carts.map((cart, indexCart) => {
+    carts.forEach((cart, indexCart) => {
       if (cart.user.seller.username === props.item.item.user.seller.username) {
         indexCartObj = indexCart;
-        cart.cartItems.map((cartItem, indexCartItem) => {
+        cart.cartItems.forEach((cartItem, indexCartItem) => {
           if (cartItem.item.id === props.item.item.id) {
             indexCartItemObj = indexCartItem;
             cartItemObj = cartItem;
@@ -53,14 +54,9 @@ function ItemCartCard(props) {
       }
     });
     carts[indexCartObj] = cartObj;
-    // console.log(carts)
     props.checkoutItems(carts, !props.isChange);
     // addToCart()
   }, [amountItem]);
-
-  // console.log(props.item.item.stock)
-
-  // console.log(props.item.name)
 
   const [deleteItemCart] = useMutation(DELETE_CART_ITEM_MUTATION, {
     update(proxy, result) {
@@ -101,6 +97,7 @@ function ItemCartCard(props) {
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(errors);
     },
   });
 
@@ -117,7 +114,6 @@ function ItemCartCard(props) {
 
           <Grid.Column width={2} verticalAlign="middle" style={{ padding: 5 }}>
             <Image
-              fluid
               centered
               rounded
               src={
@@ -177,8 +173,7 @@ function ItemCartCard(props) {
                       onClick={() => setOpen(true)}
                       icon="plus"
                       content="add notes"
-                    >
-                    </Button>
+                    ></Button>
                   )}
                 </Grid.Column>
                 <Grid.Column width={6}>
@@ -229,11 +224,6 @@ function ItemCartCard(props) {
     </>
   );
 }
-const DELETE_CART_ITEM_MUTATION = gql`
-  mutation deleteCartItem($cartId: ID!) {
-    deleteCartItem(cartId: $cartId)
-  }
-`;
 
 ItemCartCard.propTypes = {
   checkoutItems: PropTypes.func.isRequired,

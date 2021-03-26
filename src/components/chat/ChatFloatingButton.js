@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Icon, Transition, Segment, Grid, Container } from "semantic-ui-react";
+import React, { useContext } from "react";
+import { Icon, Transition, Segment, Container } from "semantic-ui-react";
 import { AuthContext } from "../../context/auth";
 import ChatFloatingCard from "./ChatFloatingCard";
 
@@ -9,7 +9,6 @@ function ChatFloatingButton({
   selectedChat,
   selectedMessage,
 }) {
-  const [visible, setVisible] = useState(true);
   // const toggleVisibility = () => {setVisible(!visible)}
   const toggleVisibility = () => {
     onChatVisible();
@@ -55,7 +54,7 @@ function ChatFloatingButton({
           <Segment
             onClick={toggleVisibility}
             floated="right"
-            raised="true"
+            raised={true}
             style={style}
           >
             <Icon color="teal" size="large" name="discussions" />

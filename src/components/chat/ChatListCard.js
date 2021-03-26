@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { List, Image, Segment } from "semantic-ui-react";
 
 function ChatListCard({ chats, user, setChat, selectedChat }) {
-  if (selectedChat.users && selectedChat.id == "new") {
-    chats = [...chats, selectedChat]
+  if (selectedChat.users && selectedChat.id === "new") {
+    chats = [...chats, selectedChat];
   }
-  console.log(selectedChat)
+  console.log(selectedChat);
   const [isItemHovered, setItemHovered] = useState({
     state: false,
     id: -1,
@@ -33,7 +33,7 @@ function ChatListCard({ chats, user, setChat, selectedChat }) {
 
   const receiver = (users) => {
     let userReceiver;
-    if (users[0].id != user.id) {
+    if (users[0].id !== user.id) {
       userReceiver = users[0];
     } else {
       userReceiver = users[1];
@@ -54,12 +54,13 @@ function ChatListCard({ chats, user, setChat, selectedChat }) {
           <List.Item
             key={index}
             onClick={() => {
-              console.log(`chat: ${chat.id} index:${index}`)
-              setChat(chat)}}
+              console.log(`chat: ${chat.id} index:${index}`);
+              setChat(chat);
+            }}
             onMouseEnter={() => handleItemHovered(index, true)}
             onMouseLeave={() => handleItemHovered(index, false)}
             style={
-              isItemHovered.state && isItemHovered.id == index
+              isItemHovered.state && isItemHovered.id === index
                 ? onMouseEnterItem
                 : onMouseLeaveItem
             }

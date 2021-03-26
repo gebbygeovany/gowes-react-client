@@ -98,6 +98,44 @@ export const SEARCH_ITEMS_QUERY = gql`
   }
 `;
 
+export const FETCH_SINGLE_ITEM_QUERY = gql`
+  query($itemId: ID!) {
+    getItem(itemId: $itemId) {
+      id
+      name
+      price
+      stock
+      weight
+      createdAt
+      description
+      condition
+      category
+      dimension {
+        length
+        width
+        height
+      }
+      images {
+        id
+        downloadUrl
+      }
+      bookmarkedBy {
+        id
+        userId
+        createdAt
+      }
+      user {
+        id
+        seller {
+          id
+          username
+        }
+      }
+    }
+  }
+`;
+
+
 export const FETCH_ITEM_QUERY = gql`
   query($itemId: ID!, $itemUserId: ID!, $currentUserId: ID!) {
     getItem(itemId: $itemId) {
@@ -488,6 +526,156 @@ export const ADD_ORDER = gql`
       shipping {
         awbNumber
         courierName
+      }
+    }
+  }
+`;
+
+export const FETCH_USER_QUERY = gql`
+  query($userId: ID!) {
+    getUser(userId: $userId) {
+      id
+      email
+      phone
+      address {
+        cityName
+        cityId
+        district
+        postalCode
+        detail
+      }
+      balance
+      buyer {
+        name
+        birthDate
+        avatar
+      }
+    }
+    getCities {
+      city_id
+      province_id
+      province
+      type
+      city_name
+      postal_code
+    }
+  }
+`;
+export const UPDATE_PROFILE_MUTATION = gql`
+  mutation updateUserProfile(
+    $avatar: String!
+    $name: String!
+    $email: String!
+    $phone: String!
+    $birthDate: String!
+    $cityName: String!
+    $cityId: String!
+    $district: String!
+    $postalCode: String!
+    $detail: String!
+  ) {
+    updateUserProfile(
+      userProfileInput: {
+        avatar: $avatar
+        name: $name
+        email: $email
+        phone: $phone
+        birthDate: $birthDate
+        address: {
+          cityName: $cityName
+          cityId: $cityId
+          district: $district
+          postalCode: $postalCode
+          detail: $detail
+        }
+      }
+    ) {
+      id
+      email
+      phone
+      address {
+        cityName
+        cityId
+        district
+        postalCode
+        detail
+      }
+      balance
+      token
+      buyer {
+        name
+        birthDate
+        avatar
+      }
+    }
+  }
+`;
+
+export const DELETE_CART_ITEM_MUTATION = gql`
+  mutation deleteCartItem($cartId: ID!) {
+    deleteCartItem(cartId: $cartId)
+  }
+`;
+
+export const UPDATE_ITEM_MUTATION = gql`
+  mutation updateItem(
+    $name: String!
+    $price: Int!
+    $stock: Int!
+    $category: String!
+    $condition: String!
+    $weight: Int!
+    $description: String!
+    $length: Int!
+    $width: Int!
+    $height: Int!
+    $itemId: ID!
+  ) {
+    updateItem(
+      itemId: $itemId
+      addItemInput: {
+        name: $name
+        price: $price
+        stock: $stock
+        category: $category
+        condition: $condition
+        weight: $weight
+        description: $description
+        dimension: { length: $length, width: $width, height: $height }
+        images: [{ downloadUrl: "" }]
+      }
+    ) {
+      id
+      name
+      price
+      stock
+      category
+      condition
+      weight
+      description
+      dimension {
+        length
+        width
+        height
+      }
+      images {
+        downloadUrl
+      }
+      createdAt
+      bookmarkedBy {
+        id
+        userId
+        createdAt
+      }
+      user {
+        id
+        seller {
+          username
+          avatar
+          description
+          createdAt
+          id
+        }
       }
     }
   }

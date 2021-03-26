@@ -1,14 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { Icon, Confirm } from "semantic-ui-react";
 
 import { FETCH_USER_CART_QUERY } from "../util/graphql";
-import { AuthContext } from "../context/auth";
 import MyPopup from "./MyPopup";
 
 function DeleteFromCartButton({ item }) {
-  const context = useContext(AuthContext);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const [deleteItemCart] = useMutation(DELETE_CART_ITEM_MUTATION, {

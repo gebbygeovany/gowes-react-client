@@ -14,13 +14,11 @@ function ItemSummaryCard(props) {
   let amountCounter = 0;
 
   useEffect(() => {
-    props.carts.map((cart) => {
-      cart.cartItems.map((cartItem) => {
+    props.carts.forEach((cart) => {
+      cart.cartItems.forEach((cartItem) => {
         amountCounter += cartItem.amountItem;
         const price = parseInt(cartItem.item.price);
         total += price * cartItem.amountItem;
-        // const amount = item
-        console.log("amount", cartItem.amountItem);
       });
     });
     setAmount(amountCounter);
@@ -34,7 +32,9 @@ function ItemSummaryCard(props) {
         <Card.Content>
           <List divided verticalAlign="middle">
             <List.Item>
-              <List.Content floated="right">Rp {currencyIdrConverter(subTotal, 0, ".", ",")}</List.Content>
+              <List.Content floated="right">
+                Rp {currencyIdrConverter(subTotal, 0, ".", ",")}
+              </List.Content>
               <List.Content style={{ marginBottom: 5 }}>
                 <h4>Sub Total ({amount} items)</h4>
               </List.Content>
@@ -43,7 +43,7 @@ function ItemSummaryCard(props) {
         </Card.Content>
         <Card.Content extra>
           <Button
-            disabled={amount == 0}
+            disabled={amount === 0}
             fluid
             color="teal"
             as={Link}

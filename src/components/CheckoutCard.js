@@ -15,7 +15,7 @@ function CheckoutCard(props) {
     amount: 0,
   });
   let weightTotal = 0;
-  props.cartItem.map((item) => {
+  props.cartItem.forEach((item) => {
     weightTotal += item.item.weight * item.amountItem;
   });
   console.log(weightTotal);
@@ -42,14 +42,14 @@ function CheckoutCard(props) {
     let cartItemObj;
     let indexCartObj;
     let indexCartItemObj;
-    carts.map((cart, indexCart) => {
+    carts.forEach((cart, indexCart) => {
       if (
         cart.user.seller.username ===
         props.cartItem[0].item.user.seller.username
       ) {
         indexCartObj = indexCart;
         cartObj = cart;
-        cart.cartItems.map((cartItem, indexCartItem) => {
+        cart.cartItems.forEach((cartItem, indexCartItem) => {
           indexCartItemObj = indexCartItem;
           cartItemObj = cartItem;
           cartItemObj = { ...cartItemObj, courier: courier };
@@ -94,7 +94,7 @@ function CheckoutCard(props) {
     const posSize = objectSize(posCosts);
     let options = [];
     if (tikiSize > 0 && tikiCosts[0].costs) {
-      tikiCosts[0].costs.map((cost) => {
+      tikiCosts[0].costs.forEach((cost) => {
         options = [
           ...options,
           {
@@ -122,7 +122,7 @@ function CheckoutCard(props) {
       });
     }
     if (jneSize > 0 && jneCosts[0].costs) {
-      jneCosts[0].costs.map((cost) => {
+      jneCosts[0].costs.forEach((cost) => {
         options = [
           ...options,
           {
@@ -150,7 +150,7 @@ function CheckoutCard(props) {
       });
     }
     if (posSize > 0 && posCosts[0].costs) {
-      posCosts[0].costs.map((cost) => {
+      posCosts[0].costs.forEach((cost) => {
         options = [
           ...options,
           {

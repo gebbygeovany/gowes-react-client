@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom'
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag'
-import { Icon, Label, Button, Popup } from 'semantic-ui-react'
-
-import MyPopup from './MyPopup';
+import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/react-hooks";
+import gql from "graphql-tag";
+import { Icon, Label, Button } from "semantic-ui-react";
+import MyPopup from "./MyPopup";
 
 function LikeButton({ user, post: { id, likeCount, likes } }) {
-  const [liked, setLiked] = useState(false)
+  const [liked, setLiked] = useState(false);
   useEffect(() => {
-    if (user && likes.find(like => like.username === user.username)) {
-      setLiked(true)
+    if (user && likes.find((like) => like.username === user.username)) {
+      setLiked(true);
     } else {
-      setLiked(false)
+      setLiked(false);
     }
-  }, [user, likes])
+  }, [user, likes]);
 
   const [likePost] = useMutation(LIKE_POST_MUTATION, {
-    variables: { postId: id }
-  })
+    variables: { postId: id },
+  });
 
   const likeButton = user ? (
     liked ? (
@@ -26,40 +25,40 @@ function LikeButton({ user, post: { id, likeCount, likes } }) {
         <Icon name="heart" />
       </Button>
     ) : (
-        <Button color="teal" basic>
-          <Icon name="heart" />
-        </Button>
-      )
-  ) : (
-      <Button as={Link} to="/login" color="teal" basic>
+      <Button color="teal" basic>
         <Icon name="heart" />
       </Button>
-    );
+    )
+  ) : (
+    <Button as={Link} to="/login" color="teal" basic>
+      <Icon name="heart" />
+    </Button>
+  );
   return (
     <>
-      <MyPopup content={liked ? 'Unlike' : 'Like'}>
-        <Button as='div' labelPosition='right' onClick={likePost}>
+      <MyPopup content={liked ? "Unlike" : "Like"}>
+        <Button as="div" labelPosition="right" onClick={likePost}>
           {likeButton}
-          <Label basic color='teal' pointing='left'>
+          <Label basic color="teal" pointing="left">
             {likeCount}
           </Label>
         </Button>
       </MyPopup>
     </>
-
-  )
+  );
 }
 
 const LIKE_POST_MUTATION = gql`
-    mutation likePost($postId:ID!){
-        likePost(postId: $postId){
-            id
-            likes{
-                id username
-            }
-            likeCount
-        }
+  mutation likePost($postId: ID!) {
+    likePost(postId: $postId) {
+      id
+      likes {
+        id
+        username
+      }
+      likeCount
     }
-`
+  }
+`;
 
-export default LikeButton
+export default LikeButton;

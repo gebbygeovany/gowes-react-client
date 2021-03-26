@@ -17,7 +17,7 @@ function PostCard({
     ribbon: true,
   };
 
-  if (condition == "used") {
+  if (condition === "used") {
     ribbon = {
       color: "grey",
       content: "Used",

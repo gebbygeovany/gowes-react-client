@@ -13,28 +13,29 @@ function ItemSummaryCheckout(props) {
   const [amount, setAmount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
 
-  const { loading, data } = useQuery(CREATE_PAYMENT_QUERY);
-  const { createPayment: payment } = data ? data : [];
+  const { loading } = useQuery(CREATE_PAYMENT_QUERY);
+  // const { createPayment: payment } = data ? data : [];
 
   let total = 0;
   let amountCounter = 0;
   let itemIds = [];
 
-  props.items.map((item) => {
+  props.items.forEach((item) => {
     itemIds = [...itemIds, item.item.id];
   });
 
   const [addOrder] = useMutation(ADD_ORDER, {
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(errors)
     },
     variables: { itemIds: itemIds, state: "CONFIRMATION", shipping: "tiki" },
   });
 
   useEffect(() => {
-    props.carts.map((cart) => {
+    props.carts.forEach((cart) => {
       setShippingCost(cart.cartItems[0].courier.amount);
-      cart.cartItems.map((cartItem) => {
+      cart.cartItems.forEach((cartItem) => {
         amountCounter += cartItem.amountItem;
         const price = parseInt(cartItem.item.price);
         total += price * cartItem.amountItem;

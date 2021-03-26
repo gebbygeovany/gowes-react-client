@@ -7,7 +7,6 @@ import {
   Radio,
   Input,
   Label,
-  Button,
 } from "semantic-ui-react";
 import { useQuery } from "@apollo/react-hooks";
 import { useHistory } from "react-router-dom";
@@ -30,15 +29,13 @@ function FilterBarHome(props) {
     minPrice: props.minPrice,
     maxPrice: props.maxPrice,
   });
-  console.log("values.category:", values.category);
 
   useEffect(() => {
     if (isSubmit) {
-      const category = values.category != "" ? `&cat=${values.category}` : "";
-      const city = values.city != "" ? `&city=${values.city}` : "";
+      const category = values.category !== "" ? `&cat=${values.category}` : "";
+      const city = values.city !== "" ? `&city=${values.city}` : "";
       const condition =
-        values.condition != "" ? `&cond=${values.condition}` : "";
-      console.log();
+        values.condition !== "" ? `&cond=${values.condition}` : "";
       const minPrice = values.minPrice > -1 ? `&min=${values.minPrice}` : "";
       const maxPrice = values.maxPrice > -1 ? `&max=${values.maxPrice}` : "";
       history.push(
@@ -46,26 +43,36 @@ function FilterBarHome(props) {
       );
     }
     setSubmit(false);
-  }, [isSubmit]);
+  }, [
+    isSubmit,
+    history,
+    props.keyword,
+    props.navsource,
+    values.category,
+    values.city,
+    values.condition,
+    values.maxPrice,
+    values.minPrice,
+  ]);
 
   const handleChange = (_, { name, value }) => {
-    setValues({ ...values, [name]: value == "all" ? "" : value });
+    setValues({ ...values, [name]: value === "all" ? "" : value });
     setSubmit(true);
   };
 
   const categoryChange = (_, { value }) => {
-    setValues({ ...values, ["category"]: value == "all" ? "" : value });
+    setValues({ ...values, category: value === "all" ? "" : value });
     setSubmit(true);
   };
 
   const cityChange = (_, { value }) => {
-    setValues({ ...values, ["city"]: value == "all" ? "" : value });
+    setValues({ ...values, city: value === "all" ? "" : value });
     setSubmit(true);
   };
 
   const priceChange = (e) => {
     const priceValue = e.target.value.trim();
-    if (priceValue.match(/^\d+$/) || priceValue == "") {
+    if (priceValue.match(/^\d+$/) || priceValue === "") {
       setPrices({
         ...prices,
         [e.target.name]: e.target.value,
@@ -77,21 +84,23 @@ function FilterBarHome(props) {
     if (e.key === "Enter") {
       switch (e.target.name) {
         case "minPrice":
-          if (prices.minPrice.match(/^\d+$/) || prices.minPrice == "") {
+          if (prices.minPrice.match(/^\d+$/) || prices.minPrice === "") {
             setValues({
               ...values,
-              ["minPrice"]:
-                prices.minPrice == "" ? -1 : parseInt(prices.minPrice),
+              minPrice: prices.minPrice === "" ? -1 : parseInt(prices.minPrice),
             });
           }
+          break;
         case "maxPrice":
-          if (prices.maxPrice.match(/^\d+$/) || prices.maxPrice == "") {
+          if (prices.maxPrice.match(/^\d+$/) || prices.maxPrice === "") {
             setValues({
               ...values,
-              ["maxPrice"]:
-                prices.maxPrice == "" ? -1 : parseInt(prices.maxPrice),
+              maxPrice: prices.maxPrice === "" ? -1 : parseInt(prices.maxPrice),
             });
           }
+          break;
+        default:
+          break;
       }
 
       setSubmit(true);
@@ -132,7 +141,7 @@ function FilterBarHome(props) {
               options={categoryOptions}
               onChange={categoryChange}
               defaultValue={
-                values.category != ""
+                values.category !== ""
                   ? values.category
                   : categoryOptions[0].value
               }
@@ -143,7 +152,6 @@ function FilterBarHome(props) {
             <Dropdown
               placeholder="Select City"
               fluid
-              selection
               options={cityOptions}
               search
               selection

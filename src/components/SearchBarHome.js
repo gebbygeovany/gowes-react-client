@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Input, Button } from "semantic-ui-react";
-import _ from "lodash";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -21,7 +20,7 @@ function SearchBarHome(props) {
       history.push(`/search/${param}`);
     }
     setSubmit(false);
-  }, [keyword, isSubmit]);
+  }, [keyword, isSubmit, history, navSource, props]);
 
   const onChange = (_, { value }) => {
     setKeyword(value);

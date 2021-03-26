@@ -8,7 +8,7 @@ import { useQuery } from "@apollo/react-hooks";
 import ItemAttachedOnChat from "./ItemAttachedOnChat";
 
 function MessageListCard({ user, chatId, selectedMessage, selectedChat }) {
-  console.log(`chatId: ${chatId}`)
+  console.log(`chatId: ${chatId}`);
   const { loading, data, subscribeToMore } = useQuery(
     FETCH_CHAT_MESSAGES_QUERY,
     {
@@ -75,15 +75,20 @@ function MessageListCard({ user, chatId, selectedMessage, selectedChat }) {
       lastMessageId = message.id;
       let position = "right";
 
-      if (message.user != user.id) {
+      if (message.user !== user.id) {
         // left message item comp
         position = "left";
       }
 
       if (message.item.id) {
-        messageItemMarkUp = <ItemAttachedOnChat item={message.item} position={position}></ItemAttachedOnChat>;
+        messageItemMarkUp = (
+          <ItemAttachedOnChat
+            item={message.item}
+            position={position}
+          ></ItemAttachedOnChat>
+        );
       } else {
-        if (position == "right") {
+        if (position === "right") {
           messageItemMarkUp = getMessageItem(
             message,
             position,
@@ -142,9 +147,9 @@ function MessageListCard({ user, chatId, selectedMessage, selectedChat }) {
   };
   let messageListMarkup;
   if (!loading) {
-    if (chatId != "new") {
-      if (chatId == selectedMessage.chatId) {
-        messages = [...messages, selectedMessage]
+    if (chatId !== "new") {
+      if (chatId === selectedMessage.chatId) {
+        messages = [...messages, selectedMessage];
       }
       messageListMarkup = (
         <Segment style={rightContent}>

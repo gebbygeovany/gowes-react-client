@@ -9,12 +9,11 @@ import {
   Icon,
 } from "semantic-ui-react";
 import gql from "graphql-tag";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
-
 import { AuthContext } from "../context/auth";
 
-function ProfileCard(props) {
+function ProfileCard() {
   const context = useContext(AuthContext);
   console.log("userid@profileCard: ", context.user.id);
   const { loading, data } = useQuery(FETCH_USER_QUERY, {
@@ -25,7 +24,6 @@ function ProfileCard(props) {
   const { getUser: currentUser } = data ? data : [];
 
   console.log("user@profileCard: ", currentUser);
-
 
   const [avatar] = useState(
     "https://react.semantic-ui.com/images/avatar/large/molly.png"

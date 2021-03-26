@@ -8,16 +8,15 @@ import {
   Header,
   Input,
   Message,
-  Confirm, Form
+  Confirm,
+  Form,
 } from "semantic-ui-react";
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import gql from "graphql-tag";
 import { FETCH_CART_QUERY } from "../util/graphql";
 import { AuthContext } from "../context/auth";
 import { ADD_TO_CART_MUTATION, FETCH_USER_CART_QUERY } from "../util/graphql";
 
-import { useForm } from '../util/hooks'
-
+import { useForm } from "../util/hooks";
 
 function ItemTransactionCard({
   contextRef,
@@ -55,7 +54,7 @@ function ItemTransactionCard({
       price: item.price,
       image: "",
     },
-    chatId: isChatExists.length > 0 ? isChatExists[0]._id : "new"
+    chatId: isChatExists.length > 0 ? isChatExists[0]._id : "new",
   };
 
   const handleDismiss = () => {
@@ -63,11 +62,16 @@ function ItemTransactionCard({
   };
 
   const { onChange, onSubmit, values } = useForm(addNotes, {
-    note: '',
-  })
+    note: "",
+  });
 
   const [addToCart] = useMutation(ADD_TO_CART_MUTATION, {
-    variables: { itemId: item.id, amountItem: amountItem, note: values.note, isChecked: false },
+    variables: {
+      itemId: item.id,
+      amountItem: amountItem,
+      note: values.note,
+      isChecked: false,
+    },
     update(proxy, result) {
       const data = proxy.readQuery({
         query: FETCH_USER_CART_QUERY,
@@ -92,10 +96,11 @@ function ItemTransactionCard({
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(errors);
     },
   });
 
-  const { loading, data: userCartData, refetch } = useQuery(FETCH_CART_QUERY, {
+  const { loading, data: userCartData } = useQuery(FETCH_CART_QUERY, {
     variables: {
       itemId: item.id,
     },
@@ -109,23 +114,22 @@ function ItemTransactionCard({
 
   function addItemToCart() {
     addToCart();
-    setConfirmOpen(true)
+    setConfirmOpen(true);
     // window.location.href='/items'
     // window.location.reload(false);
   }
   function addNotes() {
-    setNote(values.note)
+    setNote(values.note);
   }
-  console.log("note", note)
+  console.log("note", note);
 
-
-  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   function redirectToCart() {
-    window.location.href = '/cart'
+    window.location.href = "/cart";
   }
   function refreshPage() {
-    window.location.reload(false)
+    window.location.reload(false);
   }
 
   let itemMarkup = <h1>loading...</h1>;
@@ -179,14 +183,17 @@ function ItemTransactionCard({
                     <List.Item>{`Stok  ${item.stock}`}</List.Item>
                   </List>
                 </List.Item>
-                <Form onSubmit={onSubmit} style={{ marginTop: 10, marginBottom: 10 }}>
+                <Form
+                  onSubmit={onSubmit}
+                  style={{ marginTop: 10, marginBottom: 10 }}
+                >
                   <Form.Input
-                    placeholder='add notes for seller'
-                    name='note'
+                    placeholder="add notes for seller"
+                    name="note"
                     // style={{ width: 170 }}
                     value={values.note}
                     onChange={onChange}
-                    label='Note'
+                    label="Note"
                   />
                 </Form>
                 <List.Item>
@@ -199,7 +206,6 @@ function ItemTransactionCard({
                 </List.Item>
                 <List.Item></List.Item>
               </List>
-
             </Card.Content>
             <Card.Content extra>
               <div className="ui two buttons">
@@ -261,8 +267,8 @@ function ItemTransactionCard({
           )}
           <Confirm
             open={confirmOpen}
-            content='Item added successfully!'
-            cancelButton='Stay in Page'
+            content="Item added successfully!"
+            cancelButton="Stay in Page"
             confirmButton="View Cart"
             onCancel={refreshPage}
             onConfirm={redirectToCart}
@@ -273,7 +279,5 @@ function ItemTransactionCard({
   }
   return itemMarkup;
 }
-
-
 
 export default ItemTransactionCard;

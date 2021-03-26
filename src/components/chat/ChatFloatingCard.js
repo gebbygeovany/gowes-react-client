@@ -34,7 +34,7 @@ function ChatFloatingCard(props) {
   };
   if (
     props.selectedChat.id &&
-    currentChat.id != props.selectedChat.id &&
+    currentChat.id !== props.selectedChat.id &&
     !isChange
   ) {
     setCurrentChat(props.selectedChat);
@@ -42,7 +42,7 @@ function ChatFloatingCard(props) {
 
   const receiver = (users) => {
     let userReceiver;
-    if (users[0].id != user.id) {
+    if (users[0].id !== user.id) {
       userReceiver = users[0];
     } else {
       userReceiver = users[1];
@@ -89,6 +89,7 @@ function ChatFloatingCard(props) {
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(errors);
     },
     variables: {
       chatId: currentChat.id,
@@ -127,7 +128,7 @@ function ChatFloatingCard(props) {
         <Segment style={topRightBar}>
           <Grid>
             <Grid.Column width={14}>
-              {currentChat.id != "" ? (
+              {currentChat.id !== "" ? (
                 <List horizontal>
                   <List.Item>
                     <Image
@@ -168,7 +169,7 @@ function ChatFloatingCard(props) {
             </Grid.Column>
           </Grid>
         </Segment>
-        {currentChat.id != "" || props.selectedChat.id ? (
+        {currentChat.id !== "" || props.selectedChat.id ? (
           <>
             <MessageListCard
               user={user}

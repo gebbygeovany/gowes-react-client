@@ -5,6 +5,7 @@ import { AuthContext } from "../context/auth";
 import CheckoutCard from "../components/CheckoutCard";
 import ItemSummaryCheckout from "../components/ItemSummaryCheckout";
 import { FETCH_USER_CART_CHECKOUT_QUERY } from "../util/graphql";
+import { objectSize } from "../util/extensions";
 
 function Checkout() {
   const contextRef = React.createRef();
@@ -23,18 +24,8 @@ function Checkout() {
     : [];
   let { getUser: user } = userData ? userData : [];
 
-  Object.size = function (obj) {
-    var size = 0,
-      key;
-    for (key in obj) {
-      if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-  };
+  var size = objectSize(cartItemsCheckout);
 
-  var size = Object.size(cartItemsCheckout);
-
-  
   let cartMarkup = (
     <>
       <br></br>
@@ -58,11 +49,6 @@ function Checkout() {
         r[a.item.user.id] = [...(r[a.item.user.id] || []), a];
         return r;
       }, {});
-      console.log(group);
-
-      Object.keys(group).map(function (key, index) {
-        console.log(group[key]);
-      });
       cartMarkup = (
         <Ref innerRef={contextRef}>
           <Grid stackable>

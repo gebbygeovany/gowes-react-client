@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
-import { FETCH_ITEM_QUERY, FETCH_CART_QUERY } from "../util/graphql";
+import { FETCH_ITEM_QUERY } from "../util/graphql";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Ref, Rail } from "semantic-ui-react";
-
+import { Grid, Ref } from "semantic-ui-react";
 import ItemTransactionCard from "../components/ItemTransactionCard";
 import ManageItemSticky from "../components/ManageItemSticky";
 import ItemDetailCard from "../components/ItemDetailCard";
@@ -26,7 +25,9 @@ function ItemDetail(props) {
     variables: {
       itemId: itemId,
       itemUserId: itemUserId,
-      currentUserId: context.user ? context.user.id: "000000000000000000000000"
+      currentUserId: context.user
+        ? context.user.id
+        : "000000000000000000000000",
     },
   });
   const { getItem: item } = itemData ? itemData : [];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Checkbox } from "semantic-ui-react";
 import ItemCartCard from "../components/ItemCartCard";
 import { useMutation } from "@apollo/react-hooks";
@@ -9,14 +9,11 @@ import { checkoutItems } from "../actions/orderAction";
 import { EDIT_CHECKED_MUTATION, FETCH_USER_CART_QUERY } from "../util/graphql";
 
 function CartCard(props) {
-  // console.log(
-  //   `username seller: ${props.cartItem[0].item.user.seller.username}, isChecked: ${props.cartItem[0].isChecked}`
-  // );
   const [checked, setChecked] = useState(props.cartItem[0].isChecked);
-  const [_, setErrors] = useState({});
+  const [error, setErrors] = useState({});
 
   let itemIds = [];
-  props.cartItem.map((cartItem) => {
+  props.cartItem.forEach((cartItem) => {
     itemIds = [...itemIds, cartItem.item.id];
   });
 
@@ -36,6 +33,7 @@ function CartCard(props) {
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      console.log(error);
     },
   });
 
@@ -44,7 +42,11 @@ function CartCard(props) {
     let carts = props.carts;
     if (carts.length > 0) {
       console.log(carts[0].cartItem);
-      if (carts.find((cart) => cart.cartItems[0].item.user.seller.username === data.label)) {
+      if (
+        carts.find(
+          (cart) => cart.cartItems[0].item.user.seller.username === data.label
+        )
+      ) {
         carts = carts.filter(
           (cart) => cart.user.seller.username !== data.label
         );
@@ -78,9 +80,9 @@ function CartCard(props) {
         />
       </Card.Content>
       {props.cartItem &&
-        props.cartItem.map((item) => (
-          <ItemCartCard item={item} checked={checked}></ItemCartCard>
-        ))}
+        props.cartItem.map((item) => {
+          return <ItemCartCard key={item.id} item={item} checked={checked} />;
+        })}
     </Card>
   );
 }
