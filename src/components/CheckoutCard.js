@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Card, Header, Dropdown, Label, List } from "semantic-ui-react";
 import ItemCheckoutCard from "./ItemCheckoutCard";
-import { FETCH_COST_COURIER_QUERY } from "../util/graphql";
-import { useQuery } from "@apollo/react-hooks";
+import { FETCH_COST_COURIER_QUERY, ADD_ORDER } from "../util/graphql";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { objectSize } from "../util/extensions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { checkoutItems } from "../actions/orderAction";
+import { checkoutItems, setAddOrder } from "../actions/orderAction";
 
 function CheckoutCard(props) {
   const [courier, setCourier] = useState({
@@ -15,8 +15,9 @@ function CheckoutCard(props) {
     amount: 0,
   });
   let weightTotal = 0;
-  props.cartItem.forEach((item) => {
+  let itemIds = props.cartItem.map((item) => {
     weightTotal += item.item.weight * item.amountItem;
+    return item.item.id
   });
 
   let costVariables = {
@@ -34,6 +35,23 @@ function CheckoutCard(props) {
       amount: parseInt(courierSplit[2]),
     });
   };
+
+  const [addOrder] = useMutation(ADD_ORDER, {
+    variables: {
+      itemIds: itemIds,
+      state: "CONFIRMATION",
+      shipping: courier.code,
+    },
+  });
+
+
+  useEffect(() => {
+    console.log(`useeffect itemOrderIds called`, itemIds);
+    if (props.isAddOrder) {
+      addOrder();
+      props.setAddOrder(false)
+    }
+  }, [props.isAddOrder]);
 
   useEffect(() => {
     let carts = props.carts;
@@ -210,11 +228,15 @@ function CheckoutCard(props) {
 }
 CheckoutCard.propTypes = {
   checkoutItems: PropTypes.func.isRequired,
+  setAddOrder: PropTypes.func.isRequired,
   carts: PropTypes.array,
 };
 const mapStateToProps = (state) => ({
   carts: state.orders.checkoutOrders,
   isChange: state.orders.isChange,
+  isAddOrder: state.orders.isAddOrder,
 });
 
-export default connect(mapStateToProps, { checkoutItems })(CheckoutCard);
+export default connect(mapStateToProps, { checkoutItems, setAddOrder })(
+  CheckoutCard
+);

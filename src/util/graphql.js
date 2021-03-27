@@ -524,7 +524,6 @@ export const ADD_ORDER = gql`
         deadline
       }
       shipping {
-        awbNumber
         courierName
       }
     }

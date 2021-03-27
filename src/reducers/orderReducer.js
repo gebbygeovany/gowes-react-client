@@ -1,4 +1,4 @@
-import { CHECKOUT_ORDER, SET_SHIPPING_ORDER } from "../actions/types";
+import { CHECKOUT_ORDER, SET_SHIPPING_ORDER, ADD_ORDER } from "../actions/types";
 import { initialOrderList } from "../util/const";
 
 const initialState = initialOrderList;
@@ -11,6 +11,11 @@ export default function (state = initialState, action) {
         checkoutOrders: action.payload.carts,
         isChange: action.payload.isChange,
         isChecked: action.payload.isChecked
+      };
+    case ADD_ORDER:
+      return {
+        ...state,
+        isAddOrder: action.payload.isAddOrder
       };
     case SET_SHIPPING_ORDER:
       return {

@@ -11,7 +11,7 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import { CREATE_PAYMENT_QUERY, ADD_ORDER } from "../util/graphql";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { checkoutItems } from "../actions/orderAction";
+import { checkoutItems, setAddOrder } from "../actions/orderAction";
 import { currencyIdrConverter } from "../util/extensions";
 
 function ItemSummaryCheckout(props) {
@@ -23,27 +23,15 @@ function ItemSummaryCheckout(props) {
 
   const { loading } = useQuery(CREATE_PAYMENT_QUERY);
   // const { createPayment: payment } = data ? data : [];
-
   let total = 0;
   let amountCounter = 0;
   let shippingCostCounter = 0;
-  let itemIds = [];
 
-  props.items.forEach((item) => {
-    itemIds = [...itemIds, item.item.id];
-  });
-
-  const [addOrder] = useMutation(ADD_ORDER, {
-    onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
-      console.log(errors);
-    },
-    variables: { itemIds: itemIds, state: "CONFIRMATION", shipping: "tiki" },
-  });
 
   function actionAddOrder() {
     if (shippingCost > 0) {
-      addOrder();
+      setMessageVisibility(false);
+      props.setAddOrder(true);
     } else {
       setMessageVisibility(true);
     }
@@ -126,11 +114,13 @@ function ItemSummaryCheckout(props) {
 
 ItemSummaryCheckout.propTypes = {
   checkoutItems: PropTypes.func.isRequired,
+  setAddOrder: PropTypes.func.isRequired,
   carts: PropTypes.array,
 };
 const mapStateToProps = (state) => ({
   carts: state.orders.checkoutOrders,
   isChange: state.orders.isChange,
+  isAddOrder: state.orders.isAddOrder,
 });
 
-export default connect(mapStateToProps, { checkoutItems })(ItemSummaryCheckout);
+export default connect(mapStateToProps, { checkoutItems, setAddOrder })(ItemSummaryCheckout);

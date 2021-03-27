@@ -11,7 +11,7 @@ import { objectSize } from "../util/extensions";
 
 function Cart(props) {
   const contextRef = React.createRef();
-  const { loading, data } = useQuery(FETCH_USER_CART_QUERY);
+  const { loading, data, refetch } = useQuery(FETCH_USER_CART_QUERY);
   let { getUserCartItems: cartItems } = data ? data : [];
   var size = objectSize(cartItems);
 
@@ -68,7 +68,7 @@ function Cart(props) {
             <Grid.Column width={12}>
               {group &&
                 Object.keys(group).map((key, index) => (
-                  <CartCard key={index} cartItem={group[key]}></CartCard>
+                  <CartCard key={index} cartItem={group[key]} refetchCartQuery={refetch}></CartCard>
                 ))}
             </Grid.Column>
             <Grid.Column width={4}>

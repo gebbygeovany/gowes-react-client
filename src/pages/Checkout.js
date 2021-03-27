@@ -90,14 +90,14 @@ function Checkout(props) {
               </Card>
               <h3>Items</h3>
               {group &&
-                Object.keys(group).map((key, index) => (
+                Object.keys(group).map((key) => (
                   <CheckoutCard cartItem={group[key]} user={user} />
                 ))}
             </Grid.Column>
             <Grid.Column width={4}>
               <ItemSummaryCheckout
                 contextRef={contextRef}
-                items={cartItemsCheckout}
+                items={group}
               ></ItemSummaryCheckout>
             </Grid.Column>
           </Grid>

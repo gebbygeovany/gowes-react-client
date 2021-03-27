@@ -19,17 +19,8 @@ function CartCard(props) {
 
   const [editCartItem] = useMutation(EDIT_CHECKED_MUTATION, {
     variables: { itemIds: itemIds, isChecked: checked ? false : true },
-    update(proxy, result) {
-      const data = proxy.readQuery({
-        query: FETCH_USER_CART_QUERY,
-      });
-
-      proxy.writeQuery({
-        query: FETCH_USER_CART_QUERY,
-        data: {
-          getUserCartItems: [result.data.addCartItem, ...data.getUserCartItems],
-        },
-      });
+    update() {
+      props.refetchCartQuery();
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
