@@ -1,23 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { Card, Header, Dropdown, Label, List } from "semantic-ui-react";
 import ItemCheckoutCard from "./ItemCheckoutCard";
-import { FETCH_COST_COURIER_QUERY, ADD_ORDER } from "../util/graphql";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import {
+  FETCH_COST_COURIER_QUERY,
+  ADD_ORDER,
+  FETCH_USER_CART_QUERY,
+} from "../util/graphql";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { objectSize } from "../util/extensions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems, setAddOrder } from "../actions/orderAction";
 
 function CheckoutCard(props) {
+  const [updateUserCartCache, {}] = useLazyQuery(FETCH_USER_CART_QUERY);
   const [courier, setCourier] = useState({
     code: "",
     service: "",
     amount: 0,
   });
   let weightTotal = 0;
-  let itemIds = props.cartItem.map((item) => {
+  let cartItemIds = [];
+  let items = props.cartItem.map((item) => {
+    cartItemIds = [...cartItemIds, item.id];
     weightTotal += item.item.weight * item.amountItem;
-    return item.item.id
+    return {
+      id: item.item.id,
+      name: item.item.name,
+      price: item.item.price,
+      weight: item.item.weight,
+      images: [
+        {
+          downloadUrl: item.item.images[0].downloadUrl,
+        },
+      ],
+      amountItem: item.amountItem,
+      note: item.note,
+    };
   });
 
   let costVariables = {
@@ -38,18 +57,26 @@ function CheckoutCard(props) {
 
   const [addOrder] = useMutation(ADD_ORDER, {
     variables: {
-      itemIds: itemIds,
+      items: items,
       state: "CONFIRMATION",
-      shipping: courier.code,
+      shipping: {
+        awbNumber: "",
+        courierName: courier.code,
+        buyerAddress: "jalan nanas, Sukun, Kota Malang, 4321",
+        shippingCost: 1250000,
+      },
+      sellerUsername: props.cartItem[0].item.user.seller.username,
+      cartItemIds: cartItemIds,
+    },
+    update() {
+      updateUserCartCache();
     },
   });
 
-
   useEffect(() => {
-    console.log(`useeffect itemOrderIds called`, itemIds);
     if (props.isAddOrder) {
       addOrder();
-      props.setAddOrder(false)
+      props.setAddOrder(false);
     }
   }, [props.isAddOrder]);
 
@@ -76,7 +103,6 @@ function CheckoutCard(props) {
       }
     });
     carts[indexCartObj] = cartObj;
-    // console.log(carts)
     props.checkoutItems(carts, !props.isChange);
     // addToCart()
   }, [courier]);

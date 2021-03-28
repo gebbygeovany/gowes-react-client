@@ -135,7 +135,6 @@ export const FETCH_SINGLE_ITEM_QUERY = gql`
   }
 `;
 
-
 export const FETCH_ITEM_QUERY = gql`
   query($itemId: ID!, $itemUserId: ID!, $currentUserId: ID!) {
     getItem(itemId: $itemId) {
@@ -509,13 +508,21 @@ export const FETCH_COST_COURIER_QUERY = gql`
 `;
 
 export const ADD_ORDER = gql`
-  mutation addOrder($itemIds: [ID]!, $state: String!, $shipping: String!) {
+  mutation addOrder(
+    $items: [OrderItemInput]!
+    $state: String!
+    $sellerUsername: String!
+    $shipping: OrderShippingInput!
+    $cartItemIds: [ID]!
+  ) {
     addOrder(
       addOrderInput: {
-        itemIds: $itemIds
+        items: $items
         state: { stateType: $state }
-        shipping: { courierName: $shipping }
+        shipping: $shipping
+        sellerUsername: $sellerUsername
       }
+      cartItemIds: $cartItemIds
     ) {
       id
       state {
