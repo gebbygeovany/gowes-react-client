@@ -62,8 +62,8 @@ function CheckoutCard(props) {
       shipping: {
         awbNumber: "",
         courierName: courier.code,
-        buyerAddress: "jalan nanas, Sukun, Kota Malang, 4321",
-        shippingCost: 1250000,
+        buyerAddress: `${props.user.address.detail}, ${props.user.address.district}, ${props.user.address.cityName}, ${props.user.address.postalCode}`,
+        shippingCost: courier.amount,
       },
       sellerUsername: props.cartItem[0].item.user.seller.username,
       cartItemIds: cartItemIds,
