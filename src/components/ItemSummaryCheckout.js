@@ -7,15 +7,14 @@ import {
   List,
   Message,
 } from "semantic-ui-react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import { CREATE_PAYMENT_QUERY, ADD_ORDER } from "../util/graphql";
+import { useQuery } from "@apollo/react-hooks";
+import { CREATE_PAYMENT_QUERY } from "../util/graphql";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems, setAddOrder } from "../actions/orderAction";
 import { currencyIdrConverter } from "../util/extensions";
 
 function ItemSummaryCheckout(props) {
-  const [errors, setErrors] = useState({});
   const [subTotal, setSubTotal] = useState(0);
   const [amount, setAmount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
@@ -26,10 +25,14 @@ function ItemSummaryCheckout(props) {
   let total = 0;
   let amountCounter = 0;
   let shippingCostCounter = 0;
-
-
   function actionAddOrder() {
-    if (shippingCost > 0) {
+    let courierOrdersHasSet = false;
+    props.carts.every((cart) => {
+      courierOrdersHasSet =
+        cart.cartItems[0].courier && cart.cartItems[0].courier.code !== "";
+      return courierOrdersHasSet;
+    });
+    if (courierOrdersHasSet) {
       setMessageVisibility(false);
       props.setAddOrder(true);
     } else {
@@ -123,4 +126,6 @@ const mapStateToProps = (state) => ({
   isAddOrder: state.orders.isAddOrder,
 });
 
-export default connect(mapStateToProps, { checkoutItems, setAddOrder })(ItemSummaryCheckout);
+export default connect(mapStateToProps, { checkoutItems, setAddOrder })(
+  ItemSummaryCheckout
+);
