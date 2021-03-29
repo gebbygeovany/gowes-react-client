@@ -543,22 +543,37 @@ export const FETCH_USER_ORDER_QUERY = gql`
     id
     items{
       id
-      name
-      price
+     name
+     images {
+        downloadUrl
+      }
+     price
+     weight
+      amountItem
+     note
     }
-    user{
+    user {
       buyer{
         name
       }
     }
-    state{
+    seller{
+      username
+    }
+    state {
       stateType
       createdAt
       deadline
     }
+    logs{
+      stateType
+      succsededAt
+      executedAt
+    }
     shipping{
       awbNumber
       courierName
+      buyerAddress
     }
   }
 }

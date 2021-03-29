@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Divider, Grid, Modal, List, Confirm } from "semantic-ui-react";
 import ItemMyOrders from "./ItemMyOrders";
 
-function ModalMyOrders({ filter }) {
+function ModalMyOrders({ order }) {
   const [open, setOpen] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   //   let store = "6016b07f469523044467af34";
@@ -18,9 +18,9 @@ function ModalMyOrders({ filter }) {
 
   var orderAction;
 
-  console.log(filter);
+  console.log(order);
 
-  if (filter === "Order shipped") {
+  if (order.state.stateType === "Order shipped") {
     orderAction = (
       <Modal.Actions>
         <Button
@@ -41,7 +41,7 @@ function ModalMyOrders({ filter }) {
         />
       </Modal.Actions>
     );
-  } else if (filter === "Waiting for payment") {
+  } else if (order.state.stateType === "Waiting for payment") {
     orderAction = (
       <Modal.Actions>
         <Button
@@ -88,17 +88,17 @@ function ModalMyOrders({ filter }) {
             <Grid.Column width={12} style={{ paddingTop: 10, paddingLeft: 20 }}>
               <div>Invoice Number</div>
               <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
-                INV/20210302/XXI/III/767167447
+                INV/{order.id}
               </h5>
               <div>Status</div>
-              <h5 style={{ marginTop: 5, marginBottom: 10 }}>{filter}</h5>
+              <h5 style={{ marginTop: 5, marginBottom: 10 }}>{order.state.stateType}</h5>
               <div>Store Name</div>
               <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
-                Jon's Store
+                {order.seller.username}
               </h5>
               <div>Order Date</div>
               <h5 style={{ marginTop: 5, marginBottom: 10 }}>
-                2 Mar 2021, 09:22 WIB
+                {order.state.createdAt}
               </h5>
             </Grid.Column>
             <Grid.Column width={4} style={{ paddingTop: 10 }}>
@@ -107,7 +107,7 @@ function ModalMyOrders({ filter }) {
                 floated="right"
                 style={{ paddingRight: 10 }}
               >
-                {filter === "Order arrived" ? (
+                {order.state.stateType === "Order arrived" ? (
                   <Button fluid color="purple" compact>
                     Give Review
                   </Button>
@@ -128,8 +128,10 @@ function ModalMyOrders({ filter }) {
           <h5 width={8} style={{ paddingLeft: 10, margin: 0 }}>
             Item list
           </h5>
-          <ItemMyOrders></ItemMyOrders>
-          <ItemMyOrders></ItemMyOrders>
+          {order.items &&
+            order.items.map((item) => (
+              <ItemMyOrders item={item} />
+            ))}
         </Modal.Description>
 
         <Divider />
@@ -148,18 +150,18 @@ function ModalMyOrders({ filter }) {
                   color: "teal",
                 }}
               >
-                Muhammad Gebby Geovany
+                {order.user.buyer.name}
               </h5>
               <div style={{ paddingLeft: 10, marginBottom: 0 }}>
-                komplek pasanggrahan indah blok 17 no.8
+                {order.shipping.buyerAddress}
               </div>
-              <div style={{ paddingLeft: 10, marginBottom: 0 }}>
+              {/* <div style={{ paddingLeft: 10, marginBottom: 0 }}>
                 Ujung Berung
               </div>
               <div style={{ paddingLeft: 10, marginBottom: 0 }}>
                 Kota Bandung
               </div>
-              <div style={{ paddingLeft: 10, marginBottom: 0 }}>40617</div>
+              <div style={{ paddingLeft: 10, marginBottom: 0 }}>40617</div> */}
             </Grid.Column>
             <Grid.Column width={6}>
               <h5 width={8} style={{ paddingLeft: 10, marginBottom: 10 }}>
@@ -173,9 +175,9 @@ function ModalMyOrders({ filter }) {
                   color: "teal",
                 }}
               >
-                SiCepat - Regular Package
+                {order.shipping.courierName}
               </h5>
-              {filter === "Order shipped" ? (
+              {order.state.stateType === "Order shipped" ? (
                 <div style={{ paddingLeft: 10, marginBottom: 10 }}>
                   AWB num : 000444958166
                 </div>

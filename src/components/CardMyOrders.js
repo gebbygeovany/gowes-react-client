@@ -4,7 +4,7 @@ import ItemMyOrders from "./ItemMyOrders";
 import ModalMyOrders from "./ModalMyOrders";
 
 function CardMyOrders({ filter, order }) {
-  console.log(order)
+  console.log(order.items)
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content>
@@ -14,16 +14,16 @@ function CardMyOrders({ filter, order }) {
         <Grid stackable>
           <Grid.Column width={7}>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>Jon's Store</h4>
+              <h4 style={{ color: "teal" }}>{order.seller.username}</h4>
             </Grid.Row>
             <Grid.Row>(INV/{order.id})</Grid.Row>
           </Grid.Column>
           <Grid.Column width={6}>
             <Grid.Row>
-              <div>{order.state.stateType}</div>
+              <div>Status</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>{filter}</h4>
+              <h4 style={{ color: "teal" }}>{order.state.stateType}</h4>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={3}>
@@ -36,11 +36,13 @@ function CardMyOrders({ filter, order }) {
           </Grid.Column>
         </Grid>
       </Card.Content>
-      <ItemMyOrders></ItemMyOrders>
-      <ItemMyOrders></ItemMyOrders>
+      {order.items &&
+        order.items.map((item) => (
+          <ItemMyOrders item={item}/>
+        ))}
       <Card.Content>
         {/* <Button floated='right' size='small' color='teal'>See Details</Button> */}
-        <ModalMyOrders filter={filter}></ModalMyOrders>
+        <ModalMyOrders order={order}></ModalMyOrders>
       </Card.Content>
     </Card>
   );
