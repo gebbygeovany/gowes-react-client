@@ -3,11 +3,12 @@ import { Card, Grid } from "semantic-ui-react";
 import ItemMyOrders from "./ItemMyOrders";
 import ModalMyOrders from "./ModalMyOrders";
 
-function CardMyOrders({ filter }) {
+function CardMyOrders({ filter, order }) {
+  console.log(order)
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content>
-        <h5>27 Desember 2020</h5>
+        <h5>{order.state.createdAt}</h5>
       </Card.Content>
       <Card.Content>
         <Grid stackable>
@@ -15,11 +16,11 @@ function CardMyOrders({ filter }) {
             <Grid.Row>
               <h4 style={{ color: "teal" }}>Jon's Store</h4>
             </Grid.Row>
-            <Grid.Row>(INV/20201229/XX/XII/712589793)</Grid.Row>
+            <Grid.Row>(INV/{order.id})</Grid.Row>
           </Grid.Column>
           <Grid.Column width={6}>
             <Grid.Row>
-              <div>Status</div>
+              <div>{order.state.stateType}</div>
             </Grid.Row>
             <Grid.Row>
               <h4 style={{ color: "teal" }}>{filter}</h4>

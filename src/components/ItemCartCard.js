@@ -28,6 +28,7 @@ function ItemCartCard(props) {
   const [errors, setErrors] = useState({});
   const [note, setNote] = useState(props.item.note);
   const [isOpen, setOpen] = useState(false);
+  const [editAmount, setEditAmount] = useState(false);
 
   useEffect(() => {
     let carts = props.carts;
@@ -57,6 +58,7 @@ function ItemCartCard(props) {
     props.checkoutItems(carts, !props.isChange);
     // addToCart()
   }, [amountItem]);
+
 
   const [deleteItemCart] = useMutation(DELETE_CART_ITEM_MUTATION, {
     update(proxy, result) {
@@ -94,6 +96,7 @@ function ItemCartCard(props) {
           getUserCartItems: [result.data.addCartItem, ...data.getUserCartItems],
         },
       });
+      setEditAmount(false)
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -105,6 +108,23 @@ function ItemCartCard(props) {
     addToCart();
     setOpen(false);
   }
+  function plusButton() {
+    setAmountItem(amountItem + 1);
+    setEditAmount(true)
+  }
+  function minusButton() {
+    setAmountItem(amountItem - 1);
+    setEditAmount(true)
+  }
+
+  if (editAmount) {
+    addToCart();
+  }
+
+
+  // function plusButton() {
+  //   addToCart();
+  // }
 
   return (
     <>
@@ -183,9 +203,7 @@ function ItemCartCard(props) {
                   <List horizontal>
                     <List.Item>
                       <Button
-                        onClick={() => {
-                          setAmountItem(amountItem - 1);
-                        }}
+                        onClick={minusButton}
                         disabled={amountItem <= 1 || props.checked === false}
                         size="mini"
                         secondary
@@ -202,9 +220,7 @@ function ItemCartCard(props) {
                     </List.Item>
                     <List.Item>
                       <Button
-                        onClick={() => {
-                          setAmountItem(amountItem + 1);
-                        }}
+                        onClick={plusButton}
                         size="mini"
                         secondary
                         icon="plus"

@@ -537,6 +537,32 @@ export const ADD_ORDER = gql`
   }
 `;
 
+export const FETCH_USER_ORDER_QUERY = gql`
+  {
+  getUserOrders{
+    id
+    items{
+      id
+      name
+      price
+    }
+    user{
+      buyer{
+        name
+      }
+    }
+    state{
+      stateType
+      createdAt
+      deadline
+    }
+    shipping{
+      awbNumber
+      courierName
+    }
+  }
+}
+`;
 export const FETCH_USER_QUERY = gql`
   query($userId: ID!) {
     getUser(userId: $userId) {

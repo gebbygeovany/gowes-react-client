@@ -3,6 +3,8 @@ import { Card, Grid, Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 function ItemCheckoutCard({ item }) {
+
+  console.log(item.amountItem)
   return (
     <>
       <Card.Content>
@@ -32,7 +34,6 @@ function ItemCheckoutCard({ item }) {
             <Grid.Row style={{ marginTop: 5 }}>
               <div>
                 {item.amountItem} item ({item.item.weight * item.amountItem}gr){" "}
-                {item.note}
               </div>
             </Grid.Row>
           </Grid.Column>

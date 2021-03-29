@@ -25,6 +25,10 @@ function ItemSummaryCard(props) {
     setSubTotal(total);
   }, [props.carts, props.isChange]);
 
+  function checkout(){
+    window.location.href = "/checkout";
+  }
+
   return (
     <Sticky context={props.contextRef} offset={130}>
       <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
@@ -46,9 +50,9 @@ function ItemSummaryCard(props) {
             disabled={amount === 0}
             fluid
             color="teal"
-            as={Link}
-            to="/checkout"
-            // onClick={checkout}
+            // as={Link}
+            // to="/checkout"
+            onClick={checkout}
           >
             Checkout
           </Button>

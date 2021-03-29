@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { Button, Grid } from "semantic-ui-react";
 import CardMyOrders from "./CardMyOrders";
+import { useQuery } from "@apollo/react-hooks";
+
+import { FETCH_USER_ORDER_QUERY } from "../util/graphql";
 
 function MyOrders() {
   const [activeItem, setActiveItem] = useState("Waiting for payment");
   const [status, setStatus] = useState("onGoing");
+
+  const { loading, data } = useQuery(FETCH_USER_ORDER_QUERY);
+  const { getUserOrders: orders } = data ? data : [];
+
+
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
   };
   const handleStatusChange = (e, { name }) => {
     setStatus(name);
   };
-  var contentToShow;
-  contentToShow = <CardMyOrders filter={activeItem} />;
+  // var contentToShow;
+  // contentToShow =;
 
   return (
     <>
@@ -130,8 +138,10 @@ function MyOrders() {
 
         <Grid.Row>
           <Grid.Column size={16}>
-            {contentToShow}
-            {contentToShow}
+            {orders &&
+              orders.map((orders) => (
+                <CardMyOrders filter={activeItem} order={orders}/>
+              ))}
           </Grid.Column>
         </Grid.Row>
       </Grid>
