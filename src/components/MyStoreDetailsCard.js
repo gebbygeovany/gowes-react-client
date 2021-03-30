@@ -6,6 +6,8 @@ import { Link, withRouter } from 'react-router-dom';
 
 
 import { AuthContext } from '../context/auth';
+import { FETCH_USER_QUERY } from "../util/graphql";
+
 
 
 function MyStoreDetailsCard(props) {
@@ -78,21 +80,5 @@ function MyStoreDetailsCard(props) {
     )
 }
 
-const FETCH_USER_QUERY = gql`
-    query getUser($userId: ID!) {
-        getUser(userId: $userId) {
-            id
-            email
-            seller{
-            id
-            username
-            avatar
-            description
-            description
-            createdAt
-            }
-        }
-    }
-`
 
 export default withRouter(MyStoreDetailsCard)

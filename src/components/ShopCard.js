@@ -34,7 +34,7 @@ function PostCard({
       >
         <Image
           label={ribbon}
-          size="large"
+          // size="large"
           // style={{ height: 180 }}
           src={
             images.length > 0
