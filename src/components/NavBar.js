@@ -114,9 +114,9 @@ function NavBar(props) {
             <Menu.Item
               name="cart"
               active={activeItem === "cart"}
-              // onClick={handleItemClick}
-              as={Link}
-              to="/cart"
+              onClick={handleItemClick}
+              // as={Link}
+              // to="/cart"
             >
               {sizeCart > 0 ? (
                 <Label color="blue" floating>
