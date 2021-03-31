@@ -48,7 +48,7 @@ const splitLink = split(
   httpLink
 );
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link: splitLink,
   uri: "https://gowes-market-apollo-server.herokuapp.com/",
   cache: new InMemoryCache(),
