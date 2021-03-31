@@ -1,56 +1,56 @@
-import { cloneElement, PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import { cloneElement, PureComponent } from "react";
+import PropTypes from "prop-types";
 
-const { oneOfType, arrayOf, node, func, string } = PropTypes
+const { oneOfType, arrayOf, node, func, string } = PropTypes;
 
 export default class SnapMidtrans extends PureComponent {
   state = {
     children: null,
-    token: '',
-  }
+    token: "",
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     return nextProps.token !== prevState.token
       ? { token: nextProps.token }
-      : null
+      : null;
   }
 
   constructor(props) {
-    super(props)
-    const { NODE_ENV: ENV } = process.env
+    super(props);
+    const { NODE_ENV: ENV } = process.env;
 
     // bind react-midtrans method
-    this.mergeWithChildren = this.mergeWithChildren.bind(this)
+    this.mergeWithChildren = this.mergeWithChildren.bind(this);
     // backup currentview
     this.currentViewport = document
-      .getElementsByTagName('meta')
-      .hasOwnProperty('viewport')
-      ? document.getElementsByTagName('meta').viewport
-      : ''
+      .getElementsByTagName("meta")
+      .hasOwnProperty("viewport")
+      ? document.getElementsByTagName("meta").viewport
+      : "";
     // create element for script
-    this.snapScript = document.createElement('script')
+    this.snapScript = document.createElement("script");
 
     // checking environment mode
     this.snapScript.src =
-      ENV === 'production'
-        ? 'https://app.midtrans.com/snap/snap.js'
-        : 'https://app.sandbox.midtrans.com/snap/snap.js'
+      ENV === "production"
+        ? "https://app.midtrans.com/snap/snap.js"
+        : "https://app.sandbox.midtrans.com/snap/snap.js";
 
-    this.snapScript.type = 'text/javascript'
-    this.snapScript.onload = this.onLoad.bind(this)
-    this.snapScript.dataset.clientKey = props.clientKey
+    this.snapScript.type = "text/javascript";
+    this.snapScript.onload = this.onLoad.bind(this);
+    this.snapScript.dataset.clientKey = props.clientKey;
   }
 
   onLoad(e) {
-    if ('snap' in window) {
-      const { snap } = window
-      this.setState({ snap })
+    if ("snap" in window) {
+      const { snap } = window;
+      this.setState({ snap });
     }
   }
 
   componentDidMount() {
-    document.head.appendChild(this.snapScript)
-    this.mergeWithChildren(this.props.children)
+    document.head.appendChild(this.snapScript);
+    this.mergeWithChildren(this.props.children);
   }
 
   mergeWithChildren(children) {
@@ -60,25 +60,36 @@ export default class SnapMidtrans extends PureComponent {
       {
         onClick: () => {
           // If Children have a onClick
-          children.onClick && children.onClick()
-          if (this.state.token && this.state.token !== '') {
-            this.state.snap.pay(
-              this.state.token,
-              /** @todo options **/
-            )
+          children.onClick && children.onClick();
+          if (this.state.token && this.state.token !== "") {
+            this.state.snap.pay(this.state.token, {
+              onSuccess: (result) => {
+                console.log("payment success!", result);
+              },
+              onPending: (result) => {
+                console.log("wating your payment!", result);
+              },
+              onError: (result) => {
+                console.log("payment failed!", result);
+              },
+              onClose: () => {
+                console.log(
+                  "you closed the popup without finishing the payment"
+                );
+              },
+            });
           }
-          this.props.onClick && this.props.onClick()
+          this.props.onClick && this.props.onClick();
         },
-      },
-    )
-
+      }
+    );
     this.setState({
       children,
-    })
+    });
   }
 
   render() {
-    return this.state.children
+    return this.state.children;
   }
 }
 
@@ -106,4 +117,4 @@ SnapMidtrans.propTypes = {
 
   /* Callback Or Custom onClick */
   onClick: func,
-}
+};

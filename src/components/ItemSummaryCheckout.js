@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems, setAddOrder } from "../actions/orderAction";
 import { currencyIdrConverter } from "../util/extensions";
+import ReactMidtrans from "../util/react-midtrans";
 
 function ItemSummaryCheckout(props) {
   const [subTotal, setSubTotal] = useState(0);
@@ -26,24 +27,33 @@ function ItemSummaryCheckout(props) {
   let amountCounter = 0;
   let shippingCostCounter = 0;
   function actionAddOrder() {
-    let courierOrdersHasSet = false;
-    props.carts.every((cart) => {
-      courierOrdersHasSet =
-        cart.cartItems[0].courier && cart.cartItems[0].courier.code !== "";
-      return courierOrdersHasSet;
-    });
-    if (courierOrdersHasSet) {
-      setMessageVisibility(false);
-      props.setAddOrder(true);
-    } else {
-      setMessageVisibility(true);
-    }
+    props.setAddOrder(true);
+    // let courierOrdersHasSet = false;
+    // props.carts.every((cart) => {
+    //   courierOrdersHasSet =
+    //     cart.cartItems[0].courier && cart.cartItems[0].courier.code !== "";
+    //   return courierOrdersHasSet;
+    // });
+    // if (courierOrdersHasSet) {
+    //   setMessageVisibility(false);
+    //   onModalOpen();
+    // } else {
+    //   setMessageVisibility(true);
+    // }
   }
-
+  const [isCorierExists, setCorierExists] = useState(false);
+  let isExistsCourierList = [];
   useEffect(() => {
     props.carts.forEach((cart) => {
       if (cart.cartItems[0].courier) {
         shippingCostCounter += cart.cartItems[0].courier.amount;
+        // compare between previous value and next value
+        isExistsCourierList = [
+          ...isExistsCourierList,
+          cart.cartItems[0].courier.code !== "",
+        ];
+      } else {
+        isExistsCourierList = [...isExistsCourierList, false];
       }
       cart.cartItems.forEach((cartItem) => {
         amountCounter += cartItem.amountItem;
@@ -51,11 +61,48 @@ function ItemSummaryCheckout(props) {
         total += price * cartItem.amountItem;
       });
     });
+    let courierExists = false;
+    isExistsCourierList.every((value) => {
+      courierExists = value;
+      return courierExists;
+    });
     setShippingCost(shippingCostCounter);
     setAmount(amountCounter);
     setSubTotal(total);
+    setCorierExists(courierExists);
   }, [props.carts, props.isChange]);
-
+  let buttonMarkUp = (
+    <ReactMidtrans
+      clientKey={"SB-Mid-client-89j-MQayPU_GqgkR"}
+      token={"65f7eff7-955d-475d-9c7b-39a20d74e2d5"}
+    >
+      <Button disabled={true} fluid color="teal" onClick={actionAddOrder}>
+        Pay
+      </Button>
+    </ReactMidtrans>
+  );
+  const getButtonPayment = () => {
+    let markup;
+    if (isCorierExists) {
+      markup = (
+        <ReactMidtrans
+          clientKey={"SB-Mid-client-89j-MQayPU_GqgkR"}
+          token={"021360e5-9500-47c2-b7f6-5722814c9e19"}
+        >
+          <Button disabled={false} fluid color="teal" onClick={actionAddOrder}>
+            Pay
+          </Button>
+        </ReactMidtrans>
+      );
+    } else {
+      markup = (
+        <Button disabled={true} fluid color="teal" onClick={actionAddOrder}>
+          Pay
+        </Button>
+      );
+    }
+    return markup;
+  };
   return (
     <>
       {loading ? (
@@ -95,10 +142,8 @@ function ItemSummaryCheckout(props) {
               </List>
             </Card.Content>
             <Card.Content extra>
+              {getButtonPayment()}
               {/* <PaymentButton /> */}
-              <Button fluid color="teal" onClick={actionAddOrder}>
-                Pay
-              </Button>
             </Card.Content>
           </Card>
           {messageVisibility ? (

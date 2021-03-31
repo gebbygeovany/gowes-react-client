@@ -10,7 +10,7 @@ function PaymentButton({ paymentToken }) {
   return (
     <ReactMidtrans
       clientKey={"SB-Mid-client-89j-MQayPU_GqgkR"}
-      token={"782af07b-3040-4cc5-a535-e105acf08884"}
+      token={"65f7eff7-955d-475d-9c7b-39a20d74e2d5"}
     >
       <Button fluid color="teal">
         Pay
