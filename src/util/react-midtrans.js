@@ -9,7 +9,7 @@ export default class SnapMidtrans extends PureComponent {
   state = {
     children: null,
     token: "",
-    paymentInput: { createPaymentInput: {} },
+    paymentInput: {},
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -21,7 +21,6 @@ export default class SnapMidtrans extends PureComponent {
   constructor(props) {
     super(props);
     const { NODE_ENV: ENV } = process.env;
-    console.log(this.state.paymentInput);
     // bind react-midtrans method
     this.mergeWithChildren = this.mergeWithChildren.bind(this);
     // backup currentview
@@ -99,7 +98,6 @@ export default class SnapMidtrans extends PureComponent {
                 },
               },
             };
-            console.log(this.state.paymentInput);
 
             client
               .query({
