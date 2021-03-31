@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid } from "semantic-ui-react";
 import CardMyOrders from "./CardMyOrders";
 import { useQuery } from "@apollo/react-hooks";
@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/react-hooks";
 import { FETCH_USER_ORDER_QUERY } from "../util/graphql";
 
 function MyOrders() {
-  const [activeItem, setActiveItem] = useState("Waiting for payment");
+  const [activeItem, setActiveItem] = useState("Waiting for confirmation");
   const [status, setStatus] = useState("onGoing");
 
   const { loading, data } = useQuery(FETCH_USER_ORDER_QUERY);
@@ -19,9 +19,26 @@ function MyOrders() {
   const handleStatusChange = (e, { name }) => {
     setStatus(name);
   };
-  // var contentToShow;
-  // contentToShow =;
+  var orderList = []
 
+  if (orders && status === "onGoing" && activeItem === "Waiting for confirmation" && orders.find((order) => order.state.stateType === "CONFIRMATION")) {
+    orderList.push(orders.find((orders) => orders.state.stateType === "CONFIRMATION"))
+  }
+  else if (orders && status === "onGoing" && activeItem === "Order processed" && orders.find((order) => order.state.stateType === "PROCESSED")) {
+    orderList.push(orders.find((orders) => orders.state.stateType === "PROCESSED"))
+  }
+  else if (orders && status === "onGoing" && activeItem === "Order shipped" && orders.find((order) => order.state.stateType === "DELIVERY")) {
+    orderList.push(orders.find((orders) => orders.state.stateType === "DELIVERY"))
+  }
+  else if (orders && status === "onGoing" && activeItem === "Order arrived" && orders.find((order) => order.state.stateType === "ARRIVED")) {
+    orderList.push(orders.find((orders) => orders.state.stateType === "ARRIVED"))
+  }
+  else if (orders && status === "completed" && orders.find((order) => order.state.stateType === "COMPLETED")) {
+    orderList.push(orders.find((orders) => orders.state.stateType === "COMPLETED"))
+  }
+  else if (orders && status === "failed" && orders.find((order) => order.state.stateType === "FAILED")) {
+    orderList.push(orders.find((orders) => orders.state.stateType === "FAILED"))
+  }
   return (
     <>
       <Grid stackable>
@@ -138,9 +155,9 @@ function MyOrders() {
 
         <Grid.Row>
           <Grid.Column size={16}>
-            {orders &&
-              orders.map((orders) => (
-                <CardMyOrders filter={activeItem} order={orders}/>
+            {orderList &&
+              orderList.map((orders) => (
+                <CardMyOrders filter={activeItem} order={orders} />
               ))}
           </Grid.Column>
         </Grid.Row>

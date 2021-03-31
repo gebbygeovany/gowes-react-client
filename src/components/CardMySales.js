@@ -3,7 +3,7 @@ import { Card, Grid } from "semantic-ui-react";
 import ItemMyOrders from "./ItemMyOrders";
 import ModalMySales from "./ModalMySales";
 
-function CardMySales({ filter }) {
+function CardMySales({ order }) {
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content>
@@ -22,7 +22,7 @@ function CardMySales({ filter }) {
               <div>Status</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>{filter}</h4>
+              <h4 style={{ color: "teal" }}>{order.state.stateType}</h4>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={3}>
@@ -35,11 +35,13 @@ function CardMySales({ filter }) {
           </Grid.Column>
         </Grid>
       </Card.Content>
-      <ItemMyOrders></ItemMyOrders>
-      <ItemMyOrders></ItemMyOrders>
+      {order.items &&
+        order.items.map((item) => (
+          <ItemMyOrders item={item} />
+        ))}
       <Card.Content>
         {/* <Button floated='right' size='small' color='teal'>See Details</Button> */}
-        <ModalMySales filter={filter}></ModalMySales>
+        {/* <ModalMySales filter={filter}></ModalMySales> */}
       </Card.Content>
     </Card>
   );

@@ -578,6 +578,41 @@ export const FETCH_USER_ORDER_QUERY = gql`
   }
 }
 `;
+
+export const FETCH_SELLER_ORDER_QUERY = gql`
+  query($username: String!) {
+    getSellerOrders(username: $username) {
+      id
+    items{
+      id
+      name
+      price
+      weight
+      images{
+        downloadUrl
+      }
+      amountItem
+      note
+    }
+    seller{
+      username
+    }
+    shipping{
+      awbNumber
+      courierName
+      buyerAddress
+    }
+    state{
+      stateType
+    }
+    logs{
+      succsededAt
+      stateType
+      executedAt
+    }
+    }
+  }
+`;
 export const FETCH_USER_QUERY = gql`
   query($userId: ID!) {
     getUser(userId: $userId) {
@@ -595,6 +630,12 @@ export const FETCH_USER_QUERY = gql`
       buyer {
         name
         birthDate
+        avatar
+      }
+      seller{
+        username
+        createdAt
+        description
         avatar
       }
     }
