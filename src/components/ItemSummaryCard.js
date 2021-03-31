@@ -50,9 +50,9 @@ function ItemSummaryCard(props) {
             disabled={amount === 0}
             fluid
             color="teal"
-            // as={Link}
-            // to="/checkout"
-            onClick={checkout}
+            as={Link}
+            to="/checkout"
+            // onClick={checkout}
           >
             Checkout
           </Button>

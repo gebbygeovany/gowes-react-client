@@ -1,5 +1,7 @@
 import { cloneElement, PureComponent } from "react";
 import PropTypes from "prop-types";
+import { client } from "../ApolloProvider";
+import { CREATE_PAYMENT_QUERY } from "../util/graphql";
 
 const { oneOfType, arrayOf, node, func, string } = PropTypes;
 
@@ -7,18 +9,19 @@ export default class SnapMidtrans extends PureComponent {
   state = {
     children: null,
     token: "",
+    paymentInput: { createPaymentInput: {} },
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     return nextProps.token !== prevState.token
-      ? { token: nextProps.token }
+      ? { token: nextProps.token, paymentInput: nextProps.paymentInput }
       : null;
   }
 
   constructor(props) {
     super(props);
     const { NODE_ENV: ENV } = process.env;
-
+    console.log(this.state.paymentInput);
     // bind react-midtrans method
     this.mergeWithChildren = this.mergeWithChildren.bind(this);
     // backup currentview
@@ -62,22 +65,65 @@ export default class SnapMidtrans extends PureComponent {
           // If Children have a onClick
           children.onClick && children.onClick();
           if (this.state.token && this.state.token !== "") {
-            this.state.snap.pay(this.state.token, {
-              onSuccess: (result) => {
-                console.log("payment success!", result);
+            const paymentInput = {
+              grossAmount: 170000,
+              itemDetails: [
+                {
+                  id: "6048b291bef4550374ca4ad1",
+                  price: 85000,
+                  quantity: 2,
+                  name: "Sarung Tangan Sepeda",
+                },
+              ],
+              customerDetails: {
+                firstName: "Muhammad Gebby",
+                email: "mg.geovany@gmail.com",
+                phone: "081809195559",
+                billingAddress: {
+                  firstName: "Muhammad Gebby",
+                  email: "mg.geovany@gmail.com",
+                  phone: "081809195559",
+                  address: "Jl. Persekutan Dunia Akhirat",
+                  city: "Bandung",
+                  postalCode: "40111",
+                  countryCode: "IDN",
+                },
+                shippingAddress: {
+                  firstName: "jon",
+                  email: "john@gmail.com",
+                  phone: "085235400157",
+                  address: "Jl. Tebo Selatan",
+                  city: "Kota Malang",
+                  postalCode: "4321",
+                  countryCode: "IDN",
+                },
               },
-              onPending: (result) => {
-                console.log("wating your payment!", result);
-              },
-              onError: (result) => {
-                console.log("payment failed!", result);
-              },
-              onClose: () => {
-                console.log(
-                  "you closed the popup without finishing the payment"
-                );
-              },
-            });
+            };
+            console.log(this.state.paymentInput);
+
+            client
+              .query({
+                query: CREATE_PAYMENT_QUERY,
+                variables: { createPaymentInput: this.state.paymentInput },
+              })
+              .then((result) => {
+                this.state.snap.pay(result.data.createPayment.token, {
+                  onSuccess: (result) => {
+                    console.log("payment success!", result);
+                  },
+                  onPending: (result) => {
+                    console.log("wating your payment!", result);
+                  },
+                  onError: (result) => {
+                    console.log("payment failed!", result);
+                  },
+                  onClose: () => {
+                    console.log(
+                      "you closed the popup without finishing the payment"
+                    );
+                  },
+                });
+              });
           }
           this.props.onClick && this.props.onClick();
         },

@@ -469,14 +469,7 @@ export const FETCH_CITIES_QUERY = gql`
     }
   }
 `;
-export const CREATE_PAYMENT_QUERY = gql`
-  {
-    createPayment {
-      token
-      redirect_url
-    }
-  }
-`;
+
 export const FETCH_COST_COURIER_QUERY = gql`
   query(
     $origin: String!
@@ -539,77 +532,77 @@ export const ADD_ORDER = gql`
 
 export const FETCH_USER_ORDER_QUERY = gql`
   {
-  getUserOrders{
-    id
-    items{
+    getUserOrders {
       id
-     name
-     images {
-        downloadUrl
-      }
-     price
-     weight
-      amountItem
-     note
-    }
-    user {
-      buyer{
+      items {
+        id
         name
+        images {
+          downloadUrl
+        }
+        price
+        weight
+        amountItem
+        note
       }
-    }
-    seller{
-      username
-    }
-    state {
-      stateType
-      createdAt
-      deadline
-    }
-    logs{
-      stateType
-      succsededAt
-      executedAt
-    }
-    shipping{
-      awbNumber
-      courierName
-      buyerAddress
+      user {
+        buyer {
+          name
+        }
+      }
+      seller {
+        username
+      }
+      state {
+        stateType
+        createdAt
+        deadline
+      }
+      logs {
+        stateType
+        succsededAt
+        executedAt
+      }
+      shipping {
+        awbNumber
+        courierName
+        buyerAddress
+      }
     }
   }
-}
 `;
 
 export const FETCH_SELLER_ORDER_QUERY = gql`
   query($username: String!) {
     getSellerOrders(username: $username) {
       id
-    items{
-      id
-      name
-      price
-      weight
-      images{
-        downloadUrl
+      items {
+        id
+        name
+        price
+        weight
+        images {
+          downloadUrl
+        }
+        amountItem
+        note
       }
-      amountItem
-      note
-    }
-    seller{
-      username
-    }
-    shipping{
-      awbNumber
-      courierName
-      buyerAddress
-    }
-    state{
-      stateType
-    }
-    logs{
-      succsededAt
-      stateType
-      executedAt
-    }
+      seller {
+        username
+      }
+      shipping {
+        awbNumber
+        courierName
+        buyerAddress
+      }
+      state {
+        stateType
+      }
+      logs {
+        succsededAt
+        stateType
+        executedAt
+      }
     }
   }
 `;
@@ -632,7 +625,7 @@ export const FETCH_USER_QUERY = gql`
         birthDate
         avatar
       }
-      seller{
+      seller {
         username
         createdAt
         description
@@ -765,6 +758,17 @@ export const UPDATE_ITEM_MUTATION = gql`
           id
         }
       }
+    }
+  }
+`;
+
+export const CREATE_PAYMENT_QUERY = gql`
+  query makePayment($createPaymentInput: CreatePaymentInput){
+    createPayment(
+      createPaymentInput: $createPaymentInput
+    ) {
+      token
+      redirect_url
     }
   }
 `;

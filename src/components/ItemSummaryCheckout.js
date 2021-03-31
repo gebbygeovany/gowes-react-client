@@ -21,8 +21,6 @@ function ItemSummaryCheckout(props) {
   const [shippingCost, setShippingCost] = useState(0);
   const [messageVisibility, setMessageVisibility] = useState(false);
 
-  const { loading } = useQuery(CREATE_PAYMENT_QUERY);
-  // const { createPayment: payment } = data ? data : [];
   let total = 0;
   let amountCounter = 0;
   let shippingCostCounter = 0;
@@ -44,6 +42,7 @@ function ItemSummaryCheckout(props) {
   const [isCorierExists, setCorierExists] = useState(false);
   let isExistsCourierList = [];
   useEffect(() => {
+    console.log("useeffect worked")
     props.carts.forEach((cart) => {
       if (cart.cartItems[0].courier) {
         shippingCostCounter += cart.cartItems[0].courier.amount;
@@ -70,17 +69,43 @@ function ItemSummaryCheckout(props) {
     setAmount(amountCounter);
     setSubTotal(total);
     setCorierExists(courierExists);
-  }, [props.carts, props.isChange]);
-  let buttonMarkUp = (
-    <ReactMidtrans
-      clientKey={"SB-Mid-client-89j-MQayPU_GqgkR"}
-      token={"65f7eff7-955d-475d-9c7b-39a20d74e2d5"}
-    >
-      <Button disabled={true} fluid color="teal" onClick={actionAddOrder}>
-        Pay
-      </Button>
-    </ReactMidtrans>
-  );
+  }, [props.isChange]);
+
+  let paymentInput = {
+    grossAmount: 170000,
+    itemDetails: [
+      {
+        id: "6048b291bef4550374ca4ad1",
+        price: 85000,
+        quantity: 2,
+        name: "Sarung Tangan Sepeda",
+      },
+    ],
+    customerDetails: {
+      firstName: "Muhammad Gebby",
+      email: "mg.geovany@gmail.com",
+      phone: "081809195559",
+      billingAddress: {
+        firstName: "Muhammad Gebby",
+        email: "mg.geovany@gmail.com",
+        phone: "081809195559",
+        address: "Jl. Persekutan Dunia Akhirat",
+        city: "Bandung",
+        postalCode: "40111",
+        countryCode: "IDN",
+      },
+      shippingAddress: {
+        firstName: "jon's",
+        email: "john@gmail.com",
+        phone: "085235400157",
+        address: "Jl. Tebo Selatan",
+        city: "Kota Malang",
+        postalCode: "4321",
+        countryCode: "IDN",
+      },
+    },
+  };
+
   const getButtonPayment = () => {
     let markup;
     if (isCorierExists) {
@@ -88,6 +113,7 @@ function ItemSummaryCheckout(props) {
         <ReactMidtrans
           clientKey={"SB-Mid-client-89j-MQayPU_GqgkR"}
           token={"021360e5-9500-47c2-b7f6-5722814c9e19"}
+          paymentInput={paymentInput}
         >
           <Button disabled={false} fluid color="teal" onClick={actionAddOrder}>
             Pay
@@ -104,59 +130,52 @@ function ItemSummaryCheckout(props) {
     return markup;
   };
   return (
-    <>
-      {loading ? (
-        <h1>Loading checkout..</h1>
+    <Sticky context={props.contextRef} offset={130}>
+      <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
+        <Card.Content header="Shopping Summary" />
+        <Card.Content>
+          <List divided verticalAlign="middle">
+            <List.Item>
+              <List.Content floated="right">
+                Rp {currencyIdrConverter(subTotal, 0, ".", ",")}
+              </List.Content>
+              <List.Content style={{ marginBottom: 5 }}>
+                Item (x{amount})
+              </List.Content>
+              <List.Content floated="right">
+                Rp {currencyIdrConverter(shippingCost, 0, ".", ",")}
+              </List.Content>
+              <List.Content style={{ marginBottom: 5 }}>
+                Shipping Cost
+              </List.Content>
+            </List.Item>
+          </List>
+          <Divider />
+          <List divided verticalAlign="middle">
+            <List.Item>
+              <List.Content floated="right">
+                Rp {currencyIdrConverter(subTotal + shippingCost, 0, ".", ",")}
+              </List.Content>
+              <List.Content style={{ marginBottom: 5 }}>
+                <h4>Sub Total</h4>
+              </List.Content>
+            </List.Item>
+          </List>
+        </Card.Content>
+        <Card.Content extra>
+          {getButtonPayment()}
+          {/* <PaymentButton /> */}
+        </Card.Content>
+      </Card>
+      {messageVisibility ? (
+        <Message negative onDismiss={() => setMessageVisibility(false)}>
+          <Message.Header>Shipment service not chosen</Message.Header>
+          <p>Select shipment service to complete your order</p>
+        </Message>
       ) : (
-        <Sticky context={props.contextRef} offset={130}>
-          <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
-            <Card.Content header="Shopping Summary" />
-            <Card.Content>
-              <List divided verticalAlign="middle">
-                <List.Item>
-                  <List.Content floated="right">
-                    Rp {currencyIdrConverter(subTotal, 0, ".", ",")}
-                  </List.Content>
-                  <List.Content style={{ marginBottom: 5 }}>
-                    Item (x{amount})
-                  </List.Content>
-                  <List.Content floated="right">
-                    Rp {currencyIdrConverter(shippingCost, 0, ".", ",")}
-                  </List.Content>
-                  <List.Content style={{ marginBottom: 5 }}>
-                    Shipping Cost
-                  </List.Content>
-                </List.Item>
-              </List>
-              <Divider />
-              <List divided verticalAlign="middle">
-                <List.Item>
-                  <List.Content floated="right">
-                    Rp{" "}
-                    {currencyIdrConverter(subTotal + shippingCost, 0, ".", ",")}
-                  </List.Content>
-                  <List.Content style={{ marginBottom: 5 }}>
-                    <h4>Sub Total</h4>
-                  </List.Content>
-                </List.Item>
-              </List>
-            </Card.Content>
-            <Card.Content extra>
-              {getButtonPayment()}
-              {/* <PaymentButton /> */}
-            </Card.Content>
-          </Card>
-          {messageVisibility ? (
-            <Message negative onDismiss={() => setMessageVisibility(false)}>
-              <Message.Header>Shipment service not chosen</Message.Header>
-              <p>Select shipment service to complete your order</p>
-            </Message>
-          ) : (
-            <></>
-          )}
-        </Sticky>
+        <></>
       )}
-    </>
+    </Sticky>
   );
 }
 
