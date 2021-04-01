@@ -604,6 +604,7 @@ export const FETCH_SELLER_ORDER_QUERY = gql`
     }
     state{
       stateType
+      createdAt
     }
     logs{
       succsededAt

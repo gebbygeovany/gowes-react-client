@@ -3,11 +3,13 @@ import { Card, Grid } from "semantic-ui-react";
 import ItemMyOrders from "./ItemMyOrders";
 import ModalMySales from "./ModalMySales";
 
-function CardMySales({ order }) {
+function CardMySales(order) {
+  console.log(order.order.state.createdAt)
+  
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content>
-        <h5>27 Desember 2020</h5>
+        <h5>{order.order.state.createdAt}</h5>
       </Card.Content>
       <Card.Content>
         <Grid stackable>
@@ -15,14 +17,14 @@ function CardMySales({ order }) {
             <Grid.Row>
               <h4 style={{ color: "teal" }}>Jon's Store</h4>
             </Grid.Row>
-            <Grid.Row>(INV/20201229/XX/XII/712589793)</Grid.Row>
+            <Grid.Row>(INV/{order.order.id})</Grid.Row>
           </Grid.Column>
           <Grid.Column width={6}>
             <Grid.Row>
               <div>Status</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>{order.state.stateType}</h4>
+              <h4 style={{ color: "teal" }}>{order.order.state.stateType}</h4>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={3}>
@@ -35,15 +37,15 @@ function CardMySales({ order }) {
           </Grid.Column>
         </Grid>
       </Card.Content>
-      {order.items &&
-        order.items.map((item) => (
+      {order.order.items &&
+        order.order.items.map((item) => (
           <ItemMyOrders item={item} />
         ))}
       <Card.Content>
-        {/* <Button floated='right' size='small' color='teal'>See Details</Button> */}
-        {/* <ModalMySales filter={filter}></ModalMySales> */}
+        <ModalMySales order={order.order}></ModalMySales>
       </Card.Content>
     </Card>
+    // <></>
   );
 }
 

@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Button, Grid } from "semantic-ui-react";
+import { Button, Grid, Loader, Label } from "semantic-ui-react";
 import CardMySales from "./CardMySales";
-import { useQuery, useLazyQuery } from "@apollo/react-hooks";
+import { useQuery, client } from "@apollo/react-hooks";
 
 import { FETCH_SELLER_ORDER_QUERY, FETCH_USER_QUERY } from "../util/graphql";
 import { AuthContext } from "../context/auth";
+import { objectSize } from "../util/extensions";
+
 
 
 function MySales() {
@@ -42,37 +44,48 @@ function MySales() {
   var orderList = []
 
   if (orders && activeItem === "New Orders" && orders.find((order) => order.state.stateType === "CONFIRMATION")) {
-    orderList.push(orders.find((orders) => orders.state.stateType === "CONFIRMATION"))
+    orderList.push(orders.filter((order) => order.state.stateType === "CONFIRMATION"))
   }
   else if (orders && activeItem === "Ready to ship" && orders.find((order) => order.state.stateType === "PROCESSED")) {
-    orderList.push(orders.find((orders) => orders.state.stateType === "PROCESSED"))
+    orderList.push(orders.filter((orders) => orders.state.stateType === "PROCESSED"))
   }
   else if (orders && activeItem === "On delivery" && orders.find((order) => order.state.stateType === "DELIVERY")) {
-    orderList.push(orders.find((orders) => orders.state.stateType === "DELIVERY"))
+    orderList.push(orders.filter((orders) => orders.state.stateType === "DELIVERY"))
   }
   else if (orders && activeItem === "Order Arrived" && orders.find((order) => order.state.stateType === "ARRIVED")) {
-    orderList.push(orders.find((orders) => orders.state.stateType === "ARRIVED"))
+    orderList.push(orders.filter((orders) => orders.state.stateType === "ARRIVED"))
   }
   else if (orders && activeItem === "Completed" && orders.find((order) => order.state.stateType === "COMPLETED")) {
-    orderList.push(orders.find((orders) => orders.state.stateType === "COMPLETED"))
+    orderList.push(orders.filter((orders) => orders.state.stateType === "COMPLETED"))
   }
   else if (orders && activeItem === "Canceled" && orders.find((order) => order.state.stateType === "FAILED")) {
-    orderList.push(orders.find((orders) => orders.state.stateType === "FAILED"))
+    orderList.push(orders.filter((orders) => orders.state.stateType === "FAILED"))
   }
 
-  console.log(orderList)
+  var sizeConfirmation = 0
+  var sizeProcessed = 0
+  var sizeDelivery = 0
+  var sizeArrived = 0
+  var sizeCompleted = 0
+  var sizeFailed = 0
+
+  if (orders) {
+    sizeConfirmation = objectSize(orders.filter((order) => order.state.stateType === "CONFIRMATION"))
+    sizeProcessed = objectSize(orders.filter((order) => order.state.stateType === "PROCESSED"))
+    sizeDelivery = objectSize(orders.filter((order) => order.state.stateType === "DELIVERY"))
+    sizeArrived = objectSize(orders.filter((order) => order.state.stateType === "ARRIVED"))
+    sizeCompleted = objectSize(orders.filter((order) => order.state.stateType === "COMPLETED"))
+    sizeFailed = objectSize(orders.filter((order) => order.state.stateType === "FAILED"))
+  }
 
 
-
-  var contentToShow;
-  contentToShow = <CardMySales filter={activeItem}></CardMySales>;
 
   return (
     <>
       <Grid stackable>
         <Grid.Row>
           <Grid columns={6} stackable centered>
-            
+
             <Grid.Column>
               <Button
                 name="New Orders"
@@ -82,8 +95,14 @@ function MySales() {
                 fluid
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
-                New Orders
+                <span>New Orders</span>
+                {sizeConfirmation > 0 ? (
+                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                    {sizeConfirmation}
+                  </Label>
+                ) : (<></>)}
               </Button>
+
             </Grid.Column>
             <Grid.Column>
               <Button
@@ -95,6 +114,11 @@ function MySales() {
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
                 Ready to ship
+                {sizeProcessed > 0 ? (
+                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                    {sizeProcessed}
+                  </Label>
+                ) : (<></>)}
               </Button>
             </Grid.Column>
             <Grid.Column>
@@ -107,6 +131,11 @@ function MySales() {
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
                 On delivery
+                {sizeDelivery > 0 ? (
+                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                    {sizeDelivery}
+                  </Label>
+                ) : (<></>)}
               </Button>
             </Grid.Column>
             <Grid.Column>
@@ -119,6 +148,11 @@ function MySales() {
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
                 Order Arrived
+                {sizeArrived > 0 ? (
+                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                    {sizeArrived}
+                  </Label>
+                ) : (<></>)}
               </Button>
             </Grid.Column>
             <Grid.Column>
@@ -131,6 +165,11 @@ function MySales() {
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
                 Completed
+                {sizeCompleted > 0 ? (
+                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                    {sizeCompleted}
+                  </Label>
+                ) : (<></>)}
               </Button>
             </Grid.Column>
             <Grid.Column>
@@ -143,17 +182,28 @@ function MySales() {
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
                 Canceled
+                {sizeFailed > 0 ? (
+                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                    {sizeFailed}
+                  </Label>
+                ) : (<></>)}
               </Button>
             </Grid.Column>
           </Grid>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column size={16}>
-            {orderList &&
-              orderList.map((orders) => (
-                <CardMySales order={orders}></CardMySales>
-              ))}
-          </Grid.Column>
+          {!loadingUser ? (
+            <Grid.Column size={16}>
+              {orderList[0] &&
+                orderList[0].map((orders) => (
+                  <CardMySales order={orders}></CardMySales>
+                ))}
+            </Grid.Column>
+          ) : (
+            <Grid.Column size={16}>
+              <Loader active inline='centered' />
+            </Grid.Column>
+          )}
         </Grid.Row>
       </Grid>
     </>
