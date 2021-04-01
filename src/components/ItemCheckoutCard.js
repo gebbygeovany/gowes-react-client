@@ -15,7 +15,6 @@ function ItemCheckoutCard({ item }) {
             style={{ padding: 5, marginLeft: 10 }}
           >
             <Image
-              fluid
               centered
               rounded
               src={item.item.images[0].downloadUrl}

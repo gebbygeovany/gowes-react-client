@@ -226,16 +226,11 @@ function CheckoutCard(props) {
           <h4>{props.cartItem[0].item.user.seller.username}</h4>
         </Card.Content>
         {props.cartItem &&
-          props.cartItem.map((item) => (
-            <ItemCheckoutCard item={item}></ItemCheckoutCard>
+          props.cartItem.map((item, index) => (
+            <ItemCheckoutCard key={index} item={item}></ItemCheckoutCard>
           ))}
         <Card.Content>
-          <Label
-            as="a"
-            color="primary"
-            ribbon="left"
-            style={{ marginBottom: 10 }}
-          >
+          <Label as="a" ribbon={true} style={{ marginBottom: 10 }}>
             Shipping
           </Label>
           <Dropdown
