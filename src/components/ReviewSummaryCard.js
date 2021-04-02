@@ -62,8 +62,8 @@ function ReviewSummaryCard({ item }) {
             </Grid.Column>
             <Grid.Column width={3} style={{ paddingRight: 0 }}>
               <List>
-                {rateStars.map((rate) => (
-                  <List.Item>
+                {rateStars.map((rate, index) => (
+                  <List.Item key={index}>
                     <Icon style={{ color: "gold" }} name="star" />
                     {` ${rate.star}`}
                   </List.Item>
@@ -73,7 +73,7 @@ function ReviewSummaryCard({ item }) {
             <Grid.Column width={5} style={{ padding: 0, marginTop: 4 }}>
               <List>
                 {rateStars.map((rate, index) => (
-                  <List.Item>
+                  <List.Item key={index}>
                     <ProgressBar
                       key={index}
                       bgcolor={"#00B5AD"}
@@ -86,8 +86,8 @@ function ReviewSummaryCard({ item }) {
             </Grid.Column>
             <Grid.Column width={2}>
               <List>
-                {rateStars.map((rate) => (
-                  <List.Item>{rate.amountReviewers}</List.Item>
+                {rateStars.map((rate, index) => (
+                  <List.Item key={index}>{rate.amountReviewers}</List.Item>
                 ))}
               </List>
             </Grid.Column>

@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import { checkoutItems } from "../actions/orderAction";
 
 function Checkout(props) {
-  console.log("checkout page called once")
   const contextRef = React.createRef();
   const context = useContext(AuthContext);
 
@@ -67,7 +66,6 @@ function Checkout(props) {
     </>
   );
   if (!loading && cartItemsCheckout) {
-    console.log("checkout called once")
     if (size > 0) {
       let group = cartItemsCheckout.reduce((r, a) => {
         r[a.item.user.id] = [...(r[a.item.user.id] || []), a];

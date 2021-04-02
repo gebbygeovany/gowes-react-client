@@ -7,8 +7,6 @@ import {
   List,
   Message,
 } from "semantic-ui-react";
-import { useQuery } from "@apollo/react-hooks";
-import { CREATE_PAYMENT_QUERY } from "../util/graphql";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { checkoutItems, setAddOrder } from "../actions/orderAction";
@@ -20,29 +18,21 @@ function ItemSummaryCheckout(props) {
   const [amount, setAmount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
   const [messageVisibility, setMessageVisibility] = useState(false);
-
+  const [isCorierExists, setCorierExists] = useState(false);
+  const [midtransItemList, setMidtransItemList] = useState([]);
   let total = 0;
   let amountCounter = 0;
   let shippingCostCounter = 0;
-  function actionAddOrder() {
-    props.setAddOrder(true);
-    // let courierOrdersHasSet = false;
-    // props.carts.every((cart) => {
-    //   courierOrdersHasSet =
-    //     cart.cartItems[0].courier && cart.cartItems[0].courier.code !== "";
-    //   return courierOrdersHasSet;
-    // });
-    // if (courierOrdersHasSet) {
-    //   setMessageVisibility(false);
-    //   onModalOpen();
-    // } else {
-    //   setMessageVisibility(true);
-    // }
-  }
-  const [isCorierExists, setCorierExists] = useState(false);
   let isExistsCourierList = [];
+  let productItems = [];
+  let courierItems = [];
+
+  function actionAddOrder() {
+    console.log("actionAddOrder run");
+    props.setAddOrder(true);
+  }
+
   useEffect(() => {
-    console.log("useeffect worked")
     props.carts.forEach((cart) => {
       if (cart.cartItems[0].courier) {
         shippingCostCounter += cart.cartItems[0].courier.amount;
@@ -51,10 +41,28 @@ function ItemSummaryCheckout(props) {
           ...isExistsCourierList,
           cart.cartItems[0].courier.code !== "",
         ];
+        courierItems = [
+          ...courierItems,
+          {
+            id: "",
+            price: cart.cartItems[0].courier.amount,
+            quantity: 1,
+            name: `${cart.cartItems[0].courier.code} (${cart.cartItems[0].courier.service})`,
+          },
+        ];
       } else {
         isExistsCourierList = [...isExistsCourierList, false];
       }
       cart.cartItems.forEach((cartItem) => {
+        productItems = [
+          ...productItems,
+          {
+            id: cartItem.item.id,
+            price: cartItem.item.price,
+            quantity: cartItem.amountItem,
+            name: cartItem.item.name,
+          },
+        ];
         amountCounter += cartItem.amountItem;
         const price = parseInt(cartItem.item.price);
         total += price * cartItem.amountItem;
@@ -69,48 +77,33 @@ function ItemSummaryCheckout(props) {
     setAmount(amountCounter);
     setSubTotal(total);
     setCorierExists(courierExists);
+    setMidtransItemList(productItems.concat(courierItems));
   }, [props.isChange]);
-
-  let paymentInput = {
-    grossAmount: 170000,
-    itemDetails: [
-      {
-        id: "6048b291bef4550374ca4ad1",
-        price: 85000,
-        quantity: 2,
-        name: "Sarung Tangan Sepeda",
-      },
-    ],
-    customerDetails: {
-      firstName: "Muhammad Gebby",
-      email: "mg.geovany@gmail.com",
-      phone: "081809195559",
-      billingAddress: {
-        firstName: "Muhammad Gebby",
-        email: "mg.geovany@gmail.com",
-        phone: "081809195559",
-        address: "Jl. Persekutan Dunia Akhirat",
-        city: "Bandung",
-        postalCode: "40111",
-        countryCode: "IDN",
-      },
-      shippingAddress: {
-        firstName: "jon's",
-        email: "john@gmail.com",
-        phone: "085235400157",
-        address: "Jl. Tebo Selatan",
-        city: "Kota Malang",
-        postalCode: "4321",
-        countryCode: "IDN",
-      },
-    },
-  };
 
   const getButtonPayment = () => {
     let markup;
     if (isCorierExists) {
+      const paymentInput = {
+        grossAmount: subTotal + shippingCost,
+        itemDetails: midtransItemList,
+        customerDetails: {
+          firstName: props.carts[0].cartItems[0].user.buyer.name,
+          email: props.carts[0].cartItems[0].user.email,
+          phone: props.carts[0].cartItems[0].user.phone,
+          billingAddress: {
+            firstName: props.carts[0].cartItems[0].user.buyer.name,
+            email: props.carts[0].cartItems[0].user.email,
+            phone: props.carts[0].cartItems[0].user.phone,
+            address: props.carts[0].cartItems[0].user.address.detail,
+            city: props.carts[0].cartItems[0].user.address.cityName,
+            postalCode: props.carts[0].cartItems[0].user.address.postalCode,
+            countryCode: "IDN",
+          },
+        },
+      };
       markup = (
         <ReactMidtrans
+          onClick={actionAddOrder}
           clientKey={"SB-Mid-client-89j-MQayPU_GqgkR"}
           token={"021360e5-9500-47c2-b7f6-5722814c9e19"}
           paymentInput={paymentInput}

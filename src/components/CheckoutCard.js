@@ -10,7 +10,7 @@ import { useQuery, useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { objectSize } from "../util/extensions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { checkoutItems, setAddOrder } from "../actions/orderAction";
+import { checkoutItems, setAddOrder, setOrderIdsWillBePayed } from "../actions/orderAction";
 
 function CheckoutCard(props) {
   const [updateUserCartCache, {}] = useLazyQuery(FETCH_USER_CART_QUERY);
@@ -68,8 +68,11 @@ function CheckoutCard(props) {
       sellerUsername: props.cartItem[0].item.user.seller.username,
       cartItemIds: cartItemIds,
     },
-    update() {
+    update(proxy, result) {
       updateUserCartCache();
+      const updatedOrderIds = [...props.orderIds, result.data.addOrder.id]
+      console.log(updatedOrderIds)
+      props.setOrderIdsWillBePayed(updatedOrderIds)
     },
   });
 
@@ -256,8 +259,11 @@ const mapStateToProps = (state) => ({
   carts: state.orders.checkoutOrders,
   isChange: state.orders.isChange,
   isAddOrder: state.orders.isAddOrder,
+  orderIds: state.orders.orderIds,
 });
 
-export default connect(mapStateToProps, { checkoutItems, setAddOrder })(
-  CheckoutCard
-);
+export default connect(mapStateToProps, {
+  checkoutItems,
+  setAddOrder,
+  setOrderIdsWillBePayed,
+})(CheckoutCard);

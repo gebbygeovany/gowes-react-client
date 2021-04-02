@@ -230,7 +230,6 @@ function ItemTransactionCard({
                   </Button.Content>
                   <Button.Content
                     hidden
-                    icon
                     floated="right"
                     style={{ borderRadius: 8, marginLeft: 2 }}
                   >

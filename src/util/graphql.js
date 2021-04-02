@@ -206,6 +206,8 @@ export const FETCH_CART_QUERY = gql`
       amountItem
       item {
         user {
+          email
+          phone
           seller {
             username
           }
@@ -268,6 +270,13 @@ export const FETCH_USER_CART_QUERY = gql`
       }
       user {
         id
+        email
+        phone
+        address {
+          cityName
+          postalCode
+          detail
+        }
         buyer {
           name
         }
@@ -311,6 +320,13 @@ export const FETCH_USER_CART_CHECKOUT_QUERY = gql`
       }
       user {
         id
+        email
+        phone
+        address {
+          cityName
+          postalCode
+          detail
+        }
         buyer {
           name
         }
@@ -525,6 +541,26 @@ export const ADD_ORDER = gql`
       }
       shipping {
         courierName
+      }
+    }
+  }
+`;
+export const UPDATE_ORDER = gql`
+  mutation addOrder(
+    $state: String!
+    $orderId: ID!
+  ){
+    updateOrder(
+      oderId: $orderId
+      updateOrderInput: {
+        state: { stateType: $state }
+      }
+    ) {
+      id
+      state {
+        stateType
+        createdAt
+        deadline
       }
     }
   }
@@ -763,10 +799,8 @@ export const UPDATE_ITEM_MUTATION = gql`
 `;
 
 export const CREATE_PAYMENT_QUERY = gql`
-  query makePayment($createPaymentInput: CreatePaymentInput){
-    createPayment(
-      createPaymentInput: $createPaymentInput
-    ) {
+  query makePayment($createPaymentInput: CreatePaymentInput) {
+    createPayment(createPaymentInput: $createPaymentInput) {
       token
       redirect_url
     }

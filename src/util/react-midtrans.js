@@ -1,11 +1,12 @@
 import { cloneElement, PureComponent } from "react";
 import PropTypes from "prop-types";
 import { client } from "../ApolloProvider";
-import { CREATE_PAYMENT_QUERY } from "../util/graphql";
-
+import { CREATE_PAYMENT_QUERY, UPDATE_ORDER } from "../util/graphql";
+import { connect } from "react-redux";
+import { setOrderIdsWillBePayed } from "../actions/orderAction";
 const { oneOfType, arrayOf, node, func, string } = PropTypes;
 
-export default class SnapMidtrans extends PureComponent {
+class SnapMidtrans extends PureComponent {
   state = {
     children: null,
     token: "",
@@ -64,50 +65,31 @@ export default class SnapMidtrans extends PureComponent {
           // If Children have a onClick
           children.onClick && children.onClick();
           if (this.state.token && this.state.token !== "") {
-            const paymentInput = {
-              grossAmount: 170000,
-              itemDetails: [
-                {
-                  id: "6048b291bef4550374ca4ad1",
-                  price: 85000,
-                  quantity: 2,
-                  name: "Sarung Tangan Sepeda",
-                },
-              ],
-              customerDetails: {
-                firstName: "Muhammad Gebby",
-                email: "mg.geovany@gmail.com",
-                phone: "081809195559",
-                billingAddress: {
-                  firstName: "Muhammad Gebby",
-                  email: "mg.geovany@gmail.com",
-                  phone: "081809195559",
-                  address: "Jl. Persekutan Dunia Akhirat",
-                  city: "Bandung",
-                  postalCode: "40111",
-                  countryCode: "IDN",
-                },
-                shippingAddress: {
-                  firstName: "jon",
-                  email: "john@gmail.com",
-                  phone: "085235400157",
-                  address: "Jl. Tebo Selatan",
-                  city: "Kota Malang",
-                  postalCode: "4321",
-                  countryCode: "IDN",
-                },
-              },
-            };
-
             client
               .query({
                 query: CREATE_PAYMENT_QUERY,
                 variables: { createPaymentInput: this.state.paymentInput },
+                onError(err) {
+                  console.log(err.graphQLErrors[0].extensions.exception.errors);
+                },
               })
               .then((result) => {
                 this.state.snap.pay(result.data.createPayment.token, {
                   onSuccess: (result) => {
                     console.log("payment success!", result);
+                    console.log(
+                      "OrderIds that should be updated!",
+                      this.props.orderIds
+                    );
+                    this.props.orderIds.forEach((orderId) => {
+                      client.mutate({
+                        mutation: UPDATE_ORDER,
+                        variables: {
+                          orderId: orderId,
+                          state: "PROCESSED",
+                        },
+                      }).then((result) => {console.log("succedded updateOrder result:", result)});
+                    });
                   },
                   onPending: (result) => {
                     console.log("wating your payment!", result);
@@ -136,7 +118,13 @@ export default class SnapMidtrans extends PureComponent {
     return this.state.children;
   }
 }
+const mapStateToProps = (state) => ({
+  orderIds: state.orders.orderIds,
+});
 
+export default connect(mapStateToProps, { setOrderIdsWillBePayed })(
+  SnapMidtrans
+);
 /**
  * @module SnapMidtrans
  * @param {Object} props
@@ -149,9 +137,11 @@ export default class SnapMidtrans extends PureComponent {
  * @property {Function} onClose
  */
 SnapMidtrans.propTypes = {
+  orderIds: PropTypes.array,
   children: oneOfType([arrayOf(node), node]).isRequired,
   clientKey: string.isRequired,
   token: string,
+  setOrderIdsWillBePayed: func,
 
   /* @see @link {https://snap-docs.midtrans.com/#snap-js|Midtrans API 4 Callback} */
   onSuccess: func,

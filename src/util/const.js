@@ -36,4 +36,5 @@ export const initialOrderList = {
   checkoutOrders: [],
   isChange: false,
   isChecked: false,
-}
+  orderIds: [],
+};

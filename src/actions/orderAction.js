@@ -1,4 +1,4 @@
-import { CHECKOUT_ORDER, ADD_ORDER, SET_SHIPPING_ORDER } from "./types";
+import { CHECKOUT_ORDER, ADD_ORDER, ADD_ORDER_IDS, SET_SHIPPING_ORDER } from "./types";
 
 export const checkoutItems = (carts, isChange, isChecked) => (dispatch) => {
   dispatch({
@@ -18,7 +18,14 @@ export const setAddOrder = (isAddOrder) => (dispatch) => {
     },
   });
 };
-
+export const setOrderIdsWillBePayed = (orderIds) => (dispatch) => {
+  dispatch({
+    type: ADD_ORDER_IDS,
+    payload: {
+      orderIds: orderIds,
+    },
+  });
+};
 export const setShippingOrder = (filter) => (dispatch) => {
   dispatch({
     type: SET_SHIPPING_ORDER,
