@@ -11,15 +11,13 @@ import {
 import ItemMyOrders from "./ItemMyOrders";
 import { AuthContext } from "../context/auth";
 
-function ModalMySales({ filter }) {
+function ModalMySales({ order }) {
   const context = useContext(AuthContext);
   console.log(context.user.id);
 
   const [open, setOpen] = React.useState(false);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
-
-  let store = "6016b07f469523044467af34";
 
   var AWBInput = (
     <Form style={{ padding: 30 }}>
@@ -32,14 +30,13 @@ function ModalMySales({ filter }) {
 
   var orderAction;
 
-  if (store === context.user.id && filter === "New Orders") {
+  if (order.state.stateType === "CONFIRMATION") {
     orderAction = (
       <Modal.Actions>
         <Button
-          color="red"
+          color="orange"
           animated
           onClick={() => setConfirmOpen(true)}
-          style={{ width: 200, padding: 5 }}
         >
           <Button.Content visible> Cancel Order?</Button.Content>
           <Button.Content hidden>Cancel</Button.Content>
@@ -69,7 +66,7 @@ function ModalMySales({ filter }) {
         />
       </Modal.Actions>
     );
-  } else if (store === context.user.id && filter === "Ready to ship") {
+  } else if (order.state.stateType === "PROCESSED") {
     orderAction = (
       <Modal.Actions>
         <Button
@@ -120,7 +117,7 @@ function ModalMySales({ filter }) {
                 INV/20210302/XXI/III/767167447
               </h5>
               <div>Status</div>
-              <h5 style={{ marginTop: 5, marginBottom: 10 }}>{filter}</h5>
+              <h5 style={{ marginTop: 5, marginBottom: 10 }}>{order.state.stateType}</h5>
               <div>Store Name</div>
               <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
                 Jon's Store
@@ -186,9 +183,9 @@ function ModalMySales({ filter }) {
               >
                 SiCepat - Regular Package
               </h5>
-              {filter === "On delivery" ? (
+              {order.state.stateType === "DELIVERY" ? (
                 <div style={{ paddingLeft: 10, marginBottom: 10 }}>
-                  AWB num : 000444958166
+                  AWB num : {order.shipping.awbNumber}
                 </div>
               ) : (
                 <></>
