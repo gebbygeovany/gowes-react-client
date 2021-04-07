@@ -22,20 +22,55 @@ function ModalMySales({ order }) {
   const [open, setOpen] = React.useState(false);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [rejectOpen, setRejectOpen] = useState(false);
 
-  const [stateType, setStateType] = useState("PROCESSED");
+  const [stateType, setStateType] = useState("");
+  const [editState, setEditState] = useState(false);
 
-  const orderId =  order.id
-  const state =  "PROCESSED"
+  const orderId = order.id
+  // let state = "FAILED"
+
+  // if (stateType === "CONFIRMATION") {
+  //   state = "PROCESSED"
+  // }
 
   const [changeState, { loading }] = useMutation(UPDATE_ORDER, {
-    update(_, { data: {updateOrder: orderData} }) {
+    update(_, { data: { updateOrder: orderData } }) {
+      setEditState(false)
+      setConfirmOpen(false)
+      setRejectOpen(false)
+      setOpen(false)
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
     },
-    variables: {orderId: orderId, state: stateType}
+    variables: { orderId: orderId, state: stateType }
   })
+
+
+  function confirmOrder() {
+    setStateType("PROCESSED")
+    setEditState(true)
+  }
+  function cancelConfirmOrder() {
+    setEditState(false)
+    setConfirmOpen(false)
+  }
+
+  function rejectOrder() {
+    setStateType("FAILED")
+    setEditState(true)
+  }
+  function cancelRejectOrder() {
+    setEditState(false)
+    setRejectOpen(false)
+  }
+
+  if (editState) {
+    changeState()
+  }
+
+
 
   var AWBInput = (
     <Form style={{ padding: 30 }}>
@@ -54,17 +89,19 @@ function ModalMySales({ order }) {
         <Button
           color="red"
           animated
-          onClick={() => setConfirmOpen(true)}
+          onClick={() => setRejectOpen(true)}
+          style={{ width: 200 }}
         >
-          <Button.Content visible> Reject Order?</Button.Content>
+          <Button.Content visible>Reject Order?</Button.Content>
           <Button.Content hidden>Reject</Button.Content>
         </Button>
         <Confirm
-          open={confirmOpen}
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={changeState}
+          open={rejectOpen}
+          onCancel={cancelRejectOrder}
+          onConfirm={rejectOrder}
           cancelButton="Cancel"
           confirmButton="Confirm"
+        // closeIcon={onClick=() => setConfirmOpen(false)}
         />
         <Button
           color="teal"
@@ -77,10 +114,11 @@ function ModalMySales({ order }) {
         </Button>
         <Confirm
           open={confirmOpen}
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={changeState}
+          onCancel={cancelConfirmOrder}
+          onConfirm={confirmOrder}
           cancelButton="Cancel"
           confirmButton="Confirm"
+        // closeIcon={onClick=() => setConfirmOpen(false)}
         />
       </Modal.Actions>
     );
@@ -156,11 +194,15 @@ function ModalMySales({ order }) {
           <h5 width={8} style={{ paddingLeft: 10, margin: 0 }}>
             Item list
           </h5>
-          <ItemMyOrders></ItemMyOrders>
-          <ItemMyOrders></ItemMyOrders>
+          {order.items &&
+            order.items.map((item) => (
+              <>
+                <ItemMyOrders item={item} />
+                <Divider />
+              </>
+            ))}
         </Modal.Description>
 
-        <Divider />
 
         <Modal.Description>
           <Grid stackable>
