@@ -546,21 +546,42 @@ export const ADD_ORDER = gql`
   }
 `;
 export const UPDATE_ORDER = gql`
-  mutation addOrder(
-    $state: String!
-    $orderId: ID!
-  ){
+  mutation updateOrder($orderId: ID!, $state: String!) {
     updateOrder(
       oderId: $orderId
-      updateOrderInput: {
-        state: { stateType: $state }
-      }
+      updateOrderInput: { state: { stateType: $state } }
     ) {
       id
       state {
         stateType
         createdAt
         deadline
+      }
+      logs {
+        stateType
+        succsededAt
+        executedAt
+      }
+    }
+  }
+`;
+
+export const CHANGE_ORDER_STATE_MUTATION = gql`
+  mutation updateOrder {
+    updateOrder(
+      oderId: "6063dd4a057f5e15784a5742"
+      updateOrderInput: { state: { stateType: "PROCESSED" } }
+    ) {
+      id
+      state {
+        stateType
+        createdAt
+        deadline
+      }
+      logs {
+        stateType
+        succsededAt
+        executedAt
       }
     }
   }

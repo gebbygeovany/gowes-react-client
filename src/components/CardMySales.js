@@ -4,7 +4,6 @@ import ItemMyOrders from "./ItemMyOrders";
 import ModalMySales from "./ModalMySales";
 
 function CardMySales(order) {
-  console.log(order.order.state.createdAt)
   
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>

@@ -33,12 +33,10 @@ function AddItem(props) {
       setSave(true);
       setErrors({});
       props.history.push("/mystore/myItemsList");
-      console.log("data", addItem);
       window.location.href = "/myStore/myItemsList";
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
-      console.log(err.graphQLErrors[0]);
       setSave(true);
     },
     variables: values,
@@ -53,11 +51,9 @@ function AddItem(props) {
     values.height = parseInt(values.height);
     submitItem();
   }
-  console.log(values);
 
   const showMessage = () => {
     if (isSaved) {
-      console.log(errors);
       if (Object.keys(errors).length > 0) {
         return (
           <div className="ui error message">

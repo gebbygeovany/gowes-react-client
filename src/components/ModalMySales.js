@@ -8,16 +8,34 @@ import {
   Confirm,
   Form,
 } from "semantic-ui-react";
+import { useMutation } from "@apollo/react-hooks";
+
 import ItemMyOrders from "./ItemMyOrders";
 import { AuthContext } from "../context/auth";
+import { UPDATE_ORDER } from "../util/graphql";
+
 
 function ModalMySales({ order }) {
   const context = useContext(AuthContext);
-  console.log(context.user.id);
+  const [errors, setErrors] = useState({})
 
   const [open, setOpen] = React.useState(false);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const [stateType, setStateType] = useState("PROCESSED");
+
+  const orderId =  order.id
+  const state =  "PROCESSED"
+
+  const [changeState, { loading }] = useMutation(UPDATE_ORDER, {
+    update(_, { data: {updateOrder: orderData} }) {
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+    variables: {orderId: orderId, state: stateType}
+  })
 
   var AWBInput = (
     <Form style={{ padding: 30 }}>
@@ -34,17 +52,17 @@ function ModalMySales({ order }) {
     orderAction = (
       <Modal.Actions>
         <Button
-          color="orange"
+          color="red"
           animated
           onClick={() => setConfirmOpen(true)}
         >
-          <Button.Content visible> Cancel Order?</Button.Content>
-          <Button.Content hidden>Cancel</Button.Content>
+          <Button.Content visible> Reject Order?</Button.Content>
+          <Button.Content hidden>Reject</Button.Content>
         </Button>
         <Confirm
           open={confirmOpen}
           onCancel={() => setConfirmOpen(false)}
-          onConfirm={() => setOpen(false)}
+          onConfirm={changeState}
           cancelButton="Cancel"
           confirmButton="Confirm"
         />
@@ -60,7 +78,7 @@ function ModalMySales({ order }) {
         <Confirm
           open={confirmOpen}
           onCancel={() => setConfirmOpen(false)}
-          onConfirm={() => setOpen(false)}
+          onConfirm={changeState}
           cancelButton="Cancel"
           confirmButton="Confirm"
         />
@@ -89,6 +107,8 @@ function ModalMySales({ order }) {
       </Modal.Actions>
     );
   }
+
+
 
   return (
     <Modal

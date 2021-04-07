@@ -45,7 +45,6 @@ function ItemCartCard(props) {
             cartItemObj = cartItem;
             cartItemObj = { ...cartItemObj, amountItem: parseInt(amountItem) };
             cartItemObj = { ...cartItemObj, note: note };
-            console.log(cartItemObj);
             return;
           }
         });
@@ -100,7 +99,6 @@ function ItemCartCard(props) {
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
-      console.log(errors);
     },
   });
 
