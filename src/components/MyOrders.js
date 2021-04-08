@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Label, Loader } from "semantic-ui-react";
+import { Button, Grid, Label, Loader, Message } from "semantic-ui-react";
 import CardMyOrders from "./CardMyOrders";
 import { useQuery } from "@apollo/react-hooks";
 
@@ -211,15 +211,29 @@ function MyOrders() {
 
 
         {!loading ? (
-          <Grid.Row>
-            <Grid.Column size={16}>
-              {orderList[0] &&
-                orderList[0].map((orders) => (
-                  <CardMyOrders order={orders} />
-                ))}
-            </Grid.Column>
-          </Grid.Row>
+          orderList.length > 0 ? (
+            <Grid.Row>
+              <Grid.Column size={16}>
+                {orderList[0] &&
+                  orderList[0].map((orders) => (
+                    <CardMyOrders order={orders} />
+                  ))}
+              </Grid.Column>
+            </Grid.Row>
+          ) : (
+            <Grid.Row>
+              <Grid.Column size={16}>
+                <Message
+                  error
+                  icon="inbox"
+                  header="You dont have any order in this filter"
+                  content="Choose another filter to check your order"
+                  style={{ marginBottom: 109 }}
+                />
+              </Grid.Column>
+            </Grid.Row>
 
+          )
         ) : (
           <Grid.Row>
             <Grid.Column size={16}>

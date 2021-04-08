@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Button, Grid, Loader, Label } from "semantic-ui-react";
+import { Button, Grid, Loader, Label, Message } from "semantic-ui-react";
 import CardMySales from "./CardMySales";
 import { useQuery, client } from "@apollo/react-hooks";
 
@@ -76,6 +76,7 @@ function MySales() {
     sizeArrived = objectSize(orders.filter((order) => order.state.stateType === "ARRIVED"))
     sizeCompleted = objectSize(orders.filter((order) => order.state.stateType === "COMPLETED"))
     sizeFailed = objectSize(orders.filter((order) => order.state.stateType === "FAILED"))
+    console.log(orderList.length)
   }
 
 
@@ -193,12 +194,24 @@ function MySales() {
         </Grid.Row>
         <Grid.Row>
           {!loadingUser ? (
-            <Grid.Column size={16}>
-              {orderList[0] &&
-                orderList[0].map((orders) => (
-                  <CardMySales order={orders}></CardMySales>
-                ))}
-            </Grid.Column>
+            orderList.length > 0 ? (
+              <Grid.Column size={16}>
+                {orderList[0] &&
+                  orderList[0].map((orders) => (
+                    <CardMySales order={orders}></CardMySales>
+                  ))}
+              </Grid.Column>
+            ) : (
+              <Grid.Column size={16}>
+                <Message
+                  error
+                  icon="inbox"
+                  header="You dont have any order in this filter"
+                  content="Choose another filter to check your order"
+                  style={{ marginBottom: 109 }}
+                />
+              </Grid.Column>
+            )
           ) : (
             <Grid.Column size={16}>
               <Loader active inline='centered' />

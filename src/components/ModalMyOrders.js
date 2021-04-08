@@ -1,26 +1,56 @@
 import React, { useState } from "react";
 import { Button, Divider, Grid, Modal, List, Confirm } from "semantic-ui-react";
+import { useMutation } from "@apollo/react-hooks";
+
 import ItemMyOrders from "./ItemMyOrders";
+import { UPDATE_ORDER } from "../util/graphql";
+
 
 function ModalMyOrders({ order }) {
+
+  const [errors, setErrors] = useState({})
   const [open, setOpen] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  //   let store = "6016b07f469523044467af34";
+  const [rejectOpen, setRejectOpen] = useState(false);
+  const [stateType, setStateType] = useState("");
+  const [editState, setEditState] = useState(false);
 
-  //   var AWBInput = (
-  //     <Form style={{ padding: 30 }}>
-  //       <Form.Field>
-  //         <label>AWB Number</label>
-  //         <input placeholder="AWB Number" />
-  //       </Form.Field>
-  //     </Form>
-  //   );
+  const orderId = order.id
+
+  const [changeState, { loading }] = useMutation(UPDATE_ORDER, {
+    update(_, { data: { updateOrder: orderData } }) {
+      setEditState(false)
+      setConfirmOpen(false)
+      setRejectOpen(false)
+      setOpen(false)
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+    variables: { orderId: orderId, state: stateType }
+  })
+
+
+  function confirmArrivalOrder() {
+    setStateType("ARRIVED")
+    setEditState(true)
+  }
+  function cancelConfirmArrivalOrder() {
+    setEditState(false)
+    setConfirmOpen(false)
+  }
+
+  if (editState) {
+    changeState()
+  }
+
+
 
   var orderAction;
 
   console.log(order);
 
-  if (order.state.stateType === "Order shipped") {
+  if (order.state.stateType === "DELIVERY") {
     orderAction = (
       <Modal.Actions>
         <Button
@@ -34,8 +64,8 @@ function ModalMyOrders({ order }) {
         </Button>
         <Confirm
           open={confirmOpen}
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={() => setOpen(false)}
+          onCancel={cancelConfirmArrivalOrder}
+          onConfirm={confirmArrivalOrder}
           cancelButton="Cancel"
           confirmButton="Confirm"
         />

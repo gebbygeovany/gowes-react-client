@@ -18,21 +18,13 @@ import { UPDATE_ORDER } from "../util/graphql";
 function ModalMySales({ order }) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({})
-
   const [open, setOpen] = React.useState(false);
-
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [rejectOpen, setRejectOpen] = useState(false);
-
   const [stateType, setStateType] = useState("");
   const [editState, setEditState] = useState(false);
 
   const orderId = order.id
-  // let state = "FAILED"
-
-  // if (stateType === "CONFIRMATION") {
-  //   state = "PROCESSED"
-  // }
 
   const [changeState, { loading }] = useMutation(UPDATE_ORDER, {
     update(_, { data: { updateOrder: orderData } }) {
