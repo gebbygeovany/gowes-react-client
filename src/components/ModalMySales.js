@@ -12,7 +12,8 @@ import { useMutation } from "@apollo/react-hooks";
 
 import ItemMyOrders from "./ItemMyOrders";
 import { AuthContext } from "../context/auth";
-import { UPDATE_ORDER } from "../util/graphql";
+import { UPDATE_ORDER, ADD_AWB_NUMBER } from "../util/graphql";
+import { useForm } from "../util/hooks"
 
 
 function ModalMySales({ order }) {
@@ -58,18 +59,54 @@ function ModalMySales({ order }) {
     setRejectOpen(false)
   }
 
+  function sendOrder() {
+    setStateType("DELIVERY")
+    setEditState(true)
+  }
+
   if (editState) {
     changeState()
   }
 
+  const { onChange, onSubmit, values } = useForm(addAwbNumberCallback, {
+    awbNumber: ''
+  })
 
+  const [addAwbNumber] = useMutation(ADD_AWB_NUMBER, {
+    update(_, { data: { addAwbNumber: data } }) {
+      sendOrder()
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+    variables: {
+      orderId: orderId,
+      awbNumber: values.awbNumber,
+      courierName: order.shipping.courierName,
+      buyerAddress: order.shipping.buyerAddress,
+      shippingCost: order.shipping.shippingCost
+    }
+  })
+
+  function addAwbNumberCallback() {
+    addAwbNumber()
+  }
 
   var AWBInput = (
-    <Form style={{ padding: 30 }}>
+    <Form style={{ padding: 30 }} onSubmit={onSubmit}>
       <Form.Field>
-        <label>AWB Number</label>
-        <input placeholder="AWB Number" />
+        <Form.Input
+          fluid
+          label="AWB Number"
+          icon='shipping'
+          iconPosition='left'
+          placeholder='AWB Number'
+          name="awbNumber"
+          value={values.awbNumber}
+          onChange={onChange}
+        />
       </Form.Field>
+      <Button>Submit</Button>
     </Form>
   );
 
@@ -237,7 +274,7 @@ function ModalMySales({ order }) {
               >
                 SiCepat - Regular Package
               </h5>
-              {order.state.stateType === "DELIVERY" ? (
+              {order.state.stateType === "DELIVERY" || "ARRIVED" ? (
                 <div style={{ paddingLeft: 10, marginBottom: 10 }}>
                   AWB num : {order.shipping.awbNumber}
                 </div>

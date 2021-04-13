@@ -586,6 +586,35 @@ export const CHANGE_ORDER_STATE_MUTATION = gql`
     }
   }
 `;
+export const ADD_AWB_NUMBER = gql`
+  mutation addAwbNumber(
+    $orderId: ID!
+    $awbNumber: String!
+    $courierName: String!
+    $buyerAddress: String!
+    $shippingCost: Int!
+  ) {
+    addAwbNumber(
+      orderId: $orderId
+      awbNumber: $awbNumber
+      courierName: $courierName
+      buyerAddress: $buyerAddress
+      shippingCost: $shippingCost
+    ) {
+      id
+      state {
+        stateType
+        createdAt
+        deadline
+      }
+      logs {
+        stateType
+        succsededAt
+        executedAt
+      }
+    }
+  }
+`;
 
 export const FETCH_USER_ORDER_QUERY = gql`
   {
@@ -624,6 +653,7 @@ export const FETCH_USER_ORDER_QUERY = gql`
         awbNumber
         courierName
         buyerAddress
+        shippingCost
       }
     }
   }
@@ -651,6 +681,7 @@ export const FETCH_SELLER_ORDER_QUERY = gql`
         awbNumber
         courierName
         buyerAddress
+        shippingCost
       }
       state {
         stateType

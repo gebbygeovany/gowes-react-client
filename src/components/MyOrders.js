@@ -58,7 +58,9 @@ function MyOrders() {
     sizeCompleted = objectSize(orders.filter((order) => order.state.stateType === "COMPLETED"))
     sizeFailed = objectSize(orders.filter((order) => order.state.stateType === "FAILED"))
     sizeOnGoing = sizeConfirmation + sizeProcessed + sizeDelivery + sizeArrived
+    
   }
+  console.log(orders)
 
   return (
     <>

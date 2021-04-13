@@ -48,7 +48,6 @@ function ModalMyOrders({ order }) {
 
   var orderAction;
 
-  console.log(order);
 
   if (order.state.stateType === "DELIVERY") {
     orderAction = (
