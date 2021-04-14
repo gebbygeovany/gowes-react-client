@@ -7,6 +7,8 @@ import {
   List,
   Confirm,
   Form,
+  Header,
+  Icon
 } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 
@@ -20,6 +22,7 @@ function ModalMySales({ order }) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({})
   const [open, setOpen] = React.useState(false);
+  const [openModal, setOpenModal] = React.useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [rejectOpen, setRejectOpen] = useState(false);
   const [stateType, setStateType] = useState("");
@@ -69,12 +72,13 @@ function ModalMySales({ order }) {
   }
 
   const { onChange, onSubmit, values } = useForm(addAwbNumberCallback, {
-    awbNumber: ''
+    awbNumber: ""
   })
 
   const [addAwbNumber] = useMutation(ADD_AWB_NUMBER, {
     update(_, { data: { addAwbNumber: data } }) {
       sendOrder()
+      setOpenModal(false)
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -106,7 +110,7 @@ function ModalMySales({ order }) {
           onChange={onChange}
         />
       </Form.Field>
-      <Button>Submit</Button>
+      <Button floated="right" style={{ marginBottom: 30 }}>Submit</Button>
     </Form>
   );
 
@@ -153,25 +157,38 @@ function ModalMySales({ order }) {
     );
   } else if (order.state.stateType === "PROCESSED") {
     orderAction = (
-      <Modal.Actions>
-        <Button
-          color="teal"
-          animated
-          onClick={() => setConfirmOpen(true)}
-          style={{ width: 200 }}
-        >
-          <Button.Content visible>Send Item</Button.Content>
-          <Button.Content hidden>Send item now !</Button.Content>
-        </Button>
-        <Confirm
-          open={confirmOpen}
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={() => setOpen(false)}
-          cancelButton="Cancel"
-          confirmButton="Confirm"
-          content={AWBInput}
-        />
-      </Modal.Actions>
+      // <Modal.Actions>
+
+      //   <Confirm
+      //     open={confirmOpen}
+      //     onCancel={() => setConfirmOpen(false)}
+      //     onConfirm={() => setOpen(false)}
+      //     cancelButton="Cancel"
+      //     confirmButton="Confirm"
+      //     content={AWBInput}
+      //   />
+      // </Modal.Actions>
+      <Modal
+        closeIcon
+        open={openModal}
+        trigger={
+          <Button
+            color="teal"
+            animated
+            style={{ width: 200, margin: 10, marginRight: 30 }}
+            floated="right"
+          >
+            <Button.Content visible>Send Item</Button.Content>
+            <Button.Content hidden>Send item now !</Button.Content>
+          </Button>
+        }
+        onClose={() => setOpenModal(false)}
+        onOpen={() => setOpenModal(true)}
+      >
+        <Modal.Content>
+          {AWBInput}
+        </Modal.Content>
+      </Modal>
     );
   }
 
