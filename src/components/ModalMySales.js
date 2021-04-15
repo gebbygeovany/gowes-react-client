@@ -97,21 +97,33 @@ function ModalMySales({ order }) {
   }
 
   var AWBInput = (
-    <Form style={{ padding: 30 }} onSubmit={onSubmit}>
-      <Form.Field>
-        <Form.Input
-          fluid
-          label="AWB Number"
-          icon='shipping'
-          iconPosition='left'
-          placeholder='AWB Number'
-          name="awbNumber"
-          value={values.awbNumber}
-          onChange={onChange}
-        />
-      </Form.Field>
-      <Button floated="right" style={{ marginBottom: 30 }}>Submit</Button>
-    </Form>
+    <>
+      <Form style={{ padding: 30 }} onSubmit={onSubmit}>
+        <Form.Field>
+          <Form.Input
+            fluid
+            label="AWB Number"
+            icon='shipping'
+            iconPosition='left'
+            placeholder='AWB Number'
+            name="awbNumber"
+            value={values.awbNumber}
+            onChange={onChange}
+            error={errors.awbNumber}
+          />
+        </Form.Field>
+        <Button floated="right" style={{ marginBottom: 30 }}>Submit</Button>
+      </Form>
+      {/* {Object.keys(errors).length > 0 && (
+        <div className='ui error message'>
+          <ul className="list">
+            {Object.values(errors).map(value => (
+              <li key={value}>{value}</li>
+            ))}
+          </ul>
+        </div>
+      )} */}
+    </>
   );
 
   var orderAction;
