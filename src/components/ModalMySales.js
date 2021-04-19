@@ -7,7 +7,7 @@ import {
   List,
   Confirm,
   Form,
-  Header,
+  Message,
   Icon
 } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
@@ -36,6 +36,7 @@ function ModalMySales({ order }) {
       setConfirmOpen(false)
       setRejectOpen(false)
       setOpen(false)
+      setErrors({});
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -79,6 +80,7 @@ function ModalMySales({ order }) {
     update(_, { data: { addAwbNumber: data } }) {
       sendOrder()
       setOpenModal(false)
+      values.awbNumber=""
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -109,19 +111,20 @@ function ModalMySales({ order }) {
             name="awbNumber"
             value={values.awbNumber}
             onChange={onChange}
-            error={errors.awbNumber}
+            error={errors? errors.awbNumber: errors}
           />
         </Form.Field>
         <Button floated="right" style={{ marginBottom: 30 }}>Submit</Button>
       </Form>
       {/* {Object.keys(errors).length > 0 && (
-        <div className='ui error message'>
+
+        <Message negative style={{ marginLeft: 30, marginRight: 30 }}>
           <ul className="list">
             {Object.values(errors).map(value => (
               <li key={value}>{value}</li>
             ))}
           </ul>
-        </div>
+        </Message>
       )} */}
     </>
   );
