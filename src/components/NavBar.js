@@ -35,7 +35,7 @@ function NavBar(props) {
     } else if (name === "login") {
       window.location.href = "/login";
     } else if (name === "home" || "shop") {
-      window.location.href = "/";
+      window.location.href = "/"
     }
   };
 
