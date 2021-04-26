@@ -45,9 +45,15 @@ function NavBar(props) {
   const { data: cartData } = useQuery(FETCH_USER_CART_QUERY);
   let { getUserCartItems: cartItems } = cartData ? cartData : [];
 
+
+  let userId = ""
+
+  if(user){
+    userId = user.id
+  }
   const { loading, data } = useQuery(FETCH_USER_QUERY, {
     variables: {
-      userId: user.id,
+      userId: userId,
     },
   });
   const { getUser: currentUser } = data ? data : [];
