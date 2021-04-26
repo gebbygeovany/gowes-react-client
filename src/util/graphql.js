@@ -858,3 +858,26 @@ export const CREATE_PAYMENT_QUERY = gql`
     }
   }
 `;
+
+// export const FETCH_USER_QUERY = gql`
+//   query getUser($userId: ID!) {
+//     getUser(userId: $userId) {
+//       id
+//       email
+//       phone
+//       address {
+//         cityName
+//         cityId
+//         district
+//         postalCode
+//         detail
+//       }
+//       balance
+//       buyer {
+//         name
+//         birthDate
+//         avatar
+//       }
+//     }
+//   }
+// `;

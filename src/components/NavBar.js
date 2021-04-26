@@ -16,6 +16,8 @@ import { AuthContext } from "../context/auth";
 import MyPopup from "./MyPopup";
 import { FETCH_BOOKMARKS_QUERY } from "../util/graphql";
 import { FETCH_USER_CART_QUERY } from "../util/graphql";
+import { FETCH_USER_QUERY } from "../util/graphql";
+
 
 function NavBar(props) {
   const { user, logout } = useContext(AuthContext);
@@ -43,8 +45,17 @@ function NavBar(props) {
   const { data: cartData } = useQuery(FETCH_USER_CART_QUERY);
   let { getUserCartItems: cartItems } = cartData ? cartData : [];
 
+  const { loading, data } = useQuery(FETCH_USER_QUERY, {
+    variables: {
+      userId: user.id,
+    },
+  });
+  const { getUser: currentUser } = data ? data : [];
+
   var sizeBookmark = objectSize(bookmarks);
   var sizeCart = objectSize(cartItems);
+
+  console.log(user)
 
   const navBar = user ? (
     // logged in navbar
@@ -115,8 +126,8 @@ function NavBar(props) {
               name="cart"
               active={activeItem === "cart"}
               onClick={handleItemClick}
-              // as={Link}
-              // to="/cart"
+            // as={Link}
+            // to="/cart"
             >
               {sizeCart > 0 ? (
                 <Label color="blue" floating>
@@ -136,8 +147,9 @@ function NavBar(props) {
             >
               <Image
                 circular
-                src="https://react.semantic-ui.com/images/avatar/small/stevie.jpg"
-                style={{ height: 30, marginRight: 0 }}
+                avatar
+                src={loading ? "https://react.semantic-ui.com/images/avatar/small/stevie.jpg" : currentUser.buyer.avatar}
+                style={{ marginRight: 0 }}
                 verticalAlign="middle"
               />
               <Dropdown item text={user.name} style={{ marginLeft: 0 }}>

@@ -12,6 +12,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth";
+import {FETCH_USER_QUERY } from "../util/graphql";
 
 function ProfileCard() {
   const context = useContext(AuthContext);
@@ -146,27 +147,27 @@ function ProfileCard() {
     </>
   );
 }
-const FETCH_USER_QUERY = gql`
-  query getUser($userId: ID!) {
-    getUser(userId: $userId) {
-      id
-      email
-      phone
-      address {
-        cityName
-        cityId
-        district
-        postalCode
-        detail
-      }
-      balance
-      buyer {
-        name
-        birthDate
-        avatar
-      }
-    }
-  }
-`;
+// const FETCH_USER_QUERY = gql`
+//   query getUser($userId: ID!) {
+//     getUser(userId: $userId) {
+//       id
+//       email
+//       phone
+//       address {
+//         cityName
+//         cityId
+//         district
+//         postalCode
+//         detail
+//       }
+//       balance
+//       buyer {
+//         name
+//         birthDate
+//         avatar
+//       }
+//     }
+//   }
+// `;
 
 export default ProfileCard;

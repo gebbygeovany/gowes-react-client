@@ -8,6 +8,7 @@ import ItemDetailCard from "../components/ItemDetailCard";
 import ItemImagesCard from "../components/ItemImagesCard";
 import ItemReviewsCard from "../components/ItemReviewsCard";
 import ReviewSummaryCard from "../components/ReviewSummaryCard";
+import ReviewFilter from "../components/ReviewFilter";
 import { AuthContext } from "../context/auth";
 
 function ItemDetail(props) {
@@ -58,7 +59,12 @@ function ItemDetail(props) {
             <Grid.Row style={{ marginBottom: 30 }}>
               <ReviewSummaryCard />
             </Grid.Row>
+            <Grid.Row style={{ marginBottom: 30 }}>
+              <ReviewFilter/>
+            </Grid.Row>
             <Grid.Row>
+              <ItemReviewsCard reviews={reviews} />
+              <ItemReviewsCard reviews={reviews} />
               <ItemReviewsCard reviews={reviews} />
             </Grid.Row>
           </Grid.Column>
