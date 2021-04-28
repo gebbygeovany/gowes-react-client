@@ -60,12 +60,13 @@ function ItemDetail(props) {
               <ReviewSummaryCard />
             </Grid.Row>
             <Grid.Row style={{ marginBottom: 30 }}>
-              <ReviewFilter/>
+              <ReviewFilter />
             </Grid.Row>
             <Grid.Row>
-              <ItemReviewsCard reviews={reviews} />
-              <ItemReviewsCard reviews={reviews} />
-              <ItemReviewsCard reviews={reviews} />
+              {reviews &&
+                reviews.map((reviews) => (
+                  <ItemReviewsCard reviews={reviews} />
+                ))}
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={4}>

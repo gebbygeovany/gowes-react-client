@@ -178,6 +178,7 @@ export const FETCH_ITEM_QUERY = gql`
         id
         email
         buyer {
+          name
           avatar
         }
       }
