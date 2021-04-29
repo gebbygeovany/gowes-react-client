@@ -149,9 +149,9 @@ function ItemDetail(props) {
               <Grid.Row>
                 <Message
                   error
-                  icon="heart"
-                  header="You dont have any wishlisted items"
-                  content="add wishlist if want to mark the item"
+                  icon="lightbulb"
+                  header="Reviews not found"
+                  content="There is no review on this item, try another filter"
                   style={{ marginBottom: 109 }}
                 />
               </Grid.Row>
