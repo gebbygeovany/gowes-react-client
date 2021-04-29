@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FETCH_ITEM_QUERY } from "../util/graphql";
 import { useQuery } from "@apollo/react-hooks";
-import { Grid, Ref } from "semantic-ui-react";
+import { Grid, Ref, Message, Button, Icon } from "semantic-ui-react";
 import ItemTransactionCard from "../components/ItemTransactionCard";
 import ManageItemSticky from "../components/ManageItemSticky";
 import ItemDetailCard from "../components/ItemDetailCard";
 import ItemImagesCard from "../components/ItemImagesCard";
 import ItemReviewsCard from "../components/ItemReviewsCard";
 import ReviewSummaryCard from "../components/ReviewSummaryCard";
-import ReviewFilter from "../components/ReviewFilter";
 import { AuthContext } from "../context/auth";
+import { objectSize } from "../util/extensions";
+
 
 function ItemDetail(props) {
   const itemId = props.props.match.params.itemId;
@@ -35,7 +36,31 @@ function ItemDetail(props) {
   const { getItemReviews: reviews } = reviewData ? reviewData : [];
   const { isChatExists } = chatData ? chatData : [];
 
+  var [activeItem, setActiveItem] = useState("all");
+    const handleItemClick = (e, { name }) => {
+        setActiveItem(name);
+    };
+
+
+  if (activeItem !== "all"){
+    activeItem = parseInt(activeItem, 10)
+  }
+
+  var reviewList = []
+
+  if (reviews && activeItem === "all") {
+    reviewList.push(reviews)
+  }
+  else if (reviews && reviews.find((reviews) => reviews.score === activeItem)) {
+    reviewList.push(reviews.filter((reviews) => reviews.score === activeItem))
+  }
+  const reviewSize = objectSize(reviewList)
+
+  console.log(reviewList)
+
+
   let postMarkup = <p>Loading item..</p>;
+
   if (!loading && item) {
     postMarkup = (
       <Ref innerRef={contextRef}>
@@ -60,14 +85,78 @@ function ItemDetail(props) {
               <ReviewSummaryCard />
             </Grid.Row>
             <Grid.Row style={{ marginBottom: 30 }}>
-              <ReviewFilter />
+              {/* <ReviewFilter /> */}
+              <span style={{ marginRight: 20 }}>Filter</span>
+
+              <Button
+                name="all"
+                onClick={handleItemClick}
+                color={activeItem === "all" ? "teal" : ""}
+              >
+                All
+            </Button>
+              <Button
+                name="1"
+                onClick={handleItemClick}
+                color={activeItem === 1 ? "teal" : ""}
+              >
+                <Icon name="star" ></Icon>
+                1
+            </Button>
+              <Button
+                name="2"
+                onClick={handleItemClick}
+                color={activeItem === 2 ? "teal" : ""}
+              >
+                <Icon name="star" ></Icon>
+                2
+            </Button>
+              <Button
+                name="3"
+                onClick={handleItemClick}
+                color={activeItem === 3 ? "teal" : ""}
+              >
+                <Icon name="star" ></Icon>
+                3
+            </Button>
+              <Button
+                name="4"
+                onClick={handleItemClick}
+                color={activeItem === 4 ? "teal" : ""}
+              >
+                <Icon name="star" ></Icon>
+                4
+            </Button>
+              <Button
+                name="5"
+                onClick={handleItemClick}
+                color={activeItem === 5 ? "teal" : ""}
+              >
+                <Icon name="star" ></Icon>
+                5
+            </Button>
+
+
             </Grid.Row>
-            <Grid.Row>
-              {reviews &&
-                reviews.map((reviews) => (
-                  <ItemReviewsCard reviews={reviews} />
-                ))}
-            </Grid.Row>
+            {reviewSize > 0 ? (
+              <Grid.Row>
+                {reviewList[0] &&
+                  reviewList[0].map((reviewList) => (
+                    <ItemReviewsCard reviews={reviewList} />
+                  ))}
+              </Grid.Row>
+            ) : (
+              <Grid.Row>
+                <Message
+                  error
+                  icon="heart"
+                  header="You dont have any wishlisted items"
+                  content="add wishlist if want to mark the item"
+                  style={{ marginBottom: 109 }}
+                />
+              </Grid.Row>
+            )}
+
           </Grid.Column>
           <Grid.Column width={4}>
             {context.user ? (
