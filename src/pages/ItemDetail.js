@@ -9,7 +9,6 @@ import ItemImagesCard from "../components/ItemImagesCard";
 import ItemReviewsCard from "../components/ItemReviewsCard";
 import ReviewSummaryCard from "../components/ReviewSummaryCard";
 import { AuthContext } from "../context/auth";
-import { objectSize } from "../util/extensions";
 
 
 function ItemDetail(props) {
@@ -37,12 +36,12 @@ function ItemDetail(props) {
   const { isChatExists } = chatData ? chatData : [];
 
   var [activeItem, setActiveItem] = useState("all");
-    const handleItemClick = (e, { name }) => {
-        setActiveItem(name);
-    };
+  const handleItemClick = (e, { name }) => {
+    setActiveItem(name);
+  };
 
 
-  if (activeItem !== "all"){
+  if (activeItem !== "all") {
     activeItem = parseInt(activeItem, 10)
   }
 
@@ -54,8 +53,6 @@ function ItemDetail(props) {
   else if (reviews && reviews.find((reviews) => reviews.score === activeItem)) {
     reviewList.push(reviews.filter((reviews) => reviews.score === activeItem))
   }
-  const reviewSize = objectSize(reviewList)
-
   console.log(reviewList)
 
 
@@ -135,17 +132,8 @@ function ItemDetail(props) {
                 <Icon name="star" ></Icon>
                 5
             </Button>
-
-
             </Grid.Row>
-            {reviewSize > 0 ? (
-              <Grid.Row>
-                {reviewList[0] &&
-                  reviewList[0].map((reviewList) => (
-                    <ItemReviewsCard reviews={reviewList} />
-                  ))}
-              </Grid.Row>
-            ) : (
+            {reviewList.length ===0 ? (
               <Grid.Row>
                 <Message
                   error
@@ -154,6 +142,13 @@ function ItemDetail(props) {
                   content="There is no review on this item, try another filter"
                   style={{ marginBottom: 109 }}
                 />
+              </Grid.Row>
+            ) : (
+              <Grid.Row>
+                {reviewList[0] &&
+                  reviewList[0].map((reviewList) => (
+                    <ItemReviewsCard reviews={reviewList} />
+                  ))}
               </Grid.Row>
             )}
 
