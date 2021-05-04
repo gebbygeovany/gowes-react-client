@@ -10,7 +10,7 @@ function ItemReviewsCard({ reviews }) {
   function handleClick(src) {
     setImg(src)
     setOpen(true)
-  }
+  };
 
 
   const body = "Pertama beli semoga cocok dan bagus catnya bakal langganan dehh karna harga dan kualitas barang pass"
