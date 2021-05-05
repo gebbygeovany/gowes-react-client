@@ -3,6 +3,7 @@ import Time from 'react-time-format'
 import { Card, Grid } from "semantic-ui-react";
 import ItemMyOrders from "./ItemMyOrders";
 import ModalMyOrders from "./ModalMyOrders";
+import ModalAddItemReview from "./ModalAddItemReview";
 
 function CardMyOrders(order) {
   const answer_array = order.order.state.createdAt.split('T');
@@ -50,6 +51,7 @@ function CardMyOrders(order) {
       <Card.Content>
         {/* <Button floated='right' size='small' color='teal'>See Details</Button> */}
         <ModalMyOrders order={order.order}></ModalMyOrders>
+        <ModalAddItemReview order={order.order}></ModalAddItemReview>
       </Card.Content>
     </Card>
   );
