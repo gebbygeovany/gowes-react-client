@@ -9,8 +9,6 @@ function CardMyOrders(order) {
   const answer_array = order.order.state.createdAt.split('T');
   console.log(answer_array)
 
-
-
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content>
@@ -46,12 +44,11 @@ function CardMyOrders(order) {
       </Card.Content>
       {order.order.items &&
         order.order.items.map((item) => (
-          <ItemMyOrders item={item} />
+          <ItemMyOrders item={item} order={order.order}/>
         ))}
       <Card.Content>
         {/* <Button floated='right' size='small' color='teal'>See Details</Button> */}
         <ModalMyOrders order={order.order}></ModalMyOrders>
-        <ModalAddItemReview order={order.order}></ModalAddItemReview>
       </Card.Content>
     </Card>
   );

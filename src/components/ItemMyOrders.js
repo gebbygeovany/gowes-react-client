@@ -1,8 +1,11 @@
 import React from "react";
 import { Card, Grid, Image } from "semantic-ui-react";
 
-function ItemMyOrders({ item }) {
-  console.log(item)
+import ModalAddItemReview from "./ModalAddItemReview";
+
+
+function ItemMyOrders({ item, order }) {
+  console.log(order)
 
   var itemOrder = (<></>)
   if (item) {
@@ -27,7 +30,7 @@ function ItemMyOrders({ item }) {
               <h4 style={{ color: "teal" }}>{item.name}</h4>
             </Grid.Row>
           </Grid.Column>
-          <Grid.Column width={6} verticalAlign="middle">
+          <Grid.Column width={3} verticalAlign="middle">
             <Grid.Row>
               <div>Price</div>
             </Grid.Row>
@@ -42,6 +45,11 @@ function ItemMyOrders({ item }) {
             <Grid.Row>
               <h4 style={{ color: "teal" }}>{item.amountItem}</h4>
             </Grid.Row>
+          </Grid.Column>
+          <Grid.Column width={3} verticalAlign="middle">
+            {order.state.stateType === "ARRIVED" ? (
+              <ModalAddItemReview item={item}></ModalAddItemReview>
+            ) : (<></>)}
           </Grid.Column>
         </Grid>
       </Card.Content>

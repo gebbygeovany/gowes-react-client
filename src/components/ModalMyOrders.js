@@ -159,7 +159,7 @@ function ModalMyOrders({ order }) {
           </h5>
           {order.items &&
             order.items.map((item) => (
-              <ItemMyOrders item={item} />
+              <ItemMyOrders item={item} order={order}/>
             ))}
         </Modal.Description>
 

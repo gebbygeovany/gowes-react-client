@@ -786,6 +786,19 @@ export const DELETE_CART_ITEM_MUTATION = gql`
     deleteCartItem(cartId: $cartId)
   }
 `;
+export const ADD_REVIEW_MUTATION = gql`
+  mutation addReview($score: Int!, $body: String!, $itemId: ID!) {
+    addReview(addReviewInput: { score: $score, body: $body, itemId: $itemId }) {
+      id
+      score
+      body
+      images {
+        downloadUrl
+      }
+      createdAt
+    }
+  }
+`;
 
 export const UPDATE_ITEM_MUTATION = gql`
   mutation updateItem(
@@ -859,26 +872,3 @@ export const CREATE_PAYMENT_QUERY = gql`
     }
   }
 `;
-
-// export const FETCH_USER_QUERY = gql`
-//   query getUser($userId: ID!) {
-//     getUser(userId: $userId) {
-//       id
-//       email
-//       phone
-//       address {
-//         cityName
-//         cityId
-//         district
-//         postalCode
-//         detail
-//       }
-//       balance
-//       buyer {
-//         name
-//         birthDate
-//         avatar
-//       }
-//     }
-//   }
-// `;
