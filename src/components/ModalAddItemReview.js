@@ -3,6 +3,9 @@ import { Button, Modal, Header, Icon, Grid, Rating, Form, Image } from "semantic
 import { useMutation } from '@apollo/react-hooks'
 
 import { ADD_REVIEW_MUTATION } from '../util/graphql'
+import { storage } from "../firebase";
+
+
 
 
 function ModalAddItemReview({ item }) {
@@ -10,6 +13,7 @@ function ModalAddItemReview({ item }) {
     const [open, setOpen] = useState(false)
     const [rating, setRating] = useState({})
     const [body, setBody] = useState("")
+    const [image, setImage] = useState("");
 
     const handleRate = (e, { rating, maxRating }) => setRating({ rating, maxRating })
 
@@ -31,7 +35,45 @@ function ModalAddItemReview({ item }) {
         }
     })
 
-    console.log(item.id)
+    const fileInputRef = React.createRef();
+    const fileChange = (e) => {
+        const image = e.target.files[0];
+        if (image) {
+            const uploadTask = storage.ref(`images/${image.name}`).put(image);
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    // // Observe state change events such as progress, pause, and resume
+                    // // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    // var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    // console.log('Upload is ' + progress + '% done');
+                    // switch (snapshot.state) {
+                    //   case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    //     console.log('Upload is paused');
+                    //     break;
+                    //   case firebase.storage.TaskState.RUNNING: // or 'running'
+                    //     console.log('Upload is running');
+                    //     break;
+                },
+                (error) => {
+                    console.log(error);
+                },
+                () => {
+                    storage
+                        .ref("images")
+                        .child(image.name)
+                        .getDownloadURL()
+                        .then((url) => {
+                            setImage(url);
+                            // setImage([url, ...image]);
+                            console.log(url);
+                        });
+                }
+            );
+        }
+    };
+
+    console.log(image)
     return (
         <Modal
             closeIcon
@@ -46,21 +88,22 @@ function ModalAddItemReview({ item }) {
                 <Grid stackable>
                     <Grid.Row centered>
                         <Rating maxRating={5} onRate={handleRate} icon='star' size='massive' />
-                        {/* <pre>{JSON.stringify(rating, null, 2)}</pre> */}
                     </Grid.Row>
                     <Grid.Column width={16}>
                         <Form fluid>
                             <Form.TextArea
-                                placeholder='Tell us more about you...'
+                                placeholder='Tell us about the product...'
                                 onChange={handleChange}
                                 value={body}
                                 name={body}
                             />
                         </Form>
-                        <Image.Group size='tiny' style={{ marginTop: 20 }}>
-                            <Image src='https://firebasestorage.googleapis.com/v0/b/gowes-marketplace-react.appspot.com/o/images%2Fgembok%20mtb.jpg?alt=media&token=8785f099-e180-4b28-b5fa-de9665e50fcf' size='tiny' />
-                            <Image src='https://firebasestorage.googleapis.com/v0/b/gowes-marketplace-react.appspot.com/o/images%2FFrame%20Sepeda%20BMX.jpg?alt=media&token=50a39121-741a-42cb-b554-7d7ac230507e' size='tiny' />
-                        </Image.Group>
+                        {image === "" ? (<></>) : (
+                            <Image.Group size='tiny' style={{ marginTop: 20 }}>
+                                <Image src={image} size='tiny' />
+                            </Image.Group>
+                        )}
+
                     </Grid.Column>
                     <Grid.Column width={16}>
                         <Button
@@ -70,6 +113,22 @@ function ModalAddItemReview({ item }) {
                             icon="plus"
                             content="Add Image"
                         >
+                            <Form>
+                                <Button
+                                    fluid
+                                    onClick={() => fileInputRef.current.click()}
+                                    style={{ marginTop: 0, padding: 0 }}
+                                    color="teal"
+                                    icon="plus"
+                                    content="Add Image"
+                                />
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    hidden
+                                    onChange={fileChange}
+                                />
+                            </Form>
                         </Button>
                     </Grid.Column>
                 </Grid>
