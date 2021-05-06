@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { ADD_REVIEW_MUTATION } from '../util/graphql'
 
 
-function ModalAddItemReview({item}) {
+function ModalAddItemReview({ item }) {
     const [errors, setErrors] = useState({})
     const [open, setOpen] = useState(false)
     const [rating, setRating] = useState({})
@@ -15,7 +15,7 @@ function ModalAddItemReview({item}) {
 
     const handleChange = (e, { name, value }) => setBody(value)
 
-    console.log(typeof(item))
+    console.log(typeof (item))
 
     const [addReview, { loading }] = useMutation(ADD_REVIEW_MUTATION, {
         update(_, { data: { addReview: reviewData } }) {
@@ -36,7 +36,7 @@ function ModalAddItemReview({item}) {
         <Modal
             closeIcon
             open={open}
-            trigger={<Button floated="right"  size="tiny">Review Item</Button>}
+            trigger={<Button floated="right" size="tiny">Review Item</Button>}
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
             style={{ marginTop: 100 }}
@@ -58,9 +58,8 @@ function ModalAddItemReview({item}) {
                             />
                         </Form>
                         <Image.Group size='tiny' style={{ marginTop: 20 }}>
-                            <Image src='https://react.semantic-ui.com/images/avatar/large/molly.png' size='tiny' />
-                            <Image src='https://react.semantic-ui.com/images/avatar/large/molly.png' size='tiny' />
-                            <Image src='https://react.semantic-ui.com/images/avatar/large/molly.png' size='tiny' />
+                            <Image src='https://firebasestorage.googleapis.com/v0/b/gowes-marketplace-react.appspot.com/o/images%2Fgembok%20mtb.jpg?alt=media&token=8785f099-e180-4b28-b5fa-de9665e50fcf' size='tiny' />
+                            <Image src='https://firebasestorage.googleapis.com/v0/b/gowes-marketplace-react.appspot.com/o/images%2FFrame%20Sepeda%20BMX.jpg?alt=media&token=50a39121-741a-42cb-b554-7d7ac230507e' size='tiny' />
                         </Image.Group>
                     </Grid.Column>
                     <Grid.Column width={16}>
@@ -85,6 +84,7 @@ function ModalAddItemReview({item}) {
                     icon='checkmark'
                     onClick={addReview}
                     positive
+                    disabled={!rating.rating || body === "" ? true : false}
                 />
             </Modal.Actions>
         </Modal>
