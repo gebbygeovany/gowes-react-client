@@ -17,6 +17,8 @@ function CartCard(props) {
     itemIds = [...itemIds, cartItem.item.id];
   });
 
+  console.log(props.cartItem)
+
   const [editCartItem] = useMutation(EDIT_CHECKED_MUTATION, {
     variables: { itemIds: itemIds, isChecked: checked ? false : true },
     update() {

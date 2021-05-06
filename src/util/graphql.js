@@ -787,10 +787,21 @@ export const DELETE_CART_ITEM_MUTATION = gql`
   }
 `;
 
-
 export const ADD_REVIEW_MUTATION = gql`
-  mutation addReview($score: Int!, $body: String!, $itemId: ID!) {
-    addReview(addReviewInput: { score: $score, body: $body, itemId: $itemId }) {
+  mutation addReview(
+    $score: Int!
+    $body: String!
+    $itemId: ID!
+    $images: [ImageInput]!
+  ) {
+    addReview(
+      addReviewInput: {
+        score: $score
+        body: $body
+        itemId: $itemId
+        images: $images
+      }
+    ) {
       id
       score
       body

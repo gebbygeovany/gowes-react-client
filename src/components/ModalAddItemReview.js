@@ -13,13 +13,16 @@ function ModalAddItemReview({ item }) {
     const [open, setOpen] = useState(false)
     const [rating, setRating] = useState({})
     const [body, setBody] = useState("")
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState([]);
 
     const handleRate = (e, { rating, maxRating }) => setRating({ rating, maxRating })
 
     const handleChange = (e, { name, value }) => setBody(value)
 
-    console.log(typeof (item))
+    console.log(typeof (image))
+
+    const images = [
+    ];
 
     const [addReview, { loading }] = useMutation(ADD_REVIEW_MUTATION, {
         update(_, { data: { addReview: reviewData } }) {
@@ -31,7 +34,8 @@ function ModalAddItemReview({ item }) {
         variables: {
             score: rating.rating,
             body: body,
-            itemId: item.id
+            itemId: item.id,
+            images: images
         }
     })
 
@@ -64,8 +68,9 @@ function ModalAddItemReview({ item }) {
                         .child(image.name)
                         .getDownloadURL()
                         .then((url) => {
-                            setImage(url);
-                            // setImage([url, ...image]);
+                            // setImage(url);
+                            // setImage([image, ...url]);
+                            setImage(img => [...img, url]);
                             console.log(url);
                         });
                 }
@@ -73,7 +78,13 @@ function ModalAddItemReview({ item }) {
         }
     };
 
-    console.log(image)
+    image.forEach((image) => {
+        images.push({
+            downloadUrl: image,
+        });
+    });
+
+    console.log(images)
     return (
         <Modal
             closeIcon
@@ -100,7 +111,10 @@ function ModalAddItemReview({ item }) {
                         </Form>
                         {image === "" ? (<></>) : (
                             <Image.Group size='tiny' style={{ marginTop: 20 }}>
-                                <Image src={image} size='tiny' />
+                                {image &&
+                                    image.map((image) => (
+                                        <Image src={image} size='tiny' />
+                                    ))}
                             </Image.Group>
                         )}
 
@@ -121,6 +135,7 @@ function ModalAddItemReview({ item }) {
                                     color="teal"
                                     icon="plus"
                                     content="Add Image"
+                                    disabled={image.length >= 5 ? true : false}
                                 />
                                 <input
                                     ref={fileInputRef}

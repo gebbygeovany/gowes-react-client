@@ -60,7 +60,7 @@ function MyOrders() {
     sizeOnGoing = sizeConfirmation + sizeProcessed + sizeDelivery + sizeArrived
     
   }
-  console.log(orders)
+  console.log(typeof(orderList))
 
   return (
     <>
