@@ -46,7 +46,7 @@ function ModalAddItemReview({ item }) {
             const uploadTask = storage.ref(`images/${image.name}`).put(image);
             uploadTask.on(
                 "state_changed",
-                (snapshot) => {},
+                (snapshot) => { },
                 (error) => {
                     console.log(error);
                 },
@@ -82,13 +82,13 @@ function ModalAddItemReview({ item }) {
             onOpen={() => setOpen(true)}
             style={{ marginTop: 100 }}
         >
-            <Header icon='star outline' content='Review Item' />
+            <Header content='Review Item' />
             <Modal.Content>
                 <Grid stackable>
                     <Grid.Row centered>
                         <Rating maxRating={5} onRate={handleRate} icon='star' size='massive' />
                     </Grid.Row>
-                    <Grid.Column width={16}>
+                    <Grid.Column width={16} style={{paddingBottom:0}}>
                         <Form fluid>
                             <Form.TextArea
                                 placeholder='Tell us about the product...'
@@ -107,32 +107,22 @@ function ModalAddItemReview({ item }) {
                         )}
 
                     </Grid.Column>
-                    <Grid.Column width={16}>
-                        <Button
-                            style={{ marginTop: 0 }}
-                            fluid
-                            color="teal"
-                            icon="plus"
-                            content="Add Image"
-                        >
-                            <Form>
-                                <Button
-                                    fluid
-                                    onClick={() => fileInputRef.current.click()}
-                                    style={{ marginTop: 0, padding: 0 }}
-                                    color="teal"
-                                    icon="plus"
-                                    content="Add Image"
-                                    disabled={image.length >= 5 ? true : false}
-                                />
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    hidden
-                                    onChange={fileChange}
-                                />
-                            </Form>
-                        </Button>
+                    <Grid.Column width={16} style={{paddingTop:0}}>
+                        <Form>
+                            <Button
+                                fluid
+                                onClick={() => fileInputRef.current.click()}
+                                icon="plus"
+                                content="Add Image"
+                                disabled={image.length >= 5 ? true : false}
+                            />
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                hidden
+                                onChange={fileChange}
+                            />
+                        </Form>
                     </Grid.Column>
                 </Grid>
             </Modal.Content>

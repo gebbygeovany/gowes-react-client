@@ -826,6 +826,7 @@ export const UPDATE_ITEM_MUTATION = gql`
     $width: Int!
     $height: Int!
     $itemId: ID!
+    $images: [ImageInput]!
   ) {
     updateItem(
       itemId: $itemId
@@ -838,7 +839,7 @@ export const UPDATE_ITEM_MUTATION = gql`
         weight: $weight
         description: $description
         dimension: { length: $length, width: $width, height: $height }
-        images: [{ downloadUrl: "" }]
+        images: $images
       }
     ) {
       id
