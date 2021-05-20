@@ -107,6 +107,7 @@ function ManageItemSticky({ contextRef, item }) {
                     length: item.dimension.length,
                     width: item.dimension.width,
                     height: item.dimension.height,
+                    images: item.images
                   },
                 }}
               >

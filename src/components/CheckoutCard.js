@@ -195,34 +195,7 @@ function CheckoutCard(props) {
         ];
       });
     }
-    if (posSize > 0 && posCosts[0].costs) {
-      posCosts[0].costs.forEach((cost) => {
-        options = [
-          ...options,
-          {
-            key: cost.cost[0].etd,
-            text: `${posCosts[0].code} (${cost.service}) Rp${cost.cost[0].value}`,
-            value: `${posCosts[0].code} ${cost.service} ${cost.cost[0].value}`,
-            content: (
-              <>
-                <List>
-                  <List.Item>
-                    <List.Content floated="right">
-                      Rp{cost.cost[0].value}
-                    </List.Content>
-                    <List.Content style={{ marginBottom: 5 }}>
-                      <Header as="h5">
-                        {posCosts[0].code} ({cost.service})
-                      </Header>
-                    </List.Content>
-                  </List.Item>
-                </List>
-              </>
-            ),
-          },
-        ];
-      });
-    }
+   
     checkoutCartMarkup = (
       <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
         <Card.Content>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Sticky, Menu } from 'semantic-ui-react';
+import { Sticky, Menu, Card, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 
 
 
-function SidebarStore({contextRef}) {
+function SidebarStore({ contextRef }) {
 
 
     const [activeItem, setActiveItem] = useState("My Store")
@@ -36,6 +36,21 @@ function SidebarStore({contextRef}) {
                     to="/mystore/salesList"
                 />
             </Menu>
+            <Card style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>
+                <Card.Content>
+                    <List divided verticalAlign="middle">
+                        <List.Item>
+                            <List.Content style={{ marginBottom: 5 }}>
+                                <div >Balance</div>
+                            </List.Content>
+                            <List.Content>
+                                <h3>Rp50.0000</h3>
+                            </List.Content>
+
+                        </List.Item>
+                    </List>
+                </Card.Content>
+            </Card>
         </Sticky>
     )
 }

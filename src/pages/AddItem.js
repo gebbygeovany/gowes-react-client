@@ -21,7 +21,6 @@ function AddItem(props) {
   const [image, setImage] = useState([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-
   const images = [
   ];
 

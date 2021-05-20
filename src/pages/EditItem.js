@@ -12,12 +12,28 @@ import { useMutation } from "@apollo/react-hooks";
 import { UPDATE_ITEM_MUTATION } from "../util/graphql";
 
 import { useForm } from "../util/hooks";
+import { storage } from "../firebase";
 
 function EditItem(props) {
   const itemId = props.match.params.itemId;
   const itemData = props.location.item;
   const [errors, setErrors] = useState({});
   const [isSaved, setSave] = useState(false);
+  const [image, setImage] = useState([]);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+
+  if (itemData) {
+    itemData.images.forEach((images) => {
+      image.push({
+        downloadUrl: images.downloadUrl,
+      });
+    });
+  }
+
+
+  console.log(image)
+
 
   let userObj;
 
@@ -104,36 +120,70 @@ function EditItem(props) {
     }
   };
 
+  const fileInputRef = React.createRef();
+  const fileChange = (e) => {
+    const image = e.target.files[0];
+    if (image) {
+      const uploadTask = storage.ref(`images/${image.name}`).put(image);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => { },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          storage
+            .ref("images")
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              // setImage(url);
+              // setImage([image, ...url]);
+              setImage(img => [...img, url]);
+              console.log(url);
+            });
+        }
+      );
+    }
+  };
+
   let postMarkup = (
     <Grid centered stackable>
       <Grid.Column width={12}>
         <Card fluid>
           <Card.Content header="Item Image" />
           <Card.Content>
-            <Image
-              rounded
-              src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-              size="small"
-              style={{ marginRight: 5 }}
-            />
-            <Image
-              rounded
-              src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-              size="small"
-              style={{ marginRight: 5 }}
-            />
-            <Image
-              rounded
-              src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-              size="small"
-              style={{ marginRight: 5 }}
-            />
+            {image.length === 0 ? (
+              <Image
+                rounded
+                src="https://react.semantic-ui.com/images/wireframe/image.png"
+                size="small"
+                style={{ marginRight: 5 }}
+              />
+            ) : (
+              <Image.Group size='small' style={{ marginTop: 20 }}>
+                {image &&
+                  image.map((image) => (
+                    <Image src={image.downloadUrl} size='small' />
+                  ))}
+              </Image.Group>
+            )}
           </Card.Content>
           <Card.Content extra>
-            <Button fluid color="standard" size="small">
-              <Icon name="plus"></Icon>
-              add Image
-            </Button>
+            <Button
+              fluid
+              size="small"
+              onClick={() => fileInputRef.current.click()}
+              icon="plus"
+              content="Add Image"
+              // disabled={images.length >= 5 ? true : false}
+            />
+            <input
+              ref={fileInputRef}
+              type="file"
+              hidden
+              onChange={fileChange}
+            />
           </Card.Content>
         </Card>
         <Card fluid>

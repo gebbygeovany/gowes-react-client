@@ -97,6 +97,7 @@ export const FETCH_ITEM_SELLER_QUERY = gql`
         createdAt
       }
       user {
+        id
         seller {
           username
         }

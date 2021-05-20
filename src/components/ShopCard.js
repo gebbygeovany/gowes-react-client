@@ -25,6 +25,8 @@ function PostCard({
     };
   }
 
+  console.log(user)
+
   return (
     <Card style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Card.Content

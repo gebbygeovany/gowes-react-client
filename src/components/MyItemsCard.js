@@ -3,7 +3,7 @@ import { Card, Icon, Image, Grid } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import "../App.css";
 
-function MyItemsCard({ item: { id, name, price, stock } }) {
+function MyItemsCard({ item: { id, name, price, stock, images, user } }) {
   return (
     <Card fluid style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}>
       <Grid container>
@@ -12,12 +12,12 @@ function MyItemsCard({ item: { id, name, price, stock } }) {
             fluid
             centered
             rounded
-            src="https://react.semantic-ui.com/images/avatar/large/molly.png"
+            src={images[0].downloadUrl}
             size="small"
             style={{ margin: 10 }}
             as={Link}
-            to={`/items/${id}`}
-          />
+            to={`/items/${id}/${user.id}`}
+            />
         </Grid.Column>
         <Grid.Column width={2} verticalAlign="middle">
           <h4>{name}</h4>
