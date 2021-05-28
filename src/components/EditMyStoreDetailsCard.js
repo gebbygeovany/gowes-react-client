@@ -38,7 +38,7 @@ function EditMyStoreDetailsCard(props) {
       const uploadTask = storage.ref(`images/${image.name}`).put(image);
       uploadTask.on(
         "state_changed",
-        (snapshot) => {},
+        (snapshot) => { },
         (error) => {
           console.log(error);
         },
@@ -57,12 +57,20 @@ function EditMyStoreDetailsCard(props) {
   };
   console.log("File chosen --->", avatar);
 
+
+
   let userObj = {
     avatar: "",
-    username: currentUser.seller.username,
-    description: currentUser.seller.description,
+    username: "",
+    description: "",
   };
-
+  if (!loading) {
+    userObj = {
+      avatar: "",
+      username: currentUser.seller.username,
+      description: currentUser.seller.description,
+    };
+  }
   let { onChange, onSubmit, values } = useForm(updateSellerProfile, userObj);
 
   const [sellerProfileUpdate] = useMutation(

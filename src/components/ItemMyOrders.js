@@ -4,11 +4,14 @@ import { Card, Grid, Image } from "semantic-ui-react";
 import ModalAddItemReview from "./ModalAddItemReview";
 
 
-function ItemMyOrders({ item, order }) {
-  console.log(order)
+function ItemMyOrders(props) {
+  console.log(props.item)
+  console.log(props.order)
+
+  // console.log(order)
 
   var itemOrder = (<></>)
-  if (item) {
+  if (props.item) {
     itemOrder = (
       <Card.Content>
         <Grid stackable>
@@ -17,7 +20,7 @@ function ItemMyOrders({ item, order }) {
               fluid
               centered
               rounded
-              src={item.images[0].downloadUrl}
+              src={props.item.images[0].downloadUrl}
               size="tiny"
               style={{ margin: 10 }}
             />
@@ -27,7 +30,7 @@ function ItemMyOrders({ item, order }) {
               <div>Item Name</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>{item.name}</h4>
+              <h4 style={{ color: "teal" }}>{props.item.name}</h4>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={3} verticalAlign="middle">
@@ -35,7 +38,7 @@ function ItemMyOrders({ item, order }) {
               <div>Price</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>Rp{item.price}</h4>
+              <h4 style={{ color: "teal" }}>Rp{props.item.price}</h4>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={3} verticalAlign="middle">
@@ -43,12 +46,12 @@ function ItemMyOrders({ item, order }) {
               <div>Amount Item</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>{item.amountItem}</h4>
+              <h4 style={{ color: "teal" }}>{props.item.amountItem}</h4>
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={3} verticalAlign="middle">
-            {order.state.stateType === "ARRIVED" ? (
-              <ModalAddItemReview item={item}></ModalAddItemReview>
+            {props.order && props.order.state.stateType === "ARRIVED" ? (
+              <ModalAddItemReview item={props.item}></ModalAddItemReview>
             ) : (<></>)}
           </Grid.Column>
         </Grid>

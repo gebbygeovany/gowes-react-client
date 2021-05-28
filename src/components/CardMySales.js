@@ -38,7 +38,7 @@ function CardMySales(order) {
       </Card.Content>
       {order.order.items &&
         order.order.items.map((item) => (
-          <ItemMyOrders item={item} />
+          <ItemMyOrders item={item} order={order.order} />
         ))}
       <Card.Content>
         <ModalMySales order={order.order}></ModalMySales>

@@ -28,12 +28,14 @@ function MySales() {
   }
 
 
-  const { data } = useQuery(FETCH_SELLER_ORDER_QUERY, {
+  const { loading, data } = useQuery(FETCH_SELLER_ORDER_QUERY, {
     variables: {
       username: username
     },
   });
   const { getSellerOrders: orders } = data ? data : [];
+
+  console.log(orders)
 
 
   const handleItemClick = (e, { name }) => {
@@ -43,22 +45,22 @@ function MySales() {
 
   var orderList = []
 
-  if (orders && activeItem === "New Orders" && orders.find((order) => order.state.stateType === "CONFIRMATION")) {
+  if (!loading && orders && activeItem === "New Orders" && orders.find((order) => order.state.stateType === "CONFIRMATION")) {
     orderList.push(orders.filter((order) => order.state.stateType === "CONFIRMATION"))
   }
-  else if (orders && activeItem === "Ready to ship" && orders.find((order) => order.state.stateType === "PROCESSED")) {
+  else if (!loading &&orders && activeItem === "Ready to ship" && orders.find((order) => order.state.stateType === "PROCESSED")) {
     orderList.push(orders.filter((orders) => orders.state.stateType === "PROCESSED"))
   }
-  else if (orders && activeItem === "On delivery" && orders.find((order) => order.state.stateType === "DELIVERY")) {
+  else if (!loading &&orders && activeItem === "On delivery" && orders.find((order) => order.state.stateType === "DELIVERY")) {
     orderList.push(orders.filter((orders) => orders.state.stateType === "DELIVERY"))
   }
-  else if (orders && activeItem === "Order Arrived" && orders.find((order) => order.state.stateType === "ARRIVED")) {
+  else if (!loading &&orders && activeItem === "Order Arrived" && orders.find((order) => order.state.stateType === "ARRIVED")) {
     orderList.push(orders.filter((orders) => orders.state.stateType === "ARRIVED"))
   }
-  else if (orders && activeItem === "Completed" && orders.find((order) => order.state.stateType === "COMPLETED")) {
+  else if (!loading &&orders && activeItem === "Completed" && orders.find((order) => order.state.stateType === "COMPLETED")) {
     orderList.push(orders.filter((orders) => orders.state.stateType === "COMPLETED"))
   }
-  else if (orders && activeItem === "Canceled" && orders.find((order) => order.state.stateType === "FAILED")) {
+  else if (!loading &&orders && activeItem === "Canceled" && orders.find((order) => order.state.stateType === "FAILED")) {
     orderList.push(orders.filter((orders) => orders.state.stateType === "FAILED"))
   }
 
