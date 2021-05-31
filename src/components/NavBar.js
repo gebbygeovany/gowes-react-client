@@ -48,7 +48,7 @@ function NavBar(props) {
 
   let userId = ""
 
-  if(user){
+  if (user) {
     userId = user.id
   }
   const { loading, data } = useQuery(FETCH_USER_QUERY, {
@@ -84,22 +84,7 @@ function NavBar(props) {
             ></IoMdBicycle>
             <div className="logo">Gowes</div>
           </Menu.Item>
-          {/* <Menu.Item>
-                        <Input
-                            icon={{ name: 'search', circular: true, link: true }}
-                            placeholder='Search...'
-                            style={{width:500}}
-                        />
-                    </Menu.Item> */}
-          {/* <Menu.Item
-                        // onMouseEnter={handleItemHover}
-                        // onMouseLeave={handleItemHover}
-                        name='shop'
-                        active={activeItem === 'shop'}
-                        // onClick={handleItemClick}
-                        as={Link}
-                        to="/"
-                    /> */}
+
           {/* <Menu.Item
                         name='event'
                         active={activeItem === 'event'}
@@ -168,7 +153,10 @@ function NavBar(props) {
                     <Icon name="bicycle" />
                     My Store
                   </Dropdown.Item>
-                  {/* <Dropdown.Item>Transaksi</Dropdown.Item> */}
+                  <Dropdown.Item as={Link} onClick={() => window.open("http://gowes-community.herokuapp.com/", "_self")}>
+                    <Icon name="group" />
+                    Comunity
+                  </Dropdown.Item>
                   <Dropdown.Item
                     as={Link}
                     to="/"
@@ -208,21 +196,14 @@ function NavBar(props) {
             <div className="logo">Gowes</div>
           </Menu.Item>
 
-          {/* <Menu.Item
-                            name='shop'
-                            active={activeItem === 'shop'}
-                            onClick={handleItemClick}
-                            as={Link}
-                            to="/"
-                        />
-                        <Menu.Item
-                            name='event'
-                            active={activeItem === 'event'}
-                            onClick={handleItemClick}
-                            as={Link}
-                            to="/event"
-                        /> */}
-
+          <Menu.Item
+            name='Comunity'
+            active={activeItem === 'shop'}
+            onClick={() => window.open("http://gowes-community.herokuapp.com/", "_self")}
+            as={Link}
+            to="/"
+          />
+         
           <Menu.Menu position="right">
             <Menu.Item>
               <Button
