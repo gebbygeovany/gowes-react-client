@@ -23,16 +23,16 @@ function MyItemsCard({ item: { id, name, price, stock, images, user } }) {
           <h4>{name}</h4>
         </Grid.Column>
         <Grid.Column width={3} verticalAlign="middle" textAlign="center">
-          <h4>4</h4>
+          <h4>10</h4>
         </Grid.Column>
         <Grid.Column width={3} verticalAlign="middle" textAlign="center">
-          <h4>100</h4>
+          <h4>0</h4>
         </Grid.Column>
         <Grid.Column width={3} verticalAlign="middle" textAlign="center">
           <h4>{price}</h4>
         </Grid.Column>
         <Grid.Column width={2} verticalAlign="middle" textAlign="center">
-          <Icon name="star" style={{ color: "gold" }}></Icon>4
+          <Icon name="star" style={{ color: "gold" }}></Icon>0
         </Grid.Column>
       </Grid>
     </Card>
