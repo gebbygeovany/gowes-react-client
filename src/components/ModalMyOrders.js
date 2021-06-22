@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Button, Divider, Grid, Modal, List, Confirm } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
+import { Link } from "react-router-dom";
+
 
 import ItemMyOrders from "./ItemMyOrders";
 import { UPDATE_ORDER } from "../util/graphql";
+
 
 
 function ModalMyOrders({ order }) {
@@ -116,10 +119,14 @@ function ModalMyOrders({ order }) {
             <Grid.Column width={16} textAlign="center"></Grid.Column>
             <Grid.Column width={12} style={{ paddingTop: 10, paddingLeft: 20 }}>
               <div>Invoice Number</div>
-              <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
+              <h5
+                as={Link}
+                to={`/invoice`}
+                style={{ marginTop: 5, marginBottom: 10, color: "teal" }}
+              >
                 INV/{order.id}
               </h5>
-              <div>Status</div>
+              <div >Status</div>
               <h5 style={{ marginTop: 5, marginBottom: 10 }}>{order.state.stateType}</h5>
               <div>Store Name</div>
               <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
@@ -146,6 +153,13 @@ function ModalMyOrders({ order }) {
                 <Button fluid compact>
                   Chat Seller
                 </Button>
+                <Button fluid compact
+                  as={Link}
+                  to={`/invoice`}
+                  color="teal"
+                >
+                  See Invoice
+                </Button>
               </Button.Group>
             </Grid.Column>
           </Grid>
@@ -159,7 +173,7 @@ function ModalMyOrders({ order }) {
           </h5>
           {order.items &&
             order.items.map((item) => (
-              <ItemMyOrders item={item} order={order}/>
+              <ItemMyOrders item={item} order={order} />
             ))}
         </Modal.Description>
 

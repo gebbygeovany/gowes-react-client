@@ -22,7 +22,9 @@ function CardMyOrders(order) {
             <Grid.Row>
               <h4 style={{ color: "teal" }}>{order.order.seller.username}</h4>
             </Grid.Row>
-            <Grid.Row>(INV/{order.order.id})</Grid.Row>
+            <Grid.Row>
+              (INV/{order.order.id})
+            </Grid.Row>
           </Grid.Column>
           <Grid.Column width={6}>
             <Grid.Row>

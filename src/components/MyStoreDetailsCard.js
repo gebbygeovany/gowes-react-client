@@ -33,7 +33,7 @@ function MyStoreDetailsCard(props) {
                             <Button fluid color="teal" name='user' as={Link} to="/editMyStoreDetailsCard">Activate My Store</Button>
                         </Card.Content>
                     </Card>
-                    <br></br><br></br><br></br><br></br><br></br>
+                    <br></br><br></br><br></br><br></br><br></br><br></br><br></br>
                 </>
             ) : (
                     <Card fluid style={{ boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)' }}>

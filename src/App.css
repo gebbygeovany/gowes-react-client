@@ -23,6 +23,12 @@
   color: rgb(206, 206, 206);
   font-size: 23px;
 }
+.logoInvoice{
+  font-family: 'Righteous', cursive;
+  color: rgb(97, 96, 96);
+  font-size: 33px;
+  margin-bottom: 10px;
+}
 .logoLogin{
   font-family: 'Roboto', sans-serif;
   color: rgb(75, 74, 74);

@@ -14,6 +14,8 @@ function MyOrders() {
   const { loading, data } = useQuery(FETCH_USER_ORDER_QUERY);
   const { getUserOrders: orders } = data ? data : [];
 
+  console.log(orders)
+
 
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
