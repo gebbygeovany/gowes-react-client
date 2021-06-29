@@ -11,6 +11,8 @@ import {
   Icon
 } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
+import Time from 'react-time-format'
+
 
 import ItemMyOrders from "./ItemMyOrders";
 import { AuthContext } from "../context/auth";
@@ -28,6 +30,9 @@ function ModalMySales({ order }) {
   const [stateType, setStateType] = useState("");
   const [editState, setEditState] = useState(false);
 
+  const answer_array = order.state.createdAt.split('T');
+
+  console.log(order)
   const orderId = order.id
 
   const [changeState, { loading }] = useMutation(UPDATE_ORDER, {
@@ -80,7 +85,7 @@ function ModalMySales({ order }) {
     update(_, { data: { addAwbNumber: data } }) {
       sendOrder()
       setOpenModal(false)
-      values.awbNumber=""
+      values.awbNumber = ""
     },
     onError(err) {
       setErrors(err.graphQLErrors[0].extensions.exception.errors);
@@ -111,7 +116,7 @@ function ModalMySales({ order }) {
             name="awbNumber"
             value={values.awbNumber}
             onChange={onChange}
-            error={errors? errors.awbNumber: errors}
+            error={errors ? errors.awbNumber : errors}
           />
         </Form.Field>
         <Button floated="right" style={{ marginBottom: 30 }}>Submit</Button>
@@ -233,17 +238,17 @@ function ModalMySales({ order }) {
             <Grid.Column width={12} style={{ paddingTop: 10, paddingLeft: 20 }}>
               <div>Invoice Number</div>
               <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
-                INV/20210302/XXI/III/767167447
+                INV/{order.id}
               </h5>
               <div>Status</div>
               <h5 style={{ marginTop: 5, marginBottom: 10 }}>{order.state.stateType}</h5>
               <div>Store Name</div>
               <h5 style={{ marginTop: 5, marginBottom: 10, color: "teal" }}>
-                Jon's Store
+                {order.seller.username}
               </h5>
               <div>Order Date</div>
               <h5 style={{ marginTop: 5, marginBottom: 10 }}>
-                2 Mar 2021, 09:22 WIB
+                <Time value={answer_array[0]} format="DD-MM-YYYY" />
               </h5>
             </Grid.Column>
           </Grid>
@@ -279,10 +284,10 @@ function ModalMySales({ order }) {
                   color: "teal",
                 }}
               >
-                Muhammad Gebby Geovany
+                {order.user.buyer.name}
               </h5>
               <div style={{ paddingLeft: 10, marginBottom: 0 }}>
-                komplek pasanggrahan indah blok 17 no.8
+                {order.shipping.buyerAddress}
               </div>
               <div style={{ paddingLeft: 10, marginBottom: 0 }}>
                 Ujung Berung
@@ -304,7 +309,7 @@ function ModalMySales({ order }) {
                   color: "teal",
                 }}
               >
-                SiCepat - Regular Package
+                {order.shipping.courierName}
               </h5>
               {order.state.stateType === "DELIVERY" || "ARRIVED" ? (
                 <div style={{ paddingLeft: 10, marginBottom: 10 }}>
@@ -320,40 +325,7 @@ function ModalMySales({ order }) {
           </Grid>
         </Modal.Description>
 
-        <Divider />
 
-        <Modal.Description>
-          <h5 width={8} style={{ paddingLeft: 10, margin: 0 }}>
-            Payment
-          </h5>
-          <List
-            divided
-            verticalAlign="middle"
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-          >
-            <List.Item>
-              <List.Content floated="right">Rp100.000</List.Content>
-              <List.Content style={{ marginBottom: 5 }}>Item (x2)</List.Content>
-              <List.Content floated="right">Rp10.000</List.Content>
-              <List.Content style={{ marginBottom: 5 }}>
-                Shipping Cost
-              </List.Content>
-              <List.Content
-                floated="right"
-                style={{ color: "teal", fontWeight: 1000 }}
-              >
-                Rp110.000
-              </List.Content>
-              <List.Content style={{ marginBottom: 5 }}>
-                Total Payment
-              </List.Content>
-              <List.Content floated="right">BCA Virtual Account</List.Content>
-              <List.Content style={{ marginBottom: 5 }}>
-                Total Payment
-              </List.Content>
-            </List.Item>
-          </List>
-        </Modal.Description>
         <br></br>
       </Modal.Content>
       {orderAction}

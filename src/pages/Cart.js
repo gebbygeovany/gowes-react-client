@@ -70,6 +70,8 @@ function Cart(props) {
                 Object.keys(group).map((key, index) => (
                   <CartCard key={index} cartItem={group[key]} refetchCartQuery={refetch}></CartCard>
                 ))}
+                <br></br>
+                <br></br>
             </Grid.Column>
             <Grid.Column width={4}>
               <ItemSummaryCard contextRef={contextRef}></ItemSummaryCard>

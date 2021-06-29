@@ -87,7 +87,7 @@ function MySales() {
     <>
       <Grid stackable>
         <Grid.Row>
-          <Grid columns={6} stackable centered>
+          <Grid columns={5} stackable centered>
 
             <Grid.Column>
               <Button
@@ -100,7 +100,7 @@ function MySales() {
               >
                 <span>New Orders</span>
                 {sizeConfirmation > 0 ? (
-                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                  <Label color='red' circular floating style={{ left: 175, top: 0, bottom: 40 }}>
                     {sizeConfirmation}
                   </Label>
                 ) : (<></>)}
@@ -118,7 +118,7 @@ function MySales() {
               >
                 Ready to ship
                 {sizeProcessed > 0 ? (
-                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                  <Label color='red' circular floating style={{ left: 175, top: 0, bottom: 40 }}>
                     {sizeProcessed}
                   </Label>
                 ) : (<></>)}
@@ -135,7 +135,7 @@ function MySales() {
               >
                 On delivery
                 {sizeDelivery > 0 ? (
-                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                  <Label color='red' circular floating style={{ left: 175, top: 0, bottom: 40 }}>
                     {sizeDelivery}
                   </Label>
                 ) : (<></>)}
@@ -152,25 +152,8 @@ function MySales() {
               >
                 Order Arrived
                 {sizeArrived > 0 ? (
-                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                  <Label color='red' circular floating style={{ left: 175, top: 0, bottom: 40 }}>
                     {sizeArrived}
-                  </Label>
-                ) : (<></>)}
-              </Button>
-            </Grid.Column>
-            <Grid.Column>
-              <Button
-                name="Completed"
-                onClick={handleItemClick}
-                color={activeItem === "Completed" ? "black" : ""}
-                size="tiny"
-                fluid
-                style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
-              >
-                Completed
-                {sizeCompleted > 0 ? (
-                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
-                    {sizeCompleted}
                   </Label>
                 ) : (<></>)}
               </Button>
@@ -184,9 +167,9 @@ function MySales() {
                 fluid
                 style={{ boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.2)" }}
               >
-                Canceled
+                Failed
                 {sizeFailed > 0 ? (
-                  <Label color='red' circular floating style={{ left: 140, top: 0, bottom: 40 }}>
+                  <Label color='red' circular floating style={{ left: 175, top: 0, bottom: 40 }}>
                     {sizeFailed}
                   </Label>
                 ) : (<></>)}

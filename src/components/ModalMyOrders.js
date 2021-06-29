@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Divider, Grid, Modal, List, Confirm } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
+import Time from 'react-time-format'
 
 
 import ItemMyOrders from "./ItemMyOrders";
@@ -17,6 +18,8 @@ function ModalMyOrders({ order }) {
   const [rejectOpen, setRejectOpen] = useState(false);
   const [stateType, setStateType] = useState("");
   const [editState, setEditState] = useState(false);
+  const answer_array = order.state.createdAt.split('T');
+
 
   const orderId = order.id
 
@@ -134,7 +137,7 @@ function ModalMyOrders({ order }) {
               </h5>
               <div>Order Date</div>
               <h5 style={{ marginTop: 5, marginBottom: 10 }}>
-                {order.state.createdAt}
+                <Time value={answer_array[0]} format="DD-MM-YYYY" />
               </h5>
             </Grid.Column>
             <Grid.Column width={4} style={{ paddingTop: 10 }}>
@@ -222,7 +225,7 @@ function ModalMyOrders({ order }) {
               </h5>
               {order.state.stateType === "Order shipped" ? (
                 <div style={{ paddingLeft: 10, marginBottom: 10 }}>
-                  AWB num : 000444958166
+                  AWB num : {order.shipping.awbNumber}
                 </div>
               ) : (
                 <></>
@@ -231,40 +234,6 @@ function ModalMyOrders({ order }) {
           </Grid>
         </Modal.Description>
 
-        <Divider />
-
-        <Modal.Description>
-          <h5 width={8} style={{ paddingLeft: 10, margin: 0 }}>
-            Payment
-          </h5>
-          <List
-            divided
-            verticalAlign="middle"
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-          >
-            <List.Item>
-              <List.Content floated="right">Rp100.000</List.Content>
-              <List.Content style={{ marginBottom: 5 }}>Item (x2)</List.Content>
-              <List.Content floated="right">Rp10.000</List.Content>
-              <List.Content style={{ marginBottom: 5 }}>
-                Shipping Cost
-              </List.Content>
-              <List.Content
-                floated="right"
-                style={{ color: "teal", fontWeight: 1000 }}
-              >
-                Rp110.000
-              </List.Content>
-              <List.Content style={{ marginBottom: 5 }}>
-                Total Payment
-              </List.Content>
-              <List.Content floated="right">BCA Virtual Account</List.Content>
-              <List.Content style={{ marginBottom: 5 }}>
-                Total Payment
-              </List.Content>
-            </List.Item>
-          </List>
-        </Modal.Description>
         <br></br>
       </Modal.Content>
       {orderAction}

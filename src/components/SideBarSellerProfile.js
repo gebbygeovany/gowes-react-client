@@ -20,7 +20,7 @@ function SideBarSellerProfile({ contextRef, user }) {
                             <Grid.Column width={9} style={{ paddingLeft: 0, marginTop: 5 }}>
                                 <h5 style={{ marginBottom: 5 }}>{user.seller.username}</h5>
                                 <Icon style={{ marginBottom: 10 }} name="map marker alternate" color="grey"></Icon> Bandung
-                                <div>Joined in 2019</div>
+                                <div>Joined in 2021</div>
                             </Grid.Column>
                         </Grid>
                     </Card.Content>
@@ -28,8 +28,8 @@ function SideBarSellerProfile({ contextRef, user }) {
                         <h5>Description:</h5>
                         <Container textAlign='justified'>
                             <p>
-                                Khusus Sepeda, Pembelian lebih dari satu diwajibkan untuk melakukan transaksi per-masing2 satu sepeda. contoh: 1 sepeda, 1 transaksi. 2 sepeda dipisah per-1 transaksi berbeda
-                        </p>
+                            {user.seller.description}
+                            </p>
                         </Container>
                     </Card.Content>
                     <Card.Content extra>

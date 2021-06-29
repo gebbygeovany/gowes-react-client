@@ -44,7 +44,7 @@ function SidebarStore({ contextRef }) {
                                 <div >Balance</div>
                             </List.Content>
                             <List.Content>
-                                <h3>Rp50.0000</h3>
+                                <h3>Rp0</h3>
                             </List.Content>
 
                         </List.Item>

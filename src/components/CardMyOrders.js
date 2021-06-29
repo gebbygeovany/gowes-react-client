@@ -39,7 +39,7 @@ function CardMyOrders(order) {
               <div>Sub Total</div>
             </Grid.Row>
             <Grid.Row>
-              <h4 style={{ color: "teal" }}>Rp50.000</h4>
+              <h4 style={{ color: "teal" }}>Rp2</h4>
             </Grid.Row>
           </Grid.Column>
         </Grid>

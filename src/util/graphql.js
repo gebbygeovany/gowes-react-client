@@ -678,6 +678,11 @@ export const FETCH_SELLER_ORDER_QUERY = gql`
       seller {
         username
       }
+      user {
+        buyer {
+          name
+        }
+      }
       shipping {
         awbNumber
         courierName
@@ -686,6 +691,7 @@ export const FETCH_SELLER_ORDER_QUERY = gql`
       }
       state {
         stateType
+        createdAt
       }
       logs {
         succsededAt
