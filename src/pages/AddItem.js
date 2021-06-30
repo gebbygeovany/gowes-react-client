@@ -232,7 +232,7 @@ function AddItem(props) {
                     fluid
                     placeholder="Rp"
                     label="Price"
-                    value={values.price}
+                    value={parseInt(values.price)}
                     name="price"
                     type="number"
                     onChange={onChange}
@@ -242,7 +242,7 @@ function AddItem(props) {
                     fluid
                     placeholder="Amount Item"
                     label="Amount Item"
-                    value={values.stock}
+                    value={parseInt(values.stock)}
                     name="stock"
                     type="number"
                     onChange={onChange}
@@ -266,7 +266,7 @@ function AddItem(props) {
                     fluid
                     placeholder="cm"
                     label="Length"
-                    value={values.length}
+                    value={parseInt(values.length)}
                     name="length"
                     type="number"
                     onChange={onChange}
@@ -277,7 +277,7 @@ function AddItem(props) {
                     fluid
                     placeholder="cm"
                     label="Width"
-                    value={values.width}
+                    value={parseInt(values.width)}
                     name="width"
                     type="number"
                     max={1000}
@@ -288,7 +288,7 @@ function AddItem(props) {
                     fluid
                     placeholder="cm"
                     label="Height"
-                    value={values.height}
+                    value={parseInt(values.height)}
                     name="height"
                     type="number"
                     onChange={onChange}
